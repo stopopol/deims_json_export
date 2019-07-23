@@ -1,0 +1,6 @@
+name: DEIMS-SDR Site List
+description: Site List as JSON
+package: DEIMS
+type: module
+version: 8.x-1.0
+core: 8.x

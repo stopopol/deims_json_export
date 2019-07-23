@@ -1,0 +1,8 @@
+site_list.content:
+    path: '/api/site'
+    defaults:
+      _controller: 'Drupal\deims_site_list\Controller\DeimsSiteListController::renderApi'
+      _title: 'JSON api'
+    methods:  [GET]
+    requirements:
+      _access: 'TRUE'
