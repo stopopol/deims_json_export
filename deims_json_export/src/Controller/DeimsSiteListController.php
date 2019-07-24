@@ -33,11 +33,11 @@ class DeimsSiteListController {
 		if ($node->isPublished()) {
 			
 			$temp_array = [];
-			$temp_array['name'] = $node->get('title')->value;
+			$temp_array['name'] = $node->get('field_name')->value;
 			$temp_array['coordinates'] = $node->get('field_coordinates')->value;
 			$temp_array['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
 				
-
+			$paragraph_collection = [];
 			if (sizeof ($node->get('field_affiliation')) == 1) {
 				$paragraph = $node->get('field_affiliation');
 				
@@ -58,7 +58,9 @@ class DeimsSiteListController {
 					$paragraph_array['code'] = $paragraph->entity->field_network_specific_site_code->value;
 					$paragraph_array['verified'] = $verified;
 					
-					$temp_array['affiliation'] = $paragraph_array;				
+					// to make sure that the json structure is always the same indepedendant from the number of networks
+					array_push($paragraph_collection,$paragraph_array);
+					$temp_array['affiliation'] = $paragraph_collection;				
 				}
 				else {
 					$temp_array['affiliation'] = false;
@@ -67,8 +69,7 @@ class DeimsSiteListController {
 			}
 			// case for multiple paragraphs
 			else {
-
-				$paragraph_collection = [];
+				
 				$paragraph = $node->get('field_affiliation');
 				
 				foreach ($paragraph->referencedEntities() as $paragraph_item) {
