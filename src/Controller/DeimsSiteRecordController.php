@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 
 
 /**
- * Implementing our example JSON api.
+ * This controller lists detailed information about each site as a JSON; only one record at a time based on the provided UUID/DEIMS.ID
  */
 class DeimsSiteRecordController extends ControllerBase {
 

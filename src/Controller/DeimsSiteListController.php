@@ -7,7 +7,7 @@ namespace Drupal\deims_json_export\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Implementing our example JSON api.
+ * This controller lists all sites on DEIMS-SDR in a JSON object including a selected subset of information
  */
 class DeimsSiteListController {
 
