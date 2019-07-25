@@ -50,7 +50,12 @@ class DeimsSiteRecordController extends ControllerBase {
 		}
 	}
 	else {
-		$site_information["error"] = 404;
+		$error_message = [];
+		$error_message['status'] = "404";
+		$error_message['source'] = ["pointer" => "/api/site/{deimsid}"];
+		$error_message['title'] = 'Resource not found';
+		$error_message['detail'] = 'There is no site with the given DEIMS.ID :(';
+		$site_information["errors "] = $error_message;
 	}
     return $site_information;
   }
