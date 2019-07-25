@@ -16,7 +16,7 @@ class DeimsSiteParagraphFieldController extends ControllerBase {
 			$paragraph = $node->get('field_affiliation');
 				
 			if ($paragraph->entity->field_network_name->target_id) {
-				$paragraph_array = [];
+				$network_item = [];
 				
 				$network_name_tid = $paragraph->entity->field_network_name->target_id;
 				$full_taxonomy_term_object = taxonomy_term_load($network_name_tid);
@@ -28,12 +28,12 @@ class DeimsSiteParagraphFieldController extends ControllerBase {
 					$verified = false;
 				}
 					
-				$paragraph_array['name'] = $full_taxonomy_term_object->getName();
-				$paragraph_array['code'] = $paragraph->entity->field_network_specific_site_code->value;
-				$paragraph_array['verified'] = $verified;
+				$network_item['name'] = $full_taxonomy_term_object->getName();
+				$network_item['code'] = $paragraph->entity->field_network_specific_site_code->value;
+				$network_item['verified'] = $verified;
 				
 				// to make sure that the structure of the json object is always the same and indepedendant from the actual number of networks of a site
-				array_push($paragraph_collection,$paragraph_array);
+				array_push($paragraph_collection,$network_item);
 				return $paragraph_collection;				
 			}
 			else {
