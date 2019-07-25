@@ -43,7 +43,7 @@ class DeimsSiteRecordController extends ControllerBase {
 				$site_information['boundaries'] = $node->get('field_boundaries')->value;
 				$site_information['purpose'] = $node->get('field_purpose')->value;
 				$site_information['biome'] = $node->get('field_biome')->value;
-				// DeimsSiteParagraphFieldController::parseAffiliation is located in different controller file, but doesn't have to be included in order to be called
+				// DeimsSiteParagraphFieldController::parseAffiliation is located in a different controller file, but doesn't have to be included in order to be called
 				$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
 					
 			}

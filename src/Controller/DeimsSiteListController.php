@@ -36,7 +36,7 @@ class DeimsSiteListController {
 			$site_information['name'] = $node->get('field_name')->value;
 			$site_information['coordinates'] = $node->get('field_coordinates')->value;
 			$site_information['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
-			// DeimsSiteParagraphFieldController::parseAffiliation is located in different controller file, but doesn't have to be included in order to be called
+			// DeimsSiteParagraphFieldController::parseAffiliation is located in a different controller file, but doesn't have to be included in order to be called
 			$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
 			
 			array_push($site_list, $site_information);
