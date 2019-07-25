@@ -48,7 +48,11 @@ class DeimsSiteRecordController extends ControllerBase {
 				$site_information['biome'] = $node->get('field_biome')->value;
 				$site_information['boundaries'] = $node->get('field_boundaries')->value;
 				$site_information['coordinates'] = $node->get('field_coordinates')->value;
-				$site_information['country'] = $node->get('field_country')->value;
+				
+				// print label of key-value pair instead of key
+				$country_values_list = $node->getFieldDefinition('field_country')->getSetting('allowed_values');
+				$site_information['country'] = $country_values_list[$node->get('field_country')->value];
+				
 				$site_information['design_experiments'] = $node->get('field_design_experiments')->value;
 				$site_information['design_observation'] = $node->get('field_design_observation')->value;
 				$site_information['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
