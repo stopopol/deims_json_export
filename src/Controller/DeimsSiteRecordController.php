@@ -39,7 +39,7 @@ class DeimsSiteRecordController extends ControllerBase {
 				// DeimsSiteParagraphFieldController::parseAffiliation is located in a different controller file, but doesn't have to be included in order to be called
 				$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
 				
-				// aggregate temperature fields; short hand ifs to catch empty values
+				// aggregate temperature fields; shorthand ifs to catch empty values
 				$site_information['air_temperature']['average'] = (!empty($node->get('field_air_temp_average')->value)) ? $node->get('field_air_temp_average')->value . ' °C' : null;
 				$site_information['air_temperature']['min'] = (!empty($node->get('field_air_temp_min')->value)) ? $node->get('field_air_temp_min')->value . ' °C' : null;
 				$site_information['air_temperature']['max'] = (!empty($node->get('field_air_temp_max')->value)) ? $node->get('field_air_temp_max')->value . ' °C' : null;
@@ -53,7 +53,7 @@ class DeimsSiteRecordController extends ControllerBase {
 				$site_information['design_observation'] = $node->get('field_design_observation')->value;
 				$site_information['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
 				
-				// aggregate elevation fields; short hand ifs to catch empty values
+				// aggregate elevation fields; shorthand ifs to catch empty values
 				$site_information['elevation']['average'] = (!empty($node->get('field_elevation_average')->value)) ? $node->get('field_elevation_average')->value . ' m' : null;
 				$site_information['elevation']['min'] = (!empty($node->get('field_elevation_min')->value)) ? $node->get('field_elevation_min')->value . ' m' : null;
 				$site_information['elevation']['max'] = (!empty($node->get('field_elevation_max')->value)) ? $node->get('field_elevation_max')->value . ' m' : null;
@@ -69,7 +69,7 @@ class DeimsSiteRecordController extends ControllerBase {
 				$site_information['short_name'] = $node->get('field_name_short')->value;
 				$site_information['site_status'] = $node->get('field_site_status')->value;
 				
-				// short hand ifs to catch empty values
+				// shorthand ifs to catch empty values
 				$site_information['size']= (!empty($node->get('field_size')->value)) ? $node->get('field_size')->value . ' ha' : null;
 				
 				$site_information['soils'] = $node->get('field_soils')->value;
