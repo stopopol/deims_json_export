@@ -70,7 +70,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$country_values_list = $node->getFieldDefinition('field_country')->getSetting('allowed_values');
 		$site_information['_data']['country'] = $country_values_list[$node->get('field_country')->value];
 		
-		
 		$site_information['_data']['design_experiments'] = $node->get('field_design_experiments')->value;
 		$site_information['_data']['design_observation'] = $node->get('field_design_observation')->value;
 		$site_information['_data']['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
@@ -87,15 +86,14 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['hydrology'] = $node->get('field_hydrology')->value;				
 		$site_information['_data']['keywords'] = $node->get('field_keywords')->value;
 		
-		$site_information['_data']['management_resources']['status'] = $node->get('field_management_resources')->value;			
+	
+		$site_information['_data']['management_resources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
 		$site_information['_data']['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;			
 		$site_information['_data']['management_resources']['percentage'] = $node->get('field_management_resources_pct')->value;	
 		
-		
-		$site_information['_data']['permanent_operation'] = $node->get('field_permanent_operation')->value;
+		$site_information['_data']['permanent_operation'] = (!is_null($node->get('field_permanent_operation')->value)) ? (($node->get('field_permanent_operation')->value == 1) ? true : false) : null;	
 		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
 		
-				
 		// shorthand ifs to catch empty values
 		$site_information['_data']['size']= (!is_null($node->get('field_size')->value)) ? $node->get('field_size')->value . ' ha' : null;
 	
