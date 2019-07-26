@@ -86,11 +86,11 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['hydrology'] = $node->get('field_hydrology')->value;				
 		$site_information['_data']['keywords'] = $node->get('field_keywords')->value;
 		
-	
+		// special case for boolean fields
 		$site_information['_data']['management_resources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
 		$site_information['_data']['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;			
 		$site_information['_data']['management_resources']['percentage'] = $node->get('field_management_resources_pct')->value;	
-		
+		// special case for boolean fields
 		$site_information['_data']['permanent_operation'] = (!is_null($node->get('field_permanent_operation')->value)) ? (($node->get('field_permanent_operation')->value == 1) ? true : false) : null;	
 		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
 		
