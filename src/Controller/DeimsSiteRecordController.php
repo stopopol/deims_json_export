@@ -73,7 +73,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
 				
 		// aggregate elevation fields; shorthand ifs to catch empty values
-		$site_information['elevation']['average'] = (!is_null($node->get('field_elevation_avg')->value)) ? $node->get('field_elevation_avg')->value . ' m' : null;
+		$site_information['elevation']['avg'] = (!is_null($node->get('field_elevation_avg')->value)) ? $node->get('field_elevation_avg')->value . ' m' : null;
 		$site_information['elevation']['min'] = (!is_null($node->get('field_elevation_min')->value)) ? $node->get('field_elevation_min')->value . ' m' : null;
 		$site_information['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? $node->get('field_elevation_max')->value . ' m' : null;
 				
