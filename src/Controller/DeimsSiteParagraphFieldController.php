@@ -12,60 +12,50 @@ class DeimsSiteParagraphFieldController extends ControllerBase {
 	 */
 	public function parseAffiliation($node) {
 		$paragraph_collection = [];
-		if (sizeof ($node->get('field_affiliation')) == 1) {
-			$paragraph = $node->get('field_affiliation');
-				
-			if ($paragraph->entity->field_network_name->target_id) {
-				$network_item = [];
-				
-				$network_name_tid = $paragraph->entity->field_network_name->target_id;
-				$full_taxonomy_term_object = taxonomy_term_load($network_name_tid);
-						
-				if ($paragraph->entity->field_network_verified->value == 1) {
-					$verified = true;
-				}
-				else {
-					$verified = false;
-				}
-					
-				$network_item['name'] = $full_taxonomy_term_object->getName();
-				$network_item['code'] = $paragraph->entity->field_network_specific_site_code->value;
-				$network_item['verified'] = $verified;
-				
-				// to make sure that the structure of the json object is always the same and indepedendant from the actual number of networks of a site
+		// case for empty field or single paragraph
+		if (sizeof ($node->get('field_affiliation')) == 1) {		
+			if ($node->get('field_affiliation')->entity->field_network_name->target_id) {
+				$paragraph_item = $node->get('field_affiliation')->entity;				
+				$network_item = DeimsSiteParagraphFieldController::parseAffiliationFields($paragraph_item);
 				array_push($paragraph_collection,$network_item);
-				return $paragraph_collection;				
 			}
 			else {
-				return false;
+				return null;
 			}
-			
 		}
 		// case for multiple paragraphs
 		else {
-			
-			$paragraph = $node->get('field_affiliation');
-			
-			foreach ($paragraph->referencedEntities() as $paragraph_item) {
-				$network_item = [];
+			foreach ($node->get('field_affiliation')->referencedEntities() as $paragraph_item) {
 				if ($paragraph_item->field_network_name->target_id) {
-					$network_name_tid = $paragraph_item->field_network_name->target_id;
-					$full_taxonomy_term_object = taxonomy_term_load($network_name_tid);
-							
-					$network_item['name'] = $full_taxonomy_term_object->getName();
-					$network_item['code'] = $paragraph_item->field_network_specific_site_code->value;
-					if ($paragraph_item->field_network_verified->value == 1) {
-						$network_item['verified'] = true;
-					}
-					else {
-						$network_item['verified'] = false;
-					}
+					$network_item = DeimsSiteParagraphFieldController::parseAffiliationFields($paragraph_item);
 					array_push($paragraph_collection, $network_item);
 				}
-				
 			}
 			sort($paragraph_collection);
-			return $paragraph_collection;
 		}
+		return $paragraph_collection;
+	}
+	
+	/*
+	 * Function that parses the fields within a affiliation paragraph field
+	 *
+	 * Requires a paragraph entity as input and returns and array with the formatted values
+	 */
+	public function parseAffiliationFields($paragraph_item) {
+		$network_item = [];
+		$network_name_tid = $paragraph_item->field_network_name->target_id;
+		$full_taxonomy_term_object = taxonomy_term_load($network_name_tid);
+					
+		if ($paragraph_item->field_network_verified->value == 1) {
+			$verified = true;
+		}
+		else {
+			$verified = false;
+		}		
+		$network_item['name'] = $full_taxonomy_term_object->getName();
+		$network_item['code'] = $paragraph_item->field_network_specific_site_code->value;
+		$network_item['verified'] = $verified;
+					
+		return $network_item;
 	}
 }
