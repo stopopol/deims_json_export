@@ -82,8 +82,14 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['geology'] = $node->get('field_geology')->value;
 		$site_information['history'] = $node->get('field_history')->value;
 		$site_information['hydrology'] = $node->get('field_hydrology')->value;				
-		$site_information['keywords'] = $node->get('field_keywords')->value;				
+		$site_information['keywords'] = $node->get('field_keywords')->value;
+		
+		$site_information['management_resources']['status'] = $node->get('field_management_resources')->value;			
+		$site_information['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;			
+		$site_information['management_resources']['percentage'] = $node->get('field_management_resources_pct')->value;	
+		
 		$site_information['name'] = $node->get('field_name')->value;
+		$site_information['permanent_operation'] = $node->get('field_permanent_operation')->value;
 		$site_information['purpose'] = $node->get('field_purpose')->value;
 		$site_information['short_name'] = $node->get('field_name_short')->value;
 		$site_information['site_status'] = $node->get('field_site_status')->value;
