@@ -51,7 +51,6 @@ class DeimsSiteRecordController extends ControllerBase {
   public function parseSiteFields($node) {
 		$site_information = [];
 		
-		// DeimsSiteParagraphFieldController::parseAffiliation is located in a different controller file, but doesn't have to be included in order to be called
 		$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
 				
 		// aggregate temperature fields; shorthand ifs to catch empty values
