@@ -51,56 +51,59 @@ class DeimsSiteRecordController extends ControllerBase {
   public function parseSiteFields($node) {
 		$site_information = [];
 		
-		$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
+		$site_information['_id'] = (!empty($node->get('field_deims_id')->value)) ? 'https://deims.org/' . $node->get('field_deims_id')->value : null;
+		$site_information['_name'] = $node->get('field_name')->value;
+		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
+		$site_information['_data']['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
 				
 		// aggregate temperature fields; shorthand ifs to catch empty values
-		$site_information['air_temperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? $node->get('field_air_temp_avg')->value . ' °C' : null;
-		$site_information['air_temperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? $node->get('field_air_temp_min')->value . ' °C' : null;
-		$site_information['air_temperature']['max'] = (!is_null($node->get('field_air_temp_max')->value)) ? $node->get('field_air_temp_max')->value . ' °C' : null;
+		$site_information['_data']['air_temperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? $node->get('field_air_temp_avg')->value . ' °C' : null;
+		$site_information['_data']['air_temperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? $node->get('field_air_temp_min')->value . ' °C' : null;
+		$site_information['_data']['air_temperature']['max'] = (!is_null($node->get('field_air_temp_max')->value)) ? $node->get('field_air_temp_max')->value . ' °C' : null;
 
-		$site_information['biogeographical_region'] = $node->get('field_biogeographical_region')->value;
-		$site_information['biome'] = $node->get('field_biome')->value;
-		$site_information['boundaries'] = $node->get('field_boundaries')->value;
-		$site_information['coordinates'] = $node->get('field_coordinates')->value;
+		$site_information['_data']['biogeographical_region'] = $node->get('field_biogeographical_region')->value;
+		$site_information['_data']['biome'] = $node->get('field_biome')->value;
+		$site_information['_data']['boundaries'] = $node->get('field_boundaries')->value;
+		
 				
 		// print label of key-value pair instead of key
 		$country_values_list = $node->getFieldDefinition('field_country')->getSetting('allowed_values');
-		$site_information['country'] = $country_values_list[$node->get('field_country')->value];
-		$site_information['deimsid'] = (!empty($node->get('field_deims_id')->value)) ? 'https://deims.org/' . $node->get('field_deims_id')->value : null;
+		$site_information['_data']['country'] = $country_values_list[$node->get('field_country')->value];
 		
-		$site_information['design_experiments'] = $node->get('field_design_experiments')->value;
-		$site_information['design_observation'] = $node->get('field_design_observation')->value;
-		$site_information['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
+		
+		$site_information['_data']['design_experiments'] = $node->get('field_design_experiments')->value;
+		$site_information['_data']['design_observation'] = $node->get('field_design_observation')->value;
+		$site_information['_data']['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
 				
 		// aggregate elevation fields; shorthand ifs to catch empty values
-		$site_information['elevation']['avg'] = (!is_null($node->get('field_elevation_avg')->value)) ? $node->get('field_elevation_avg')->value . ' m' : null;
-		$site_information['elevation']['min'] = (!is_null($node->get('field_elevation_min')->value)) ? $node->get('field_elevation_min')->value . ' m' : null;
-		$site_information['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? $node->get('field_elevation_max')->value . ' m' : null;
+		$site_information['_data']['elevation']['avg'] = (!is_null($node->get('field_elevation_avg')->value)) ? $node->get('field_elevation_avg')->value . ' m' : null;
+		$site_information['_data']['elevation']['min'] = (!is_null($node->get('field_elevation_min')->value)) ? $node->get('field_elevation_min')->value . ' m' : null;
+		$site_information['_data']['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? $node->get('field_elevation_max')->value . ' m' : null;
 				
-		$site_information['funding_agency'] = $node->get('field_funding_agency')->value;
-		$site_information['geo_bon_biome'] = $node->get('field_geo_bon_biome')->value;
-		$site_information['geology'] = $node->get('field_geology')->value;
-		$site_information['history'] = $node->get('field_history')->value;
-		$site_information['hydrology'] = $node->get('field_hydrology')->value;				
-		$site_information['keywords'] = $node->get('field_keywords')->value;
+		$site_information['_data']['funding_agency'] = $node->get('field_funding_agency')->value;
+		$site_information['_data']['geo_bon_biome'] = $node->get('field_geo_bon_biome')->value;
+		$site_information['_data']['geology'] = $node->get('field_geology')->value;
+		$site_information['_data']['history'] = $node->get('field_history')->value;
+		$site_information['_data']['hydrology'] = $node->get('field_hydrology')->value;				
+		$site_information['_data']['keywords'] = $node->get('field_keywords')->value;
 		
-		$site_information['management_resources']['status'] = $node->get('field_management_resources')->value;			
-		$site_information['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;			
-		$site_information['management_resources']['percentage'] = $node->get('field_management_resources_pct')->value;	
+		$site_information['_data']['management_resources']['status'] = $node->get('field_management_resources')->value;			
+		$site_information['_data']['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;			
+		$site_information['_data']['management_resources']['percentage'] = $node->get('field_management_resources_pct')->value;	
 		
-		$site_information['name'] = $node->get('field_name')->value;
-		$site_information['permanent_operation'] = $node->get('field_permanent_operation')->value;
-		$site_information['purpose'] = $node->get('field_purpose')->value;
-		$site_information['short_name'] = $node->get('field_name_short')->value;
-		$site_information['site_status'] = $node->get('field_site_status')->value;
+		
+		$site_information['_data']['permanent_operation'] = $node->get('field_permanent_operation')->value;
+		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
+		
 				
 		// shorthand ifs to catch empty values
-		$site_information['size']= (!is_null($node->get('field_size')->value)) ? $node->get('field_size')->value . ' ha' : null;
-				
-		$site_information['soils'] = $node->get('field_soils')->value;
-		$site_information['vegetation'] = $node->get('field_vegetation')->value;	
-		$site_information['year_closed'] = $node->get('field_year_closed')->value;	
-		$site_information['year_established'] = $node->get('field_year_established')->value;
+		$site_information['_data']['size']= (!is_null($node->get('field_size')->value)) ? $node->get('field_size')->value . ' ha' : null;
+	
+		$site_information['_data']['soils'] = $node->get('field_soils')->value;
+		$site_information['_data']['status'] = $node->get('field_site_status')->value;
+		$site_information['_data']['vegetation'] = $node->get('field_vegetation')->value;	
+		$site_information['_data']['year_closed'] = $node->get('field_year_closed')->value;	
+		$site_information['_data']['year_established'] = $node->get('field_year_established')->value;
 
 		return $site_information;
   }
