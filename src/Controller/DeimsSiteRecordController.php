@@ -54,9 +54,9 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
 				
 		// aggregate temperature fields; shorthand ifs to catch empty values
-		$site_information['air_temperature']['average'] = (!empty($node->get('field_air_temp_average')->value)) ? $node->get('field_air_temp_average')->value . ' °C' : null;
-		$site_information['air_temperature']['min'] = (!empty($node->get('field_air_temp_min')->value)) ? $node->get('field_air_temp_min')->value . ' °C' : null;
-		$site_information['air_temperature']['max'] = (!empty($node->get('field_air_temp_max')->value)) ? $node->get('field_air_temp_max')->value . ' °C' : null;
+		$site_information['air_temperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? $node->get('field_air_temp_avg')->value . ' °C' : null;
+		$site_information['air_temperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? $node->get('field_air_temp_min')->value . ' °C' : null;
+		$site_information['air_temperature']['max'] = (!is_null($node->get('field_air_temp_max')->value)) ? $node->get('field_air_temp_max')->value . ' °C' : null;
 
 		$site_information['biogeographical_region'] = $node->get('field_biogeographical_region')->value;
 		$site_information['biome'] = $node->get('field_biome')->value;
@@ -73,9 +73,9 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
 				
 		// aggregate elevation fields; shorthand ifs to catch empty values
-		$site_information['elevation']['average'] = (!empty($node->get('field_elevation_average')->value)) ? $node->get('field_elevation_average')->value . ' m' : null;
-		$site_information['elevation']['min'] = (!empty($node->get('field_elevation_min')->value)) ? $node->get('field_elevation_min')->value . ' m' : null;
-		$site_information['elevation']['max'] = (!empty($node->get('field_elevation_max')->value)) ? $node->get('field_elevation_max')->value . ' m' : null;
+		$site_information['elevation']['average'] = (!is_null($node->get('field_elevation_avg')->value)) ? $node->get('field_elevation_avg')->value . ' m' : null;
+		$site_information['elevation']['min'] = (!is_null($node->get('field_elevation_min')->value)) ? $node->get('field_elevation_min')->value . ' m' : null;
+		$site_information['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? $node->get('field_elevation_max')->value . ' m' : null;
 				
 		$site_information['funding_agency'] = $node->get('field_funding_agency')->value;
 		$site_information['geo_bon_biome'] = $node->get('field_geo_bon_biome')->value;
@@ -89,7 +89,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['site_status'] = $node->get('field_site_status')->value;
 				
 		// shorthand ifs to catch empty values
-		$site_information['size']= (!empty($node->get('field_size')->value)) ? $node->get('field_size')->value . ' ha' : null;
+		$site_information['size']= (!is_null($node->get('field_size')->value)) ? $node->get('field_size')->value . ' ha' : null;
 				
 		$site_information['soils'] = $node->get('field_soils')->value;
 		$site_information['vegetation'] = $node->get('field_vegetation')->value;	
