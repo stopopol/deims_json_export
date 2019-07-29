@@ -54,7 +54,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_id'] = (!empty($node->get('field_deims_id')->value)) ? 'https://deims.org/' . $node->get('field_deims_id')->value : null;
 		$site_information['_name'] = $node->get('field_name')->value;
 		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
-		$site_information['_data']['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
+		$DeimsSiteParagraphFieldController = new DeimsSiteParagraphFieldController();
+		$site_information['_data']['affiliation'] = $DeimsSiteParagraphFieldController->parseAffiliation($node);
 				
 		// aggregate temperature fields; shorthand ifs to catch empty values
 		$site_information['_data']['air_temperature']['avg_c'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
@@ -105,7 +106,19 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['permanent_operation'] = (!is_null($node->get('field_permanent_operation')->value)) ? (($node->get('field_permanent_operation')->value == 1) ? true : false) : null;	
 		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
 		
-
+		// content type 'person'
+		$site_manager_array = [];
+		
+		$site_information['_data']['site_manager'] = $node->get('field_site_manager')->referencedEntities();
+		/*
+		foreach ($node->get('field_site_manager') as $reference) {
+			$temp_array = [];
+			$temp_array['id'] = $reference->target_id;
+			$temp_array['name'] = $reference->entity->get('field_site_manager')->value;
+			array_push($site_manager_array, $temp_array);
+		 
+		}
+		$site_information['_data']['site_manager'] = $site_manager_array; */
 		
 		// shorthand ifs to catch empty values
 		$site_information['_data']['size_ha']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;

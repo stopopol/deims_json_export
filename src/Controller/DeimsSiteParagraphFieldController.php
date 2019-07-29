@@ -12,10 +12,11 @@ class DeimsSiteParagraphFieldController extends ControllerBase {
 	 */
 	public function parseAffiliation($node) {
 		$paragraph_collection = [];
+		$DeimsSiteParagraphFieldController = new DeimsSiteParagraphFieldController();
 		// case for empty field or single paragraph
 		if (sizeof ($node->get('field_affiliation')) == 1) {		
 			if ($node->get('field_affiliation')->entity->field_network_name->target_id) {	
-				$network_item = DeimsSiteParagraphFieldController::parseAffiliationFields($node->get('field_affiliation')->entity);
+				$network_item = $DeimsSiteParagraphFieldController->parseAffiliationFields($node->get('field_affiliation')->entity);
 				array_push($paragraph_collection, $network_item);
 			}
 			else {
@@ -26,7 +27,7 @@ class DeimsSiteParagraphFieldController extends ControllerBase {
 		else {
 			foreach ($node->get('field_affiliation')->referencedEntities() as $paragraph_item) {
 				if ($paragraph_item->field_network_name->target_id) {
-					$network_item = DeimsSiteParagraphFieldController::parseAffiliationFields($paragraph_item);
+					$network_item = $DeimsSiteParagraphFieldController->parseAffiliationFields($paragraph_item);
 					array_push($paragraph_collection, $network_item);
 				}
 			}
