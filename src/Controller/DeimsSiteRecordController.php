@@ -55,7 +55,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_name'] = $node->get('field_name')->value;
 		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
 		$DeimsSiteParagraphFieldController = new DeimsSiteParagraphFieldController();
-		$site_information['_data']['affiliation'] = $DeimsSiteParagraphFieldController->parseAffiliation($node);
+		$site_information['_data']['affiliation'] = $DeimsSiteParagraphFieldController->parseAffiliation($node->get('field_affiliation'));
 				
 		// aggregate temperature fields; shorthand ifs to catch empty values
 		$site_information['_data']['air_temperature']['avg_c'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;

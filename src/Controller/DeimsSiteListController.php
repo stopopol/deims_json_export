@@ -36,7 +36,7 @@ class DeimsSiteListController {
 			$site_information['name'] = $node->get('field_name')->value;
 			$site_information['coordinates'] = $node->get('field_coordinates')->value;
 			$site_information['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
-			$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node);
+			$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node->get('field_affiliation'));
 			
 			array_push($site_list, $site_information);
 		}

@@ -10,13 +10,13 @@ class DeimsSiteParagraphFieldController extends ControllerBase {
 	 *
 	 * Requires a node object as input and will look for an "affiliation" field within the node
 	 */
-	public function parseAffiliation($node) {
+	public function parseAffiliation($affiliation) {
 		$paragraph_collection = [];
 		$DeimsSiteParagraphFieldController = new DeimsSiteParagraphFieldController();
 		// case for empty field or single paragraph
-		if (sizeof ($node->get('field_affiliation')) == 1) {		
-			if ($node->get('field_affiliation')->entity->field_network_name->target_id) {	
-				$network_item = $DeimsSiteParagraphFieldController->parseAffiliationFields($node->get('field_affiliation')->entity);
+		if (sizeof ($affiliation) == 1) {
+			if ($affiliation->entity->field_network_name->target_id) {	
+				$network_item = $DeimsSiteParagraphFieldController->parseAffiliationFields($affiliation->entity);
 				array_push($paragraph_collection, $network_item);
 			}
 			else {
@@ -25,7 +25,7 @@ class DeimsSiteParagraphFieldController extends ControllerBase {
 		}
 		// case for multiple paragraphs
 		else {
-			foreach ($node->get('field_affiliation')->referencedEntities() as $paragraph_item) {
+			foreach ($affiliation->referencedEntities() as $paragraph_item) {
 				if ($paragraph_item->field_network_name->target_id) {
 					$network_item = $DeimsSiteParagraphFieldController->parseAffiliationFields($paragraph_item);
 					array_push($paragraph_collection, $network_item);
