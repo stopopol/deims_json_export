@@ -11,13 +11,14 @@ class DeimsSitePersonFieldController extends ControllerBase {
 	 * Requires a node object as input and the fieldname
 	 */
 	public function parsePersonField($field) {
-		$person_collection = [];
+		$RefEntity_collection = [];
 		$DeimsSitePersonFieldController = new DeimsSitePersonFieldController();
+		
 		// case for empty field or single person
 		if (sizeof ($field) == 1) {
 			if ($field->entity) {	
-				$person_item = $DeimsSitePersonFieldController->parsePersonFields($field->entity);
-				array_push($person_collection, $person_item);
+				$RefEntity_item = $DeimsSitePersonFieldController->parseRefEntityField($field->entity);
+				array_push($RefEntity_collection, $RefEntity_item);
 			}
 			else {
 				return null;
@@ -25,15 +26,15 @@ class DeimsSitePersonFieldController extends ControllerBase {
 		}
 		// case for multiple person references
 		else {
-			foreach ($field->referencedEntities() as $person) {
-				if ($person) {
-					$person_item = $DeimsSitePersonFieldController->parsePersonFields($person);
-					array_push($person_collection, $person_item);
+			foreach ($field->referencedEntities() as $RefEntity) {
+				if ($RefEntity) {
+					$RefEntity_item = $DeimsSitePersonFieldController->parseRefEntityField($RefEntity);
+					array_push($RefEntity_collection, $RefEntity_item);
 				}
 			}
-			sort($person_collection);
+			sort($RefEntity_collection);
 		} 
-		return $person_collection;
+		return $RefEntity_collection;
 	}
 	
 	/*
@@ -41,12 +42,26 @@ class DeimsSitePersonFieldController extends ControllerBase {
 	 *
 	 * Requires a paragraph entity as input and returns and array with the formatted values
 	 */
-	public function parsePersonFields($person) {
+	public function parseRefEntityField($RefEntity) {
 		
-		$person_item = [];
-		$person_item['name'] = $person->field_person_name->given . ' ' . $person->field_person_name->family;
-		$person_item['email'] = $person->field_email->value;
-					
-		return $person_item;
+		$RefEntity_item = [];
+		
+		// case for content type 'person'
+		if ($RefEntity->bundle() == 'person') {
+			$RefEntity_item['type'] = 'person';
+			$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
+			$RefEntity_item['email'] = $RefEntity->field_email->value;
+		}
+		
+		// case for content type 'organisation'
+		if ($RefEntity->bundle() == 'organisation') {
+			$RefEntity_item['type'] = 'organisation';
+			$RefEntity_item['name'] = $RefEntity->field_name->value;
+			foreach ($RefEntity->field_url as $url) {
+				$RefEntity_item['url'] = $url -> uri;
+			}
+		}
+		
+		return $RefEntity_item;
 	}
 }

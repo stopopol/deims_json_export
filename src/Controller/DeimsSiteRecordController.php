@@ -51,10 +51,14 @@ class DeimsSiteRecordController extends ControllerBase {
   public function parseSiteFields($node) {
 		$site_information = [];
 		
+		// loading controller functions
+		$DeimsSitePersonFieldController = new DeimsSitePersonFieldController();
+		$DeimsSiteParagraphFieldController = new DeimsSiteParagraphFieldController();
+		
 		$site_information['_id'] = (!empty($node->get('field_deims_id')->value)) ? 'https://deims.org/' . $node->get('field_deims_id')->value : null;
 		$site_information['_name'] = $node->get('field_name')->value;
 		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
-		$DeimsSiteParagraphFieldController = new DeimsSiteParagraphFieldController();
+
 		$site_information['_data']['affiliation'] = $DeimsSiteParagraphFieldController->parseAffiliation($node->get('field_affiliation'));
 				
 		// aggregate temperature fields; shorthand ifs to catch empty values
@@ -106,9 +110,10 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['permanent_operation'] = (!is_null($node->get('field_permanent_operation')->value)) ? (($node->get('field_permanent_operation')->value == 1) ? true : false) : null;	
 		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
 		
-		// content type 'person'	
-		$DeimsSitePersonFieldController = new DeimsSitePersonFieldController();
+		// content type 'person' - but this is missing the case for the content type 'organisation'	
 		$site_information['_data']['site_manager'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_site_manager'));
+		$site_information['_data']['site_owner'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_site_owner'));
+		$site_information['_data']['funding_agency'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_funding_agency'));
 		
 		// shorthand ifs to catch empty values
 		$site_information['_data']['size_ha']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;
