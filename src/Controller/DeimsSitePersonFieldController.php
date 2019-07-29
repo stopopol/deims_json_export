@@ -14,7 +14,7 @@ class DeimsSitePersonFieldController extends ControllerBase {
 		$person_collection = [];
 		$DeimsSitePersonFieldController = new DeimsSitePersonFieldController();
 		// case for empty field or single person
-		if (sizeof ($field->entity) == 1) {
+		if (sizeof ($field) == 1) {
 			if ($field->entity) {	
 				$person_item = $DeimsSitePersonFieldController->parsePersonFields($field->entity);
 				array_push($person_collection, $person_item);
