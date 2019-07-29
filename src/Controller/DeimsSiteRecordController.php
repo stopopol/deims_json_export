@@ -68,8 +68,8 @@ class DeimsSiteRecordController extends ControllerBase {
 				
 		// print label of key-value pair instead of key
 		$country_values_list = $node->getFieldDefinition('field_country')->getSetting('allowed_values');
+		$site_information['_data']['country'] = $country_values_list[$node->get('field_country')->value];
 		
-		$site_information['_data']['country'] = $country_values_list[$node->get('field_country')->value];		
 		$site_information['_data']['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
 		
 		// group experiments
@@ -91,8 +91,11 @@ class DeimsSiteRecordController extends ControllerBase {
 		
 		// special case for boolean fields
 		$site_information['_data']['management_resources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
-		$site_information['_data']['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;			
-		$site_information['_data']['management_resources']['percentage'] = $node->get('field_management_resources_pct')->value;	
+		$site_information['_data']['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;
+
+		// print label of key-value pair instead of key
+		$management_resources_pct_values_list = $node->getFieldDefinition('field_management_resources_pct')->getSetting('allowed_values');
+		$site_information['_data']['management_resources']['percentage'] = $management_resources_pct_values_list[$node->get('field_management_resources_pct')->value];
 		
 		// group observations
 		$site_information['_data']['observations']['design'] = $node->get('field_design_observation')->value;
