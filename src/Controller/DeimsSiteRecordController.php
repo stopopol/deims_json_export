@@ -110,7 +110,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['permanent_operation'] = (!is_null($node->get('field_permanent_operation')->value)) ? (($node->get('field_permanent_operation')->value == 1) ? true : false) : null;	
 		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
 		
-		// content type 'person' - but this is missing the case for the content type 'organisation'	
+		// parses both referenced fields of content type 'person' and/or 'organisation'
 		$site_information['_data']['site_manager'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_site_manager'));
 		$site_information['_data']['site_owner'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_site_owner'));
 		$site_information['_data']['funding_agency'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_funding_agency'));
