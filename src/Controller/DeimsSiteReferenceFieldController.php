@@ -28,7 +28,9 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 			foreach ($field->referencedEntities() as $RefEntity) {
 				if ($RefEntity) {
 					$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity);
-					array_push($RefEntity_collection, $RefEntity_item);
+					if ($RefEntity_item) {
+						array_push($RefEntity_collection, $RefEntity_item);
+					}
 				}
 			}
 			sort($RefEntity_collection);
