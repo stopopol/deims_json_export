@@ -16,25 +16,21 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		
 		// case for empty field or single reference
 		if (sizeof ($field) == 1) {
-			$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($field->entity);
-			if ($RefEntity_item) {
-				array_push($RefEntity_collection, $RefEntity_item);
-			}
-			
+			array_push($RefEntity_collection, $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity));
 		}
 		// case for multiple references
 		else {
 			foreach ($field->referencedEntities() as $RefEntity) {
-				$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity);
-				if ($RefEntity_item) {
-					array_push($RefEntity_collection, $RefEntity_item);
-				}
-				
+				array_push($RefEntity_collection, $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity));
 			}
 			sort($RefEntity_collection);
 		}
-		// filter empty arrays
-		return (!empty($RefEntity_collection)) ? $RefEntity_collection : null;
+		// filter empty values in array, because there are cases when a node is insufficiently filled in or there are drupal leftovers due to the form API
+		$sanitized_RefEntity_collection = array_values(array_filter($RefEntity_collection));
+		if (!empty($sanitized_RefEntity_collection)) {
+			return $sanitized_RefEntity_collection;
+		}
+		
 	}
 	
 	/*
@@ -44,16 +40,14 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 	 */
 	public function parseEntityFieldContent($RefEntity) {
 		
-		$RefEntity_item = [];
-		
 		if ($RefEntity) {
+			$RefEntity_item = [];
 			switch ($RefEntity->bundle()) {
 				// case for content type 'person'
 				case 'person':
 					$RefEntity_item['type'] = 'person';
 					$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
-					break;
 				
 				// case for content type 'organisation'
 				case 'organisation':
@@ -62,7 +56,6 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 					foreach ($RefEntity->field_url as $url) {
 						$RefEntity_item['url'] = $url -> uri;
 					}
-					break;
 				
 				// case for paragraphs of type 'network_pg'
 				case 'network_pg' :
@@ -71,9 +64,8 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 						$RefEntity_item['code'] = $RefEntity->field_network_specific_site_code->value;
 						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
 					}
-					break;
 			}
-		}
-		return $RefEntity_item;
+			return $RefEntity_item;
+		}		
 	}
 }
