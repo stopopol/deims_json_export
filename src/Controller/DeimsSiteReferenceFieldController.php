@@ -18,10 +18,9 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		if (sizeof ($field) == 1) {
 			if ($field->entity) {	
 				$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($field->entity);
-				array_push($RefEntity_collection, $RefEntity_item);
-			}
-			else {
-				return null;
+				if ($RefEntity_item) {
+					array_push($RefEntity_collection, $RefEntity_item);
+				}
 			}
 		}
 		// case for multiple person references
@@ -33,8 +32,9 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 				}
 			}
 			sort($RefEntity_collection);
-		} 
-		return $RefEntity_collection;
+		}
+		
+		return (!empty($RefEntity_collection)) ? $RefEntity_collection : null;
 	}
 	
 	/*

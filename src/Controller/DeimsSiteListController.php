@@ -38,8 +38,7 @@ class DeimsSiteListController {
 			$site_information['name'] = $node->get('field_name')->value;
 			$site_information['coordinates'] = $node->get('field_coordinates')->value;
 			$site_information['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
-			$affiliation_array = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
-			$site_information['affiliation'] = (!empty($affiliation_array[0])) ? $affiliation_array : null;
+			$site_information['affiliation'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 			
 			array_push($site_list, $site_information);
 		}
