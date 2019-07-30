@@ -10,14 +10,14 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 	 *
 	 * Requires a node object as input and the fieldname
 	 */
-	public function parsePersonField($field) {
+	public function parseEntityReferenceField($field) {
 		$RefEntity_collection = [];
 		$DeimsSiteReferenceFieldController = new DeimsSiteReferenceFieldController();
 		
 		// case for empty field or single person
 		if (sizeof ($field) == 1) {
 			if ($field->entity) {	
-				$RefEntity_item = $DeimsSiteReferenceFieldController->parseRefEntityField($field->entity);
+				$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($field->entity);
 				array_push($RefEntity_collection, $RefEntity_item);
 			}
 			else {
@@ -28,7 +28,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		else {
 			foreach ($field->referencedEntities() as $RefEntity) {
 				if ($RefEntity) {
-					$RefEntity_item = $DeimsSiteReferenceFieldController->parseRefEntityField($RefEntity);
+					$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity);
 					array_push($RefEntity_collection, $RefEntity_item);
 				}
 			}
@@ -38,11 +38,11 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 	}
 	
 	/*
-	 * Function that parses the fields within a person field
+	 * Function that parses the fields within a referenced field
 	 *
-	 * Requires a paragraph entity as input and returns and array with the formatted values
+	 * Requires an entity as input and returns an array with the formatted values
 	 */
-	public function parseRefEntityField($RefEntity) {
+	public function parseEntityFieldContent($RefEntity) {
 		
 		$RefEntity_item = [];
 		

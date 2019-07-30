@@ -58,7 +58,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_name'] = $node->get('field_name')->value;
 		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
 
-		$affiliation_array = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_affiliation'));
+		$affiliation_array = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 		$site_information['_data']['affiliation'] = (!empty($affiliation_array[0])) ? $affiliation_array : null;		
 		
 		// aggregate temperature fields; shorthand ifs to catch empty values
@@ -111,9 +111,9 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
 		
 		// parses both referenced fields of content type 'person' and/or 'organisation'
-		$site_information['_data']['site_manager'] = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_site_manager'));
-		$site_information['_data']['site_owner'] = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_site_owner'));
-		$site_information['_data']['funding_agency'] = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_funding_agency'));
+		$site_information['_data']['site_manager'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_site_manager'));
+		$site_information['_data']['site_owner'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_site_owner'));
+		$site_information['_data']['funding_agency'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_funding_agency'));
 		
 		// shorthand ifs to catch empty values
 		$site_information['_data']['size_ha']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;
