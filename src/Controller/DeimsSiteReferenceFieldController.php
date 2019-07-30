@@ -16,22 +16,20 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		
 		// case for empty field or single reference
 		if (sizeof ($field) == 1) {
-			if ($field->entity) {	
-				$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($field->entity);
-				if ($RefEntity_item) {
-					array_push($RefEntity_collection, $RefEntity_item);
-				}
+			$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($field->entity);
+			if ($RefEntity_item) {
+				array_push($RefEntity_collection, $RefEntity_item);
 			}
+			
 		}
 		// case for multiple references
 		else {
 			foreach ($field->referencedEntities() as $RefEntity) {
-				if ($RefEntity) {
-					$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity);
-					if ($RefEntity_item) {
-						array_push($RefEntity_collection, $RefEntity_item);
-					}
+				$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity);
+				if ($RefEntity_item) {
+					array_push($RefEntity_collection, $RefEntity_item);
 				}
+				
 			}
 			sort($RefEntity_collection);
 		}
@@ -48,31 +46,32 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		
 		$RefEntity_item = [];
 		
-		// case for content type 'person'
-		if ($RefEntity->bundle() == 'person') {
-			$RefEntity_item['type'] = 'person';
-			$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
-			$RefEntity_item['email'] = $RefEntity->field_email->value;
-		}
-		
-		// case for content type 'organisation'
-		if ($RefEntity->bundle() == 'organisation') {
-			$RefEntity_item['type'] = 'organisation';
-			$RefEntity_item['name'] = $RefEntity->field_name->value;
-			foreach ($RefEntity->field_url as $url) {
-				$RefEntity_item['url'] = $url -> uri;
+		if ($RefEntity) {
+			// case for content type 'person'
+			if ($RefEntity->bundle() == 'person') {
+				$RefEntity_item['type'] = 'person';
+				$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
+				$RefEntity_item['email'] = $RefEntity->field_email->value;
+			}
+			
+			// case for content type 'organisation'
+			if ($RefEntity->bundle() == 'organisation') {
+				$RefEntity_item['type'] = 'organisation';
+				$RefEntity_item['name'] = $RefEntity->field_name->value;
+				foreach ($RefEntity->field_url as $url) {
+					$RefEntity_item['url'] = $url -> uri;
+				}
+			}
+			
+			// case for paragraphs of type 'network_pg'
+			if ($RefEntity->bundle() == 'network_pg') {
+				if ($RefEntity->field_network->entity) {
+					$RefEntity_item['network'] =  $RefEntity->field_network->entity->getTitle();
+					$RefEntity_item['code'] = $RefEntity->field_network_specific_site_code->value;
+					$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
+				}
 			}
 		}
-		
-		// case for paragraphs of type 'network'
-		if ($RefEntity->bundle() == 'network_pg') {
-			if ($RefEntity->field_network->entity) {
-				$RefEntity_item['network'] =  $RefEntity->field_network->entity->getTitle();
-				$RefEntity_item['code'] = $RefEntity->field_network_specific_site_code->value;
-				$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
-			}
-		}
-		
 		return $RefEntity_item;
 	}
 }
