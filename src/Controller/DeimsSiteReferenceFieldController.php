@@ -14,7 +14,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		$RefEntity_collection = [];
 		$DeimsSiteReferenceFieldController = new DeimsSiteReferenceFieldController();
 		
-		// case for empty field or single person
+		// case for empty field or single reference
 		if (sizeof ($field) == 1) {
 			if ($field->entity) {	
 				$RefEntity_item = $DeimsSiteReferenceFieldController->parseEntityFieldContent($field->entity);
@@ -23,7 +23,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 				}
 			}
 		}
-		// case for multiple person references
+		// case for multiple references
 		else {
 			foreach ($field->referencedEntities() as $RefEntity) {
 				if ($RefEntity) {
@@ -33,7 +33,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 			}
 			sort($RefEntity_collection);
 		}
-		
+		// filter empty arrays
 		return (!empty($RefEntity_collection)) ? $RefEntity_collection : null;
 	}
 	
