@@ -63,7 +63,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		}
 		
 		// case for paragraphs of type 'network'
-		if ($RefEntity->bundle() == 'network') {
+		if ($RefEntity->bundle() == 'network_pg') {
 			if ($RefEntity->field_network_name->target_id) {
 				$RefEntity_item['name'] =  taxonomy_term_load($RefEntity->field_network_name->target_id)->getName();
 				$RefEntity_item['code'] = $RefEntity->field_network_specific_site_code->value;
