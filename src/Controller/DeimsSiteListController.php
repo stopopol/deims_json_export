@@ -26,8 +26,10 @@ class DeimsSiteListController {
 	$site_list = [];
 	
 	$nids = \Drupal::entityQuery('node')->condition('type','site')->execute();
-    $nodes = \Drupal\node\Entity\Node::loadMultiple($nids); 
- 	
+    $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+	
+	$DeimsSiteReferenceFieldController = new DeimsSiteReferenceFieldController();
+	
 	foreach ($nodes as $node) {
 		
 		if ($node->isPublished()) {
@@ -36,7 +38,8 @@ class DeimsSiteListController {
 			$site_information['name'] = $node->get('field_name')->value;
 			$site_information['coordinates'] = $node->get('field_coordinates')->value;
 			$site_information['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
-			$site_information['affiliation'] = DeimsSiteParagraphFieldController::parseAffiliation($node->get('field_affiliation'));
+			$affiliation_array = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_affiliation'));
+			$site_information['affiliation'] = (!empty($affiliation_array[0])) ? $affiliation_array : null;
 			
 			array_push($site_list, $site_information);
 		}

@@ -52,15 +52,15 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information = [];
 		
 		// loading controller functions
-		$DeimsSitePersonFieldController = new DeimsSitePersonFieldController();
-		$DeimsSiteParagraphFieldController = new DeimsSiteParagraphFieldController();
+		$DeimsSiteReferenceFieldController = new DeimsSiteReferenceFieldController();
 		
 		$site_information['_id'] = (!empty($node->get('field_deims_id')->value)) ? 'https://deims.org/' . $node->get('field_deims_id')->value : null;
 		$site_information['_name'] = $node->get('field_name')->value;
 		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
 
-		$site_information['_data']['affiliation'] = $DeimsSiteParagraphFieldController->parseAffiliation($node->get('field_affiliation'));
-				
+		$affiliation_array = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_affiliation'));
+		$site_information['_data']['affiliation'] = (!empty($affiliation_array[0])) ? $affiliation_array : null;		
+		
 		// aggregate temperature fields; shorthand ifs to catch empty values
 		$site_information['_data']['air_temperature']['avg_c'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
 		$site_information['_data']['air_temperature']['min_c'] = (!is_null($node->get('field_air_temp_min')->value)) ? floatval($node->get('field_air_temp_min')->value) : null;
@@ -111,9 +111,9 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['purpose'] = $node->get('field_purpose')->value;
 		
 		// parses both referenced fields of content type 'person' and/or 'organisation'
-		$site_information['_data']['site_manager'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_site_manager'));
-		$site_information['_data']['site_owner'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_site_owner'));
-		$site_information['_data']['funding_agency'] = $DeimsSitePersonFieldController->parsePersonField($node->get('field_funding_agency'));
+		$site_information['_data']['site_manager'] = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_site_manager'));
+		$site_information['_data']['site_owner'] = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_site_owner'));
+		$site_information['_data']['funding_agency'] = $DeimsSiteReferenceFieldController->parsePersonField($node->get('field_funding_agency'));
 		
 		// shorthand ifs to catch empty values
 		$site_information['_data']['size_ha']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;
