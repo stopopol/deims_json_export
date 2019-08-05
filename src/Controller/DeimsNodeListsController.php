@@ -63,6 +63,23 @@ class DeimsNodeListsController {
 			} 
 			break;
 			
+		case 'activity':
+			$nids = \Drupal::entityQuery('node')->condition('type',$content_type)->execute();
+			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+			
+			foreach ($nodes as $node) {
+				
+				if ($node->isPublished()) {
+					
+					$dataset_information = [];
+					$dataset_information['name'] = $node->get('title')->value;
+					$dataset_information['uuid'] = $node->get('uuid')->value;
+					
+					array_push($node_list, $dataset_information);
+				}
+			} 
+			break;	
+			
 		default:
 			$error_message = [];
 			$error_message['status'] = "404";
