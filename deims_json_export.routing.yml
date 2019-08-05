@@ -14,3 +14,20 @@ site_record.content:
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
+
+dataset_list.content:
+    path: '/api/dataset'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsDatasetListController::renderApi'
+      _title: 'JSON api'
+    methods:  [GET]
+    requirements:
+      _access: 'TRUE' 
+     
+dataset_record.content:
+    path: '/api/dataset/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsDatasetRecordController::renderApi'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
