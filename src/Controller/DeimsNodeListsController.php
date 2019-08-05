@@ -46,7 +46,9 @@ class DeimsNodeListsController {
 				}
 			}
 			break;
-			
+		
+		case 'activity':
+		case 'sensor':
 		case 'dataset':
 			$nids = \Drupal::entityQuery('node')->condition('type',$content_type)->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
@@ -63,40 +65,6 @@ class DeimsNodeListsController {
 				}
 			} 
 			break;
-			
-		case 'activity':
-			$nids = \Drupal::entityQuery('node')->condition('type',$content_type)->execute();
-			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
-			
-			foreach ($nodes as $node) {
-				
-				if ($node->isPublished()) {
-					
-					$node_information = [];
-					$node_information['name'] = $node->get('title')->value;
-					$node_information['uuid'] = $node->get('uuid')->value;
-					
-					array_push($node_list, $node_information);
-				}
-			} 
-			break;
-		
-		case 'sensor':
-			$nids = \Drupal::entityQuery('node')->condition('type',$content_type)->execute();
-			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
-			
-			foreach ($nodes as $node) {
-				
-				if ($node->isPublished()) {
-					
-					$node_information = [];
-					$node_information['name'] = $node->get('title')->value;
-					$node_information['uuid'] = $node->get('uuid')->value;
-					
-					array_push($node_list, $node_information);
-				}
-			} 
-			break;	
 			
 		default:
 			$error_message = [];
