@@ -7,7 +7,7 @@ namespace Drupal\deims_json_export\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * This controller lists all sites on DEIMS-SDR in a JSON object including a selected subset of information
+ * This controller lists all nodes on DEIMS-SDR in a JSON object including a selected subset of information
  */
 class DeimsNodeListsController {
 
@@ -24,7 +24,8 @@ class DeimsNodeListsController {
   public function getResults($content_type) {
 	
 	$node_list = [];
-
+	
+	// only return defined contents
 	switch ($content_type) {
 	
 		case 'site':
@@ -35,13 +36,13 @@ class DeimsNodeListsController {
 				
 				if ($node->isPublished()) {
 					
-					$site_information = [];
-					$site_information['name'] = $node->get('field_name')->value;
-					$site_information['coordinates'] = $node->get('field_coordinates')->value;
-					$site_information['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
-					$site_information['affiliation'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
+					$node_information = [];
+					$node_information['name'] = $node->get('field_name')->value;
+					$node_information['coordinates'] = $node->get('field_coordinates')->value;
+					$node_information['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
+					$node_information['affiliation'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 					
-					array_push($node_list, $site_information);
+					array_push($node_list, $node_information);
 				}
 			}
 			break;
@@ -54,11 +55,11 @@ class DeimsNodeListsController {
 				
 				if ($node->isPublished()) {
 					
-					$dataset_information = [];
-					$dataset_information['name'] = $node->get('title')->value;
-					$dataset_information['uuid'] = $node->get('uuid')->value;
+					$node_information = [];
+					$node_information['name'] = $node->get('title')->value;
+					$node_information['uuid'] = $node->get('uuid')->value;
 					
-					array_push($node_list, $dataset_information);
+					array_push($node_list, $node_information);
 				}
 			} 
 			break;
@@ -71,11 +72,11 @@ class DeimsNodeListsController {
 				
 				if ($node->isPublished()) {
 					
-					$dataset_information = [];
-					$dataset_information['name'] = $node->get('title')->value;
-					$dataset_information['uuid'] = $node->get('uuid')->value;
+					$node_information = [];
+					$node_information['name'] = $node->get('title')->value;
+					$node_information['uuid'] = $node->get('uuid')->value;
 					
-					array_push($node_list, $dataset_information);
+					array_push($node_list, $node_information);
 				}
 			} 
 			break;	
