@@ -38,7 +38,8 @@ class DeimsNodeListsController {
 					
 					$node_information = [];
 					$node_information['name'] = $node->get('field_name')->value;
-					$node_information['deimsid'] = 'https://deims.org/' . $node->get('field_deims_id')->value;
+					$node_information['deimsid']['prefix'] = 'https://deims.org/';
+					$node_information['deimsid']['id'] = $node->get('field_deims_id')->value;
 					$node_information['coordinates'] = $node->get('field_coordinates')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 					$node_information['affiliation'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
