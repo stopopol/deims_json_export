@@ -16,7 +16,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 		
 		// case for empty field or single reference
 		if (sizeof ($field) == 1) {
-			array_push($RefEntity_collection, $DeimsSiteReferenceFieldController->parseEntityFieldContent($RefEntity));
+			array_push($RefEntity_collection, $DeimsSiteReferenceFieldController->parseEntityFieldContent($field->entity));
 		}
 		// case for multiple references
 		else {
