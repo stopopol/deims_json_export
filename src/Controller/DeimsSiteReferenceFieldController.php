@@ -48,7 +48,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 					$RefEntity_item['type'] = 'person';
 					$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
-				
+					break;
 				// case for content type 'organisation'
 				case 'organisation':
 					$RefEntity_item['type'] = 'organisation';
@@ -56,7 +56,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 					foreach ($RefEntity->field_url as $url) {
 						$RefEntity_item['url'] = $url -> uri;
 					}
-				
+					break;
 				// case for paragraphs of type 'network_pg'
 				case 'network_pg' :
 					if ($RefEntity->field_network->entity) {
@@ -64,6 +64,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 						$RefEntity_item['code'] = $RefEntity->field_network_specific_site_code->value;
 						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
 					}
+					break;
 			}
 			return $RefEntity_item;
 		}		
