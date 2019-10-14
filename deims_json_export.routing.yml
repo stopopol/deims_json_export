@@ -1,4 +1,4 @@
-deims_lists.content:
+landing_page.content:
     path: '/api'
     defaults:
       _controller: 'Drupal\deims_json_export\Controller\DeimsLandingPageController::renderApi'

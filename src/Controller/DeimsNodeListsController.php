@@ -22,9 +22,9 @@ class DeimsNodeListsController {
    * A helper function returning results.
    */
   public function getResults($content_type) {
-	
+
 	$node_list = [];
-	
+
 	// only return defined contents
 	switch ($content_type) {
 	
@@ -40,6 +40,7 @@ class DeimsNodeListsController {
 					$node_information['name'] = $node->get('field_name')->value;
 					$node_information['deimsid']['prefix'] = 'https://deims.org/';
 					$node_information['deimsid']['id'] = $node->get('field_deims_id')->value;
+					$node_information['coordinates'] = $node->get('field_coordinates')->value;
 					$node_information['coordinates'] = $node->get('field_coordinates')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 					$node_information['affiliation'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
@@ -61,14 +62,15 @@ class DeimsNodeListsController {
 					
 					$node_information = [];
 					$node_information['name'] = $node->get('title')->value;
-					$node_information['uuid'] = $node->get('uuid')->value;
+					$node_information['path']['prefix'] = "https://deims.org/" . $content_type . "/";
+					$node_information['path']['uuid'] = $node->get('uuid')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 
 					array_push($node_list, $node_information);
 				}
 			} 
 			break;
-			
+
 		default:
 			$error_message = [];
 			$error_message['status'] = "404";

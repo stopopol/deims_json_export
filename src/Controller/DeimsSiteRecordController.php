@@ -75,8 +75,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$country_values_list = $node->getFieldDefinition('field_country')->getSetting('allowed_values');
 		$site_information['_data']['country'] = $country_values_list[$node->get('field_country')->value];
 		
-		$site_information['_data']['ecosystem_landuse'] = $node->get('field_ecosystem_land_use')->value;
-		
 		// group experiments
 		$site_information['_data']['experiments']['design'] = $node->get('field_design_experiments')->value;
 		$site_information['_data']['experiments']['scale'] = $node->get('field_scale_experiments')->value;
@@ -125,6 +123,16 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['year_closed'] = intval($node->get('field_year_closed')->value);	 
 		$site_information['_data']['year_established'] = intval($node->get('field_year_established')->value);
 
+		// parameter and research topics
+
+		// multi-value cases
+
+		// TO DO
+		$site_information['_data']['ecosystem_landuse'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_ecosystem_land_use'));
+		$site_information['_data']['parameters'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_parameters'));
+		$site_information['_data']['research_topics'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_research_topics'));
+
+		
 		return $site_information;
   }
 

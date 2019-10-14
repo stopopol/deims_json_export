@@ -48,7 +48,9 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 					$RefEntity_item['type'] = 'person';
 					$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
+
 					break;
+				
 				// case for content type 'organisation'
 				case 'organisation':
 					$RefEntity_item['type'] = 'organisation';
@@ -58,12 +60,21 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 					}
 					break;
 				// case for paragraphs of type 'network_pg'
-				case 'network_pg' :
+				case 'network_pg':
 					if ($RefEntity->field_network->entity) {
 						$RefEntity_item['network'] =  $RefEntity->field_network->entity->getTitle();
 						$RefEntity_item['code'] = $RefEntity->field_network_specific_site_code->value;
 						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
 					}
+					break;
+				// cases for taxonomies
+				case 'ecosystem_types_and_land_use':
+					$RefEntity_item['label'] = $RefEntity->label();
+					break;
+				case 'parameters':
+				case 'research_topics':
+					$RefEntity_item['label'] = $RefEntity->label();
+					$RefEntity_item['uri'] = $RefEntity->field_uri->uri;
 					break;
 			}
 			return $RefEntity_item;
