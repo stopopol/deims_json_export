@@ -70,6 +70,7 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 				// cases for taxonomies
 				case 'ecosystem_types_and_land_use':
 					$RefEntity_item['label'] = $RefEntity->label();
+					$RefEntity_item['uri'] = null;
 					break;
 				case 'parameters':
 				case 'research_topics':
