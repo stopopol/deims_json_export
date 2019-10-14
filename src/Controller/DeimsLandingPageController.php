@@ -29,7 +29,8 @@ class DeimsLandingPageController extends ControllerBase {
 	$output_information = [];
 
 	$output_information['version'] = '0.1';
-    $output_information['terms_of_use'] = 'https://deims.org/about';
+    $output_information['about'] = 'https://deims.org/about';
+    $output_information['terms'] = 'https://deims.org/terms';
     $output_information['resources'] = array("site","dataset","activity","sensor");
         
 	
