@@ -71,9 +71,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['biome'] = $node->get('field_biome')->value;
 		$site_information['_data']['boundaries'] = $node->get('field_boundaries')->value;
 		
-		// print label of key-value pair instead of key
-		$country_values_list = $node->getFieldDefinition('field_country')->getSetting('allowed_values');
-		$site_information['_data']['country'] = $country_values_list[$node->get('field_country')->value];
+		$site_information['_data']['country'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_country');
 		
 		$site_information['_data']['ecosystem_landuse'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_ecosystem_land_use'));
 
@@ -98,11 +96,9 @@ class DeimsSiteRecordController extends ControllerBase {
 		// special case for boolean fields
 		$site_information['_data']['management_resources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
 		$site_information['_data']['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;
-
-		// print label of key-value pair instead of key
-		$management_resources_pct_values_list = $node->getFieldDefinition('field_management_resources_pct')->getSetting('allowed_values');
-		$site_information['_data']['management_resources']['percentage'] = $management_resources_pct_values_list[$node->get('field_management_resources_pct')->value];
 		
+		$site_information['_data']['management_resources']['percentage']  = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_management_resources_pct');
+
 		// group observations
 		$site_information['_data']['observations']['design'] = $node->get('field_design_observation')->value;
 		$site_information['_data']['observations']['scale'] = $node->get('field_scale_observation')->value;
@@ -132,8 +128,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		// available 
 		$site_information['_data']['infrastructure']['accessible_all_year'] = (!is_null($node->get('field_accessible_all_year')->value)) ? (($node->get('field_accessible_all_year')->value == 1) ? true : false) : null;
 
-		$access_type_values_list = $node->getFieldDefinition('field_access_type')->getSetting('allowed_values');
-		$site_information['_data']['infrastructure']['access_type'] = $access_type_values_list[$node->get('field_access_type')->value];
+		$site_information['_data']['infrastructure']['access_type'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_access_type');
 
 		$site_information['_data']['infrastructure']['all_parts_accessible'] = (!is_null($node->get('field_all_parts_accessible')->value)) ? (($node->get('field_all_parts_accessible')->value == 1) ? true : false) : null;
 		$site_information['_data']['infrastructure']['permanent_power_supply'] = (!is_null($node->get('field_permanent_power_supply')->value)) ? (($node->get('field_permanent_power_supply')->value == 1) ? true : false) : null;
