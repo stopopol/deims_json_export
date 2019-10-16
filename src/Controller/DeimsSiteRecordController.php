@@ -59,7 +59,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
 
 		$site_information['_data']['affiliation'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));		
-		
+		$site_information['_data']['abstract'] = $node->get('field_abstract')->value;	
+
 		// aggregate temperature fields; shorthand ifs to catch empty values
 		$site_information['_data']['air_temperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
 		$site_information['_data']['air_temperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? floatval($node->get('field_air_temp_min')->value) : null;
@@ -70,7 +71,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['biome'] = $node->get('field_biome')->value;
 		$site_information['_data']['boundaries'] = $node->get('field_boundaries')->value;
 		
-				
 		// print label of key-value pair instead of key
 		$country_values_list = $node->getFieldDefinition('field_country')->getSetting('allowed_values');
 		$site_information['_data']['country'] = $country_values_list[$node->get('field_country')->value];
@@ -93,7 +93,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['geology'] = $node->get('field_geology')->value;
 		$site_information['_data']['history'] = $node->get('field_history')->value;
 		$site_information['_data']['hydrology'] = $node->get('field_hydrology')->value;				
-		$site_information['_data']['keywords'] = $node->get('field_keywords')->value;
+		$site_information['_data']['keywords']= $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_keywords'));
 		
 		// special case for boolean fields
 		$site_information['_data']['management_resources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
@@ -129,6 +129,25 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['year_closed'] = intval($node->get('field_year_closed')->value);	 
 		$site_information['_data']['year_established'] = intval($node->get('field_year_established')->value);
 		
+		// available 
+		$site_information['_data']['infrastructure']['accessible_all_year'] = (!is_null($node->get('field_accessible_all_year')->value)) ? (($node->get('field_accessible_all_year')->value == 1) ? true : false) : null;
+
+		$access_type_values_list = $node->getFieldDefinition('field_access_type')->getSetting('allowed_values');
+		$site_information['_data']['infrastructure']['access_type'] = $access_type_values_list[$node->get('field_access_type')->value];
+
+		$site_information['_data']['infrastructure']['all_parts_accessible'] = (!is_null($node->get('field_all_parts_accessible')->value)) ? (($node->get('field_all_parts_accessible')->value == 1) ? true : false) : null;
+		$site_information['_data']['infrastructure']['permanent_power_supply'] = (!is_null($node->get('field_permanent_power_supply')->value)) ? (($node->get('field_permanent_power_supply')->value == 1) ? true : false) : null;
+		$site_information['_data']['infrastructure']['notes'] = $node->get('field_infrastructure_notes')->value;
+			
+		$site_information['_data']['infrastructure']['collection'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_infrastructure'));
+
+		$site_information['_data']['infrastructure']['data']['notes'] = $node->get('field_data_notes')->value;
+		$site_information['_data']['infrastructure']['data']['policy']['notes'] = $node->get('field_site_data_policy')->value;
+		$site_information['_data']['infrastructure']['data']['policy']['url'] = $node->get('field_data_policy_url')->uri;
+
+		// dedicated function for text list with n values
+		$site_information['_data']['infrastructure']['data']['services'] = $DeimsSiteReferenceFieldController->parseTextListField($node, $fieldname = 'field_site_dataservi');
+
 		return $site_information;
   }
 

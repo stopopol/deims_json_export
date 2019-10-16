@@ -48,7 +48,6 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 					$RefEntity_item['type'] = 'person';
 					$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
-
 					break;
 				
 				// case for content type 'organisation'
@@ -67,11 +66,14 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
 					}
 					break;
-				// cases for taxonomies
+				// case for taxonomies without uri fields
+				case 'lter_controlled_vocabulary':
+				case 'infrastructure':
 				case 'ecosystem_types_and_land_use':
 					$RefEntity_item['label'] = $RefEntity->label();
 					$RefEntity_item['uri'] = null;
 					break;
+				// case for taxonomies with uri fields
 				case 'parameters':
 				case 'research_topics':
 					$RefEntity_item['label'] = $RefEntity->label();
@@ -80,5 +82,34 @@ class DeimsSiteReferenceFieldController extends ControllerBase {
 			}
 			return $RefEntity_item;
 		}		
+	}
+
+	/*
+	 * Function that parses the fields within a referenced field
+	 *
+	 * Requires an entity as input and returns an array with the formatted values
+	 */
+	public function parseTextListField($node, $fieldname) {
+		// handle multi-values for text fields; turn into function
+		$data_values_list_labels = $node->getFieldDefinition($fieldname)->getSetting('allowed_values');
+		if (count($node->get($fieldname)) > 0) {
+			// single-value case
+			if (count($node->get($fieldname)) == 1) {
+				$data_values = $data_values_list_labels[$node->get($fieldname)->value];
+			}
+			// multi-value case
+			else {
+				$data_values = array();
+				foreach ($node->get($fieldname) as $item) {
+					array_push($data_values, $item->value);
+				}
+			}
+		}
+		// no-value case
+		else {
+			$data_values = null;
+		}
+
+		return $data_values;
 	}
 }
