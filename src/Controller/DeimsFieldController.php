@@ -93,15 +93,15 @@ class DeimsFieldController extends ControllerBase {
 		// handle multi-values for text fields; turn into function
 		$data_values_list_labels = $node->getFieldDefinition($fieldname)->getSetting('allowed_values');
 		if (count($node->get($fieldname)) > 0) {
+			$data_values = array();
 			// single-value case
 			if (count($node->get($fieldname)) == 1) {
-				$data_values = $data_values_list_labels[$node->get($fieldname)->value];
+				array_push($data_values, $data_values_list_labels[$node->get($fieldname)->value]);
 			}
 			// multi-value case
 			else {
-				$data_values = array();
 				foreach ($node->get($fieldname) as $item) {
-					array_push($data_values, $item->value);
+					array_push($data_values, $data_values_list_labels[$item->value]);
 				}
 			}
 		}
