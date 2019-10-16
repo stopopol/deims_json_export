@@ -52,13 +52,13 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information = [];
 		
 		// loading controller functions
-		$DeimsSiteReferenceFieldController = new DeimsSiteReferenceFieldController();
+		$DeimsFieldController = new DeimsFieldController();
 
 		$dataset_information['name'] = $node->get('title')->value;
 		$dataset_information['uuid'] = $node->get('uuid')->value;
 		$dataset_information['abstract'] = (!is_null($node->get('field_abstract')->value)) ? ($node->get('field_abstract')->value) : null; 
 		$dataset_information['biological_classification'] = (!is_null($node->get('field_biological_classification')->value)) ? ($node->get('field_abstract')->value) : null; 
-		$dataset_information['contact'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_contact'));
+		$dataset_information['contact'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_contact'));
 		$dataset_information['data_policy_url'] = (!is_null($node->get('field_data_policy_url')->value)) ? ($node->get('field_data_policy_url')->value) : null; 
 		$dataset_information['field_date_range'] = (!is_null($node->get('field_date_range')->value)) ? ($node->get('field_date_range')->value) : null; 
 		$dataset_information['field_doi'] = (!is_null($node->get('field_doi')->value)) ? ($node->get('field_doi')->value) : null; 

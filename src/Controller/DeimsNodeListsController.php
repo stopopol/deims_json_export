@@ -29,7 +29,7 @@ class DeimsNodeListsController {
 	switch ($content_type) {
 	
 		case 'site':
-			$DeimsSiteReferenceFieldController = new DeimsSiteReferenceFieldController();
+			$DeimsFieldController = new DeimsFieldController();
 			$nids = \Drupal::entityQuery('node')->condition('type',$content_type)->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 			foreach ($nodes as $node) {
@@ -43,7 +43,7 @@ class DeimsNodeListsController {
 					$node_information['coordinates'] = $node->get('field_coordinates')->value;
 					$node_information['coordinates'] = $node->get('field_coordinates')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-					$node_information['affiliation'] = $DeimsSiteReferenceFieldController->parseEntityReferenceField($node->get('field_affiliation'));
+					$node_information['affiliation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 					
 					array_push($node_list, $node_information);
 				}
