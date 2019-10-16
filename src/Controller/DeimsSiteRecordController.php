@@ -96,7 +96,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		// special case for boolean fields
 		$site_information['_data']['management_resources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
 		$site_information['_data']['management_resources']['notes'] = $node->get('field_management_resources_notes')->value;
-		
 		$site_information['_data']['management_resources']['percentage']  = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_management_resources_pct');
 
 		// group observations
@@ -139,9 +138,29 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['infrastructure']['data']['notes'] = $node->get('field_data_notes')->value;
 		$site_information['_data']['infrastructure']['data']['policy']['notes'] = $node->get('field_site_data_policy')->value;
 		$site_information['_data']['infrastructure']['data']['policy']['url'] = $node->get('field_data_policy_url')->uri;
+		$site_information['_data']['infrastructure']['data']['policy']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
 
 		// dedicated function for text list with n values
 		$site_information['_data']['infrastructure']['data']['services'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_dataservi');
+		$site_information['_data']['infrastructure']['data']['location'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_datastorloc');
+
+		$site_information['_data']['eunis'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_eunis_habitat'));
+
+		$site_information['_data']['infrastructure']['interval']= (!is_null($node->get('field_maintenance_interval')->value)) ? floatval($node->get('field_maintenance_interval')->value) : null;
+
+		// TO DO:
+		// field_date - remove this field altogether?
+		// field_operation_notes
+		// field_parent_site
+		// field_subsite_name
+		// field_projects
+		// field_protection_programme
+		// field_name_short
+		// field_site_type
+		// field_site_visit_interval
+		// field_url
+
+		// field_images?
 
 		return $site_information;
   }

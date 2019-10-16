@@ -67,6 +67,7 @@ class DeimsFieldController extends ControllerBase {
 					}
 					break;
 				// case for taxonomies without uri fields
+				case 'eunis_habitat':
 				case 'lter_controlled_vocabulary':
 				case 'infrastructure':
 				case 'ecosystem_types_and_land_use':
