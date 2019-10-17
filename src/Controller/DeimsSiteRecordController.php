@@ -136,7 +136,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['infrastructure']['data']['policy']['url'] = $node->get('field_data_policy_url')->uri;
 		$site_information['_data']['infrastructure']['data']['policy']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
 		$site_information['_data']['infrastructure']['data']['services'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_dataservi');
-		$site_information['_data']['infrastructure']['data']['location'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_datastorloc');
+		$site_information['_data']['infrastructure']['data']['location'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_datastorloc'));
 		
 		// TO DO:
 		// field_images -> TBD when necessary
