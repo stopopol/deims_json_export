@@ -57,6 +57,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_id'] = (!empty($node->get('field_deims_id')->value)) ? 'https://deims.org/' . $node->get('field_deims_id')->value : null;
 		$site_information['_name'] = $node->get('field_name')->value;
 		$site_information['_coordinates'] = $node->get('field_coordinates')->value;
+		$site_information['_changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 
 		$site_information['_data']['affiliation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));		
 		$site_information['_data']['abstract'] = $node->get('field_abstract')->value;	
@@ -148,19 +149,25 @@ class DeimsSiteRecordController extends ControllerBase {
 
 		$site_information['_data']['infrastructure']['interval']= (!is_null($node->get('field_maintenance_interval')->value)) ? floatval($node->get('field_maintenance_interval')->value) : null;
 
-		// TO DO:
-		// field_date - remove this field altogether?
-		// field_operation_notes
-		// field_parent_site
-		// field_subsite_name
-		// field_projects
-		// field_protection_programme
-		// field_name_short
-		// field_site_type
-		// field_site_visit_interval
-		// field_url
+		$site_information['_data']['operation']['notes'] = $node->get('field_operation_notes')->value;
+		$site_information['_data']['hierarchy']['parent'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parent_site'));	
+		$site_information['_data']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));	
+		$site_information['_data']['projects'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_projects'));	
+		$site_information['_data']['protectionProgramme'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_protection_programme'));	
+		
 
-		// field_images?
+		$site_information['_data']['shortName'] = $node->get('field_name_short')->value;
+		
+		$site_information['_data']['siteType'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type'));
+
+		$site_information['_data']['SiteVisitInterval']= (!is_null($node->get('field_site_visit_interval')->value)) ? floatval($node->get('field_site_visit_interval')->value) : null;
+
+		// multi-value case
+		$site_information['_data']['SiteURL'] = $DeimsFieldController->parseURLField($node->get('field_url'));
+		
+		// TO DO:
+		// field_images -> TBD when necessary
+		$site_information['_data']['images'] = null;
 
 		return $site_information;
   }

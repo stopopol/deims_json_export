@@ -43,13 +43,19 @@ class DeimsFieldController extends ControllerBase {
 		if ($RefEntity) {
 			$RefEntity_item = [];
 			switch ($RefEntity->bundle()) {
+				// case for content type 'site'
+				case 'site':
+					$RefEntity_item['type'] = 'site';
+					$RefEntity_item['name'] = $RefEntity->field_name->value;
+					$RefEntity_item['deimsid']['prefix'] = 'https://deims.org/';
+					$RefEntity_item['deimsid']['id'] = $RefEntity->field_deims_id->value;
+					break;
 				// case for content type 'person'
 				case 'person':
 					$RefEntity_item['type'] = 'person';
 					$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
 					break;
-				
 				// case for content type 'organisation'
 				case 'organisation':
 					$RefEntity_item['type'] = 'organisation';
@@ -66,7 +72,15 @@ class DeimsFieldController extends ControllerBase {
 						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
 					}
 					break;
+				// case for paragraphs of type 'protection_programme'
+				case 'protection_programme':
+					// always just 0:1 values
+					$RefEntity_item['name'] =  $RefEntity->field_protection_programme->entity->getName();
+					$RefEntity_item['cover'] = $RefEntity->field_protection_programme_cover->value;
+					$RefEntity_item['notes'] = $RefEntity->field_protection_programme_notes->value;
+					break;
 				// case for taxonomies without uri fields
+				case 'projects':
 				case 'eunis_habitat':
 				case 'lter_controlled_vocabulary':
 				case 'infrastructure':
@@ -103,6 +117,34 @@ class DeimsFieldController extends ControllerBase {
 			else {
 				foreach ($node->get($fieldname) as $item) {
 					array_push($data_values, $data_values_list_labels[$item->value]);
+				}
+			}
+		}
+		// no-value case
+		else {
+			$data_values = null;
+		}
+
+		return $data_values;
+	}
+
+	/*
+	 * Function that parses the fields within a referenced field
+	 *
+	 * Requires an entity as input and returns an array with the formatted values
+	 */
+	public function parseURLField($field) {
+		// handle multi-values for text fields; turn into function
+		if (count($field) > 0) {
+			$data_values = array();
+			// single-value case
+			if (count($field) == 1) {
+				array_push($data_values, array('title'=>$field->title,'uri'=>$field->uri));
+			}
+			// multi-value case
+			else {
+				foreach ($field as $item) {
+					array_push($data_values, array('title'=>$item->title,'uri'=>$item->uri));
 				}
 			}
 		}
