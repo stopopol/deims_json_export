@@ -28,7 +28,7 @@ class DeimsLandingPageController extends ControllerBase {
 	  $output_information = [];
 
 	  $output_information['title'] = 'DEIMS-SDR API';
-	  $output_information['description'] = 'This a an API for automated data export from the site and dataset registry DEIMS-SDR';
+	  $output_information['description'] = 'This is an API for automated data export from the site and dataset registry DEIMS-SDR';
     $output_information['termsOfService'] = 'https://deims.org/terms';
     $output_information['contact']['name'] = 'DEIMS-SDR Support';
     $output_information['contact']['url'] = 'https://deims.org/contact';
