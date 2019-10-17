@@ -82,10 +82,10 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['general']['SiteURL'] = $DeimsFieldController->parseURLField($node->get('field_url'));
 
 		// aggregate temperature fields; shorthand ifs to catch empty values
-		$site_information['_data']['environmentalCharacteristics']['air_temperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
-		$site_information['_data']['environmentalCharacteristics']['air_temperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? floatval($node->get('field_air_temp_min')->value) : null;
-		$site_information['_data']['environmentalCharacteristics']['air_temperature']['max'] = (!is_null($node->get('field_air_temp_max')->value)) ? floatval($node->get('field_air_temp_max')->value) : null;
-		$site_information['_data']['environmentalCharacteristics']['air_temperature']['unit'] = '°C';
+		$site_information['_data']['environmentalCharacteristics']['airTemperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
+		$site_information['_data']['environmentalCharacteristics']['airTemperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? floatval($node->get('field_air_temp_min')->value) : null;
+		$site_information['_data']['environmentalCharacteristics']['airTemperature']['max'] = (!is_null($node->get('field_air_temp_max')->value)) ? floatval($node->get('field_air_temp_max')->value) : null;
+		$site_information['_data']['environmentalCharacteristics']['airTemperature']['unit'] = '°C';
 		$site_information['_data']['environmentalCharacteristics']['biogeographicalRegion'] = $node->get('field_biogeographical_region')->value;
 		$site_information['_data']['environmentalCharacteristics']['biome'] = $node->get('field_biome')->value;
 		$site_information['_data']['environmentalCharacteristics']['ecosystemAndLanduse'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_ecosystem_land_use'));

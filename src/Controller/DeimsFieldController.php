@@ -80,6 +80,10 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['notes'] = $RefEntity->field_protection_programme_notes->value;
 					break;
 				// case for taxonomies without uri fields
+				case 'spatial_design':
+				case 'spatial_scale':
+				case 'temporal_resolution':
+				case 'data_policy':
 				case 'projects':
 				case 'eunis_habitat':
 				case 'lter_controlled_vocabulary':
@@ -89,6 +93,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['uri'] = null;
 					break;
 				// case for taxonomies with uri fields
+				case 'inspire_data_themes':
 				case 'parameters':
 				case 'research_topics':
 					$RefEntity_item['label'] = $RefEntity->label();

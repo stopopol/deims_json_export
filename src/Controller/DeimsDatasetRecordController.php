@@ -58,12 +58,41 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['uuid'] = $node->get('uuid')->value;
 		$dataset_information['abstract'] = (!is_null($node->get('field_abstract')->value)) ? ($node->get('field_abstract')->value) : null; 
 		$dataset_information['biological_classification'] = (!is_null($node->get('field_biological_classification')->value)) ? ($node->get('field_abstract')->value) : null; 
-		$dataset_information['contact'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_contact'));
+		$dataset_information['contact']['corresponding'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_contact'));
+		$dataset_information['contact']['creator']= $DeimsFieldController->parseEntityReferenceField($node->get('field_creator'));
 		$dataset_information['data_policy_url'] = (!is_null($node->get('field_data_policy_url')->value)) ? ($node->get('field_data_policy_url')->value) : null; 
 		$dataset_information['field_date_range'] = (!is_null($node->get('field_date_range')->value)) ? ($node->get('field_date_range')->value) : null; 
 		$dataset_information['field_doi'] = (!is_null($node->get('field_doi')->value)) ? ($node->get('field_doi')->value) : null; 
+		$dataset_information['_data']['general']['keywords']= $DeimsFieldController->parseEntityReferenceField($node->get('field_keywords'));
+		$dataset_information['_data']['general']['inspire']= $DeimsFieldController->parseEntityReferenceField($node->get('field_inspire_data_theme'));
+
+		$dataset_information['instrumentation'] = (!is_null($node->get('field_instrumentation')->value)) ? ($node->get('field_instrumentation')->value) : null; 
+		$dataset_information['rights'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights'));
+		$dataset_information['language'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_language'));
+		$dataset_information['legalAct'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_legal'));
+
+		$dataset_information['contact']['metadataProvider']= $DeimsFieldController->parseEntityReferenceField($node->get('field_metadata_provider'));
+		$dataset_information['methodURL']['title'] = $node->get('field_method')->title;
+		$dataset_information['methodURL']['uri'] = $node->get('field_method')->uri;
+		$dataset_information['methodDescription'] = (!is_null($node->get('field_method_description')->value)) ? ($node->get('field_method_description')->value) : null; 
+		
+		$dataset_information['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
+		$dataset_information['accessUse'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_access_use_termref'));
+		$dataset_information['qualityAssurance'] = (!is_null($node->get('field_quality_assurance')->value)) ? ($node->get('field_quality_assurance')->value) : null; 
+		$dataset_information['citation'] = (!is_null($node->get('field_citation')->value)) ? ($node->get('field_citation')->value) : null; 
+		$dataset_information['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'));
+		$dataset_information['temporalResolution'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'));
+		$dataset_information['samplingTimeUnit'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_sampling_time_unit'));
+		$dataset_information['spatialDesign'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_design'));
+		$dataset_information['spatialScale'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'));
+
+		// TO DO:
+		//field_data_sources
+		//field_observation_location
+		//field_online_locator
 
 		return $dataset_information;
+
   }
 
 }
