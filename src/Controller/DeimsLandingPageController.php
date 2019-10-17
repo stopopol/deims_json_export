@@ -27,10 +27,14 @@ class DeimsLandingPageController extends ControllerBase {
 	  	  
 	  $output_information = [];
 
-	  $output_information['version'] = '0.1';
-    $output_information['about'] = 'https://deims.org/about';
-    $output_information['terms'] = 'https://deims.org/terms';
-    $output_information['resources'] = array("site","dataset","activity","sensor");
+	  $output_information['title'] = 'DEIMS-SDR API';
+	  $output_information['description'] = 'This a an API for automated data export from the site and dataset registry DEIMS-SDR';
+    $output_information['termsOfService'] = 'https://deims.org/terms';
+    $output_information['contact']['name'] = 'DEIMS-SDR Support';
+    $output_information['contact']['url'] = 'https://deims.org/contact';
+    $output_information['license']['name'] = 'CC-BY-NC International 4.0';
+    $output_information['license']['url'] = 'https://creativecommons.org/licenses/by-nc/4.0/';
+    $output_information['version'] = '0.1';
         
     return $output_information;
   }
