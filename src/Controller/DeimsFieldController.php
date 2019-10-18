@@ -96,6 +96,12 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['elevation']['max'] = $RefEntity->field_elevation_max->value;
 					$RefEntity_item['elevation']['unit'] = 'msl';
 					break;
+				case 'online_locator':
+					$RefEntity_item['function'] = $RefEntity->field_distribution_function->value;
+					$RefEntity_item['url']['title'] = $RefEntity->field_distribution_url->title;
+					$RefEntity_item['url']['value'] = $RefEntity->field_distribution_url->uri;
+					$RefEntity_item['email'] = $RefEntity->field_email->value;
+					break;
 				// case for taxonomies without uri fields
 				case 'spatial_design':
 				case 'spatial_scale':

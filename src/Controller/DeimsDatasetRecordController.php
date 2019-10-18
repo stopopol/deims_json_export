@@ -78,9 +78,11 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['onlineDistribution']['dataPolicyUrl'] = (!is_null($node->get('field_data_policy_url')->value)) ? ($node->get('field_data_policy_url')->value) : null; 
 		$dataset_information['onlineDistribution']['doi'] = (!is_null($node->get('field_doi')->value)) ? ($node->get('field_doi')->value) : null; 
 		
+		$dataset_information['onlineDistribution']['onlineLocation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_online_locator')); 
+		
 		$dataset_information['legal']['accessUse'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_access_use_termref'));
 		$dataset_information['legal']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
-		$dataset_information['legal']['legalAct'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_legal', true);
+		$dataset_information['legal']['legalAct'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_legal', $single_value_field=true);
 		$dataset_information['legal']['citation'] = (!is_null($node->get('field_citation')->value)) ? ($node->get('field_citation')->value) : null; 
 		
 		$dataset_information['method']['instrumentation'] = $DeimsFieldController->parseMultiText($node->get('field_instrumentation'));
@@ -94,8 +96,6 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['method']['spatialScale'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'), $single_value_field=true);
 		$dataset_information['method']['temporalResolution'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'), $single_value_field=true);
 		
-		// To do
-		//field_online_locator
 
 		return $dataset_information;
 
