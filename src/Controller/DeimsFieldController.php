@@ -10,12 +10,12 @@ class DeimsFieldController extends ControllerBase {
 	 *
 	 * Requires a node object as input and the fieldname
 	 */
-	public function parseEntityReferenceField($field) {
-		$RefEntity_collection = [];
+	public function parseEntityReferenceField($field, $single_value_field = null) {
 		$DeimsFieldController = new DeimsFieldController();
+		$RefEntity_collection = [];
 		
 		// case for empty field or single reference
-		if (sizeof ($field) == 1) {
+		if (sizeof($field) == 1) {
 			array_push($RefEntity_collection, $DeimsFieldController->parseEntityFieldContent($field->entity));
 		}
 		// case for multiple references
@@ -25,9 +25,14 @@ class DeimsFieldController extends ControllerBase {
 			}
 			sort($RefEntity_collection);
 		}
+
 		// filter empty values in array, because there are cases when a node is insufficiently filled in or there are drupal leftovers due to the form API
 		$sanitized_RefEntity_collection = array_values(array_filter($RefEntity_collection));
 		if (!empty($sanitized_RefEntity_collection)) {
+			// case for fields that have 0:1 cardinality; only applied when an optional $single_value_field is provided
+			if ($single_value_field) {
+				$sanitized_RefEntity_collection=reset($RefEntity_collection);
+			}
 			return $sanitized_RefEntity_collection;
 		}
 		
@@ -79,6 +84,18 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['cover'] = $RefEntity->field_protection_programme_cover->value;
 					$RefEntity_item['notes'] = $RefEntity->field_protection_programme_notes->value;
 					break;
+
+				// case for 'data_source'; currently incomplete
+				case 'data_source':
+					$RefEntity_item['title'] = $RefEntity->getTitle();
+					break;
+				case 'observation_location':
+					$RefEntity_item['boundaries'] = $RefEntity->field_boundaries->value;
+					$RefEntity_item['abstract'] = $RefEntity->field_abstract->value;
+					$RefEntity_item['elevation']['min'] = $RefEntity->field_elevation_min->value;
+					$RefEntity_item['elevation']['max'] = $RefEntity->field_elevation_max->value;
+					$RefEntity_item['elevation']['unit'] = 'msl';
+					break;
 				// case for taxonomies without uri fields
 				case 'spatial_design':
 				case 'spatial_scale':
@@ -109,14 +126,20 @@ class DeimsFieldController extends ControllerBase {
 	 *
 	 * Requires an entity as input and returns an array with the formatted values
 	 */
-	public function parseTextListField($node, $fieldname) {
+	public function parseTextListField($node, $fieldname, $single_value_field = null) {
 		// handle multi-values for text fields; turn into function
 		$data_values_list_labels = $node->getFieldDefinition($fieldname)->getSetting('allowed_values');
 		if (count($node->get($fieldname)) > 0) {
 			$data_values = array();
 			// single-value case
 			if (count($node->get($fieldname)) == 1) {
-				array_push($data_values, $data_values_list_labels[$node->get($fieldname)->value]);
+				// case if this is a field with a 0:1 cardinality
+				if ($single_value_field) {
+					$data_values = $data_values_list_labels[$node->get($fieldname)->value];
+				}
+				else {
+					array_push($data_values, $data_values_list_labels[$node->get($fieldname)->value]);
+				}
 			}
 			// multi-value case
 			else {
@@ -145,11 +168,40 @@ class DeimsFieldController extends ControllerBase {
 			// single-value case
 			if (count($field) == 1) {
 				array_push($data_values, array('title'=>$field->title,'uri'=>$field->uri));
+				// field 0:1 relation
 			}
 			// multi-value case
 			else {
 				foreach ($field as $item) {
 					array_push($data_values, array('title'=>$item->title,'uri'=>$item->uri));
+				}
+			}
+		}
+		// no-value case
+		else {
+			$data_values = null;
+		}
+
+		return $data_values;
+	}
+
+	/*
+	 * Function that parses the fields within a referenced field
+	 *
+	 * Requires an entity as input and returns an array with the formatted values
+	 */
+	public function parseMultiText($field) {
+		// handle multi-values for text fields; turn into function
+		if (count($field) > 0) {
+			$data_values = array();
+			// single-value case
+			if (count($field) == 1) {
+				array_push($data_values, $field->value);
+			}
+			// multi-value case
+			else {
+				foreach ($field as $item) {
+					array_push($data_values, $item->value);
 				}
 			}
 		}
