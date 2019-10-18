@@ -78,7 +78,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['general']['hierarchy']['parent'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parent_site'));	
 		$site_information['_data']['general']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));	
 		$site_information['_data']['general']['shortName'] = $node->get('field_name_short')->value;
-		$site_information['_data']['general']['siteType'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type'));
+		$site_information['_data']['general']['siteType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type', $single_value_field=true);
+
 		$site_information['_data']['general']['SiteURL'] = $DeimsFieldController->parseURLField($node->get('field_url'));
 
 		// aggregate temperature fields; shorthand ifs to catch empty values
@@ -120,9 +121,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['focusDesignScale']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
 		$site_information['_data']['focusDesignScale']['research_topics'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_research_topics'));
 		
-		// available 
 		$site_information['_data']['infrastructure']['accessibleAllYear'] = (!is_null($node->get('field_accessible_all_year')->value)) ? (($node->get('field_accessible_all_year')->value == 1) ? true : false) : null;
-		$site_information['_data']['infrastructure']['accessType'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_access_type'));
+		$site_information['_data']['infrastructure']['accessType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_access_type', $single_value_field=true);		
 		$site_information['_data']['infrastructure']['allPartsAccessible'] = (!is_null($node->get('field_all_parts_accessible')->value)) ? (($node->get('field_all_parts_accessible')->value == 1) ? true : false) : null;
 		$site_information['_data']['infrastructure']['maintenanceInterval']= (!is_null($node->get('field_maintenance_interval')->value)) ? floatval($node->get('field_maintenance_interval')->value) : null;
 		$site_information['_data']['infrastructure']['permanentPowerSupply'] = (!is_null($node->get('field_permanent_power_supply')->value)) ? (($node->get('field_permanent_power_supply')->value == 1) ? true : false) : null;
@@ -136,8 +136,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['infrastructure']['data']['policy']['url'] = $node->get('field_data_policy_url')->uri;
 		$site_information['_data']['infrastructure']['data']['policy']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
 		$site_information['_data']['infrastructure']['data']['services'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_dataservi');
-		$site_information['_data']['infrastructure']['data']['location'] = reset($DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_datastorloc'));
-		
+		$site_information['_data']['infrastructure']['data']['location'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_datastorloc', $single_value_field=true);	
+
 		// TO DO:
 		// field_images -> TBD when necessary
 		$site_information['_data']['images'] = null;

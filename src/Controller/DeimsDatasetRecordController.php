@@ -70,7 +70,6 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['observations']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
 		$dataset_information['observations']['speciesGroups'] = (!is_null($node->get('field_biological_classification')->value)) ? ($node->get('field_abstract')->value) : null; 
 		
-		// geographic
 		$dataset_information['geographic'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_observation_location'));
 
 		// TO DO: extend to all fields of dataSource
@@ -96,9 +95,7 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['method']['spatialScale'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'), $single_value_field=true);
 		$dataset_information['method']['temporalResolution'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'), $single_value_field=true);
 		
-
 		return $dataset_information;
-
+		
   }
-
 }
