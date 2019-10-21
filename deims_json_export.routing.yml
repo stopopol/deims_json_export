@@ -39,3 +39,11 @@ activity_record.content:
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
+
+sensor_record.content:
+    path: '/api/sensor/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsSensorRecordController::renderApi'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
