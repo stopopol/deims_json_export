@@ -79,7 +79,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['general']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));	
 		$site_information['_data']['general']['shortName'] = $node->get('field_name_short')->value;
 		$site_information['_data']['general']['siteType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type', $single_value_field=true);
-
 		$site_information['_data']['general']['SiteURL'] = $DeimsFieldController->parseURLField($node->get('field_url'));
 
 		// aggregate temperature fields; shorthand ifs to catch empty values

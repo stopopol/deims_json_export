@@ -42,7 +42,7 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$error_message['status'] = "404";
 		$error_message['source'] = ["pointer" => "/api/dataset/{uuid}"];
 		$error_message['title'] = 'Resource not found';
-		$error_message['detail'] = 'There is no site with the given ID :(';
+		$error_message['detail'] = 'There is no dataset with the given ID :(';
 		$dataset_information['errors'] = $error_message;
 	}
     return $dataset_information;

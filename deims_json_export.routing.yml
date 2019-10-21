@@ -31,3 +31,11 @@ dataset_record.content:
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
+
+activity_record.content:
+    path: '/api/activity/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsActivityRecordController::renderApi'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
