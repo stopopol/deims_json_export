@@ -5,7 +5,6 @@
 
 namespace Drupal\deims_json_export\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
 
 
