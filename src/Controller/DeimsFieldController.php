@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 
 class DeimsFieldController extends ControllerBase {
 	/*
-	 * Function specifically for parsing information in 'person' fields of DEIMS-SDR
+	 * Function specifically for parsing information entity reference fields of DEIMS-SDR
 	 *
 	 * Requires a node object as input and the fieldname
 	 */

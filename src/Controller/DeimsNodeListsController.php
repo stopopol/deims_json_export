@@ -45,7 +45,7 @@ class DeimsNodeListsController {
 		case 'activity':
 		case 'sensor':
 		case 'dataset':
-			$nids = \Drupal::entityQuery('node')->condition('type',$content_type)->execute();
+			$nids = \Drupal::entityQuery('node')->condition('type', $content_type)->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 			
 			foreach ($nodes as $node) {

@@ -7,9 +7,8 @@ namespace Drupal\deims_json_export\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 
-
 /**
- * This controller lists detailed information about each site as a JSON; only one record at a time based on the provided UUID/DEIMS.ID
+ * This controller lists detailed information about each dataset as a JSON; only one record at a time based on the provided UUID/DEIMS.ID
  */
 class DeimsDatasetRecordController extends ControllerBase {
  
