@@ -3,13 +3,20 @@
 namespace Drupal\deims_json_export\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 /*
  * Controlls all error messages of api
  *
  * path input parameter
  */
+ 
 class DeimsRecordRetrievalController extends ControllerBase {
+
+	public function renderApi($uuid, $content_type) {
+		$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
+		$record_information = $DeimsRecordRetrievalController->record_retrieval($uuid, $content_type);
+		return new JsonResponse($record_information);
+	}
 	
 	public function record_retrieval($uuid, $path_parameter) {
 		$nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => $uuid]);

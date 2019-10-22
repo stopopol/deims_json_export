@@ -13,19 +13,8 @@ use Drupal\Core\Controller\ControllerBase;
  * This controller lists detailed information about each site as a JSON; only one record at a time based on the provided UUID/DEIMS.ID
  */
 class DeimsActivityRecordController extends ControllerBase {
-
-  /**
-   * Callback for the API.
-   */
-  public function renderApi($uuid) {
-	$record_information = [];
-	$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
-	$record_information = $DeimsRecordRetrievalController->record_retrieval($uuid, 'activity');
-	return new JsonResponse($record_information);
-  }
   
   public function parseActivityFields($node) {
-		$activity_information = [];
 		
 		// loading controller functions
 		$DeimsFieldController = new DeimsFieldController();

@@ -13,16 +13,6 @@ use Drupal\Core\Controller\ControllerBase;
  * This controller lists detailed information about each site as a JSON; only one record at a time based on the provided UUID/DEIMS.ID
  */
 class DeimsSensorRecordController extends ControllerBase {
-
-  /**
-   * Callback for the API.
-   */
-  public function renderApi($uuid) {
-	$record_information = [];
-	$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
-	$record_information = $DeimsRecordRetrievalController->record_retrieval($uuid, 'sensor');
-	return new JsonResponse($record_information);
-  }
   
   public function parseSensorFields($node) {
 		

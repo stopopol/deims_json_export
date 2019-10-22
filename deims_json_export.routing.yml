@@ -17,7 +17,8 @@ deims_lists.content:
 site_record.content:
     path: '/api/site/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsSiteRecordController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      content_type: 'site'
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
@@ -25,7 +26,8 @@ site_record.content:
 dataset_record.content:
     path: '/api/dataset/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsDatasetRecordController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      content_type: 'dataset'
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
@@ -33,7 +35,8 @@ dataset_record.content:
 activity_record.content:
     path: '/api/activity/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsActivityRecordController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      content_type: 'activity'
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
@@ -41,7 +44,8 @@ activity_record.content:
 sensor_record.content:
     path: '/api/sensor/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsSensorRecordController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      content_type: 'sensor'
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
