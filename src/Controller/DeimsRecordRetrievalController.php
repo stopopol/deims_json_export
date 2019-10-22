@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  
 class DeimsRecordRetrievalController extends ControllerBase {
 
-	public function renderApi($uuid, $content_type) {
+	public function renderRecord($uuid, $content_type) {
 		$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
 		$record_information = $DeimsRecordRetrievalController->record_retrieval($uuid, $content_type);
 		return new JsonResponse($record_information);

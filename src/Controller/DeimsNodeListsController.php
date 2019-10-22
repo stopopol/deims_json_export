@@ -14,7 +14,7 @@ class DeimsNodeListsController {
   /**
    * Callback for the API.
    */
-  public function renderApi($content_type) {
+  public function renderRecordList($content_type) {
 	$node_list = [];
 
 	// only return defined contents

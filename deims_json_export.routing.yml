@@ -1,7 +1,7 @@
 landing_page.content:
     path: '/api'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsLandingPageController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsLandingPageController::renderLandingPage'
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
@@ -9,7 +9,7 @@ landing_page.content:
 deims_lists.content:
     path: '/api/{content_type}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsNodeListsController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsNodeListsController::renderRecordList'
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
@@ -17,7 +17,7 @@ deims_lists.content:
 site_record.content:
     path: '/api/site/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'site'
       _title: 'JSON api'
     requirements:
@@ -26,7 +26,7 @@ site_record.content:
 dataset_record.content:
     path: '/api/dataset/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'dataset'
       _title: 'JSON api'
     requirements:
@@ -35,7 +35,7 @@ dataset_record.content:
 activity_record.content:
     path: '/api/activity/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'activity'
       _title: 'JSON api'
     requirements:
@@ -44,7 +44,7 @@ activity_record.content:
 sensor_record.content:
     path: '/api/sensor/{uuid}'
     defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderApi'
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'sensor'
       _title: 'JSON api'
     requirements:

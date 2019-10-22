@@ -16,17 +16,8 @@ class DeimsLandingPageController extends ControllerBase {
   /**
    * Callback for the API.
    */
-  public function renderApi() {
-	  return new JsonResponse($this->getResults());
-  }
-
-  /**
-   * A helper function returning results.
-   */
-  public function getResults() {
-	  	  
-	  $output_information = [];
-
+  public function renderLandingPage() {
+    
     // https://app.swaggerhub.com/apis/klimeto/RPI2.0/0.0.1
 	  $output_information['title'] = 'DEIMS-SDR API';
 	  $output_information['description'] = 'This is an API for automated data export from the site and dataset registry DEIMS-SDR';
@@ -36,8 +27,8 @@ class DeimsLandingPageController extends ControllerBase {
     $output_information['license']['name'] = 'CC-BY-NC International 4.0';
     $output_information['license']['url'] = 'https://creativecommons.org/licenses/by-nc/4.0/';
     $output_information['version'] = '0.1';
-        
-    return $output_information;
+    
+    return new JsonResponse($output_information);
   }
   
 }
