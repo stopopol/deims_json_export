@@ -63,7 +63,7 @@ class DeimsNodeListsController {
 					$node_information = [];
 					$node_information['name'] = $node->get('title')->value;
 					$node_information['path']['prefix'] = "https://deims.org/" . $content_type . "/";
-					$node_information['path']['uuid'] = $node->get('uuid')->value;
+					$node_information['path']['id'] = $node->get('uuid')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 
 					array_push($node_list, $node_information);

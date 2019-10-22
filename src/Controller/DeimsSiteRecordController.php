@@ -17,35 +17,11 @@ class DeimsSiteRecordController extends ControllerBase {
   /**
    * Callback for the API.
    */
-  public function renderApi($deimsid) {
-	return new JsonResponse($this->getResults($deimsid));
-  }
-
-  /**
-   * A helper function returning results.
-   */
-  public function getResults($deimsid) {
-	  	  
-	$nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => $deimsid]);
-	$site_information = [];
-
-	// needs to be a loop due to array structure of the loadByProperties result
-	if (!empty($nodes)) {
-		foreach ($nodes as $node) {
-			if ($node->bundle() == 'site' && $node->isPublished()) {
-				$site_information = DeimsSiteRecordController::parseSiteFields($node);
-			}
-		}
-	}
-	else {
-		$error_message = [];
-		$error_message['status'] = "404";
-		$error_message['source'] = ["pointer" => "/api/site/{deimsid}"];
-		$error_message['title'] = 'Resource not found';
-		$error_message['detail'] = 'There is no site with the given DEIMS.ID :(';
-		$site_information['errors'] = $error_message;
-	}
-    return $site_information;
+  public function renderApi($uuid) {
+	$record_information = [];
+	$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
+	$record_information = $DeimsRecordRetrievalController->record_retrieval($uuid, 'site');
+	return new JsonResponse($record_information);
   }
   
   public function parseSiteFields($node) {

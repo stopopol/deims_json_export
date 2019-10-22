@@ -18,34 +18,10 @@ class DeimsActivityRecordController extends ControllerBase {
    * Callback for the API.
    */
   public function renderApi($uuid) {
-	return new JsonResponse($this->getResults($uuid));
-  }
-
-  /**
-   * A helper function returning results.
-   */
-  public function getResults($uuid) {
-	  	  
-	$nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => $uuid]);
-	$activity_information = [];
-
-	// needs to be a loop due to array structure of the loadByProperties result
-	if (!empty($nodes)) {
-		foreach ($nodes as $node) {
-			if ($node->bundle() == 'activity' && $node->isPublished()) {
-				$activity_information = DeimsActivityRecordController::parseActivityFields($node);
-			}
-		}
-	}
-	else {
-		$error_message = [];
-		$error_message['status'] = "404";
-		$error_message['source'] = ["pointer" => "/api/activity/{uuid}"];
-		$error_message['title'] = 'Resource not found';
-		$error_message['detail'] = 'There is no activity with the given ID :(';
-		$activity_information['errors'] = $error_message;
-	}
-    return $activity_information;
+	$record_information = [];
+	$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
+	$record_information = $DeimsRecordRetrievalController->record_retrieval($uuid, 'activity');
+	return new JsonResponse($record_information);
   }
   
   public function parseActivityFields($node) {
@@ -56,9 +32,24 @@ class DeimsActivityRecordController extends ControllerBase {
 
 		$activity_information['general']['name'] = $node->get('title')->value;
 		$activity_information['general']['uuid'] = $node->get('uuid')->value;
+		$activity_information['general']['contact'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_contact'));
+		$activity_information['general']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'));
+		$activity_information['general']['abstract'] = $node->get('field_abstract')->value;
+		$activity_information['general']['keywords']= $DeimsFieldController->parseEntityReferenceField($node->get('field_keywords'));
+		$activity_information['general']['dateRange']['from'] = (!is_null($node->get('field_date_range')->value)) ? ($node->get('field_date_range')->value) : null;
+		$activity_information['general']['dateRange']['to'] = (!is_null($node->get('field_date_range')->end_value)) ? ($node->get('field_date_range')->end_value) : null;
+		$activity_information['boundaries'] = (!is_null($node->get('field_related_site')->entity)) ? (($node->get('field_related_site')->entity->field_boundaries->value)) : null;	
+		$activity_information['availability']['digitally'] = (!is_null($node->get('field_data_available')->value)) ? (($node->get('field_data_available')->value == 1) ? true : false) : null;	
+		$activity_information['availability']['forEcopotential'] = (!is_null($node->get('field_data_available_ecopot')->value)) ? (($node->get('field_data_available_ecopot')->value == 1) ? true : false) : null;	
+		$activity_information['availability']['openData'] = (!is_null($node->get('field_open_data')->value)) ? (($node->get('field_open_data')->value == 1) ? true : false) : null;	
+		$activity_information['availability']['notes'] = $node->get('field_notes')->value;
+		$activity_information['availability']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
+		$activity_information['availability']['source']['url'] = $DeimsFieldController->parseURLField($node->get('field_url'));
+		$activity_information['resolution']['spatial'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'), $single_value_field=true);
+		$activity_information['resolution']['temporal'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'), $single_value_field=true);
 
-		
 		return $activity_information;
 		
   }
+
 }

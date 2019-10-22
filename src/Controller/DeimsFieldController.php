@@ -80,11 +80,15 @@ class DeimsFieldController extends ControllerBase {
 				// case for paragraphs of type 'protection_programme'
 				case 'protection_programme':
 					// always just 0:1 values
-					$RefEntity_item['name'] =  $RefEntity->field_protection_programme->entity->getName();
+					$RefEntity_item['name'] = $RefEntity->field_protection_programme->entity->getName();
 					$RefEntity_item['cover'] = $RefEntity->field_protection_programme_cover->value;
 					$RefEntity_item['notes'] = $RefEntity->field_protection_programme_notes->value;
 					break;
-
+				// paragraphs of type 'observation'
+				case 'observation':
+					$RefEntity_item['property'] = $RefEntity->field_media_monitored->entity->getName();
+					$RefEntity_item['unitOfMeasurment'] = 'not implemented';
+					break;
 				// case for 'data_source'; currently incomplete
 				case 'data_source':
 					$RefEntity_item['title'] = $RefEntity->getTitle();
@@ -112,6 +116,7 @@ class DeimsFieldController extends ControllerBase {
 				case 'lter_controlled_vocabulary':
 				case 'infrastructure':
 				case 'ecosystem_types_and_land_use':
+				case 'sensortype':
 					$RefEntity_item['label'] = $RefEntity->label();
 					$RefEntity_item['uri'] = null;
 					break;

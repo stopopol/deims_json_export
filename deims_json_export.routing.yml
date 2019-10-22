@@ -14,16 +14,14 @@ deims_lists.content:
     requirements:
       _access: 'TRUE'
     
-    
 site_record.content:
-    path: '/api/site/{deimsid}'
+    path: '/api/site/{uuid}'
     defaults:
       _controller: 'Drupal\deims_json_export\Controller\DeimsSiteRecordController::renderApi'
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
 
-     
 dataset_record.content:
     path: '/api/dataset/{uuid}'
     defaults:

@@ -27,6 +27,7 @@ class DeimsLandingPageController extends ControllerBase {
 	  	  
 	  $output_information = [];
 
+    // https://app.swaggerhub.com/apis/klimeto/RPI2.0/0.0.1
 	  $output_information['title'] = 'DEIMS-SDR API';
 	  $output_information['description'] = 'This is an API for automated data export from the site and dataset registry DEIMS-SDR';
     $output_information['termsOfService'] = 'https://deims.org/terms';

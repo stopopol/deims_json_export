@@ -18,37 +18,13 @@ class DeimsDatasetRecordController extends ControllerBase {
    * Callback for the API.
    */
   public function renderApi($uuid) {
-	return new JsonResponse($this->getResults($uuid));
-  }
-
-  /**
-   * A helper function returning results.
-   */
-  public function getResults($uuid) {
-	  	  
-	$nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => $uuid]);
-	$dataset_information = [];
-
-	// needs to be a loop due to array structure of the loadByProperties result
-	if (!empty($nodes)) {
-		foreach ($nodes as $node) {
-			if ($node->bundle() == 'dataset' && $node->isPublished()) {
-				$dataset_information = DeimsDatasetRecordController::parseSiteFields($node);
-			}
-		}
-	}
-	else {
-		$error_message = [];
-		$error_message['status'] = "404";
-		$error_message['source'] = ["pointer" => "/api/dataset/{uuid}"];
-		$error_message['title'] = 'Resource not found';
-		$error_message['detail'] = 'There is no dataset with the given ID :(';
-		$dataset_information['errors'] = $error_message;
-	}
-    return $dataset_information;
+	$record_information = [];
+	$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
+	$record_information = $DeimsRecordRetrievalController->record_retrieval($uuid, 'dataset');
+	return new JsonResponse($record_information);
   }
   
-  public function parseSiteFields($node) {
+  public function parseDatasetFields($node) {
 		$dataset_information = [];
 		
 		// loading controller functions
@@ -59,7 +35,8 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['general']['abstract'] = (!is_null($node->get('field_abstract')->value)) ? ($node->get('field_abstract')->value) : null; 
 		$dataset_information['general']['keywords']= $DeimsFieldController->parseEntityReferenceField($node->get('field_keywords'));
 		$dataset_information['general']['inspire']= $DeimsFieldController->parseEntityReferenceField($node->get('field_inspire_data_theme'));
-		$dataset_information['general']['dateRange'] = (!is_null($node->get('field_date_range')->value)) ? ($node->get('field_date_range')->value) : null;
+		$dataset_information['general']['dateRange']['from'] = (!is_null($node->get('field_date_range')->value)) ? ($node->get('field_date_range')->value) : null;
+		$dataset_information['general']['dateRange']['to'] = (!is_null($node->get('field_date_range')->end_value)) ? ($node->get('field_date_range')->end_value) : null;
 		$dataset_information['general']['language'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_language', true);
 		$dataset_information['general']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'));
 
@@ -90,7 +67,6 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['method']['methodURL']['uri'] = $node->get('field_method')->uri;
 		$dataset_information['method']['methodDescription']= $DeimsFieldController->parseMultiText($node->get('field_method_description'));
 		$dataset_information['method']['samplingTimeUnit'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_sampling_time_unit'), $single_value_field=true);
-		$dataset_information['method']['spatialDesign'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_design'), $single_value_field=true);
 		$dataset_information['method']['spatialDesign'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_design'), $single_value_field=true);
 		$dataset_information['method']['spatialScale'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'), $single_value_field=true);
 		$dataset_information['method']['temporalResolution'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'), $single_value_field=true);
