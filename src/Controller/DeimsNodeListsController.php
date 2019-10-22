@@ -15,14 +15,6 @@ class DeimsNodeListsController {
    * Callback for the API.
    */
   public function renderApi($content_type) {
-    return new JsonResponse($this->getResults($content_type));
-  }
-
-  /**
-   * A helper function returning results.
-   */
-  public function getResults($content_type) {
-
 	$node_list = [];
 
 	// only return defined contents
@@ -60,7 +52,6 @@ class DeimsNodeListsController {
 				
 				if ($node->isPublished()) {
 					
-					$node_information = [];
 					$node_information['name'] = $node->get('title')->value;
 					$node_information['path']['prefix'] = "https://deims.org/" . $content_type . "/";
 					$node_information['path']['id'] = $node->get('uuid')->value;
@@ -72,15 +63,12 @@ class DeimsNodeListsController {
 			break;
 
 		default:
-			$error_message = [];
 			$error_message['status'] = "404";
 			$error_message['source'] = ["pointer" => "/api/{type}"];
-			$error_message['title'] = 'Resource not found';
-			$error_message['detail'] = 'This is not a valid request :(';
+			$error_message['title'] = 'Resource type not found';
+			$error_message['detail'] = "This is not a valid request because DEIMS-SDR doesn't have a resource type with this name :(";
 			$node_list['errors'] = $error_message;
 	}
-	
-    return $node_list;
+    return new JsonResponse($node_list);
   }
-
 }
