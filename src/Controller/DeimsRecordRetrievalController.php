@@ -39,16 +39,16 @@ class DeimsRecordRetrievalController extends ControllerBase {
 					}
 				}
 			}
-			return $record_information;
+			
 		}
 		else {
-			$error_message = [];
 			$error_message['status'] = "404";
 			$error_message['source'] = ["pointer" => '/api/' . $path_parameter . '/{id}'];
 			$error_message['title'] = 'Resource not found';
 			$error_message['detail'] = 'There is no ' . $path_parameter . ' with the given ID :(';
 			$record_information['errors'] = $error_message;
 		}
+		return $record_information;
 	}
-	
+
 }
