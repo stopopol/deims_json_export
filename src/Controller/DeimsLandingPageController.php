@@ -14,7 +14,7 @@ use Drupal\Core\Controller\ControllerBase;
 class DeimsLandingPageController extends ControllerBase {
 
   /**
-   * Callback for the API.
+   * renders the capabilities of the API following the OpenAPI 3.0.0. specification
    */
   public function renderLandingPage() {
     
