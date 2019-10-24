@@ -19,10 +19,11 @@ class DeimsLandingPageController extends ControllerBase {
   public function renderLandingPage() {
     
     // https://app.swaggerhub.com/apis/klimeto/RPI2.0/0.0.1
-    //$output_information['servers'] = array(array("description"=>"Official DEIMS-SDR API","url"=>"https://deims.org/api"));
-    $definition_location = __DIR__ . '/../Custom/Path/';
     $output_information['openapi'] = '3.0.0';
-    $output_information['info']= json_decode(file_get_contents($definition_location . 'info.json'));
+    $output_information['info']= json_decode(file_get_contents(__DIR__ . '/../json/info.json'));
+    //$output_information['servers'] = array(array("description"=>"Official DEIMS-SDR API","url"=>"https://deims.org/api"));
+
+    $definition_location = __DIR__ . '/../json/path/';
     $output_information['paths']['/site'] = json_decode(file_get_contents($definition_location . 'site_list.json'));
     $output_information['paths']['/site/{resource_id}'] = json_decode(file_get_contents($definition_location . 'site_record.json'));
     $output_information['paths']['/dataset'] = json_decode(file_get_contents($definition_location . 'dataset_list.json'));
@@ -32,7 +33,7 @@ class DeimsLandingPageController extends ControllerBase {
     $output_information['paths']['/sensor'] = json_decode(file_get_contents($definition_location . 'sensor_list.json'));
     $output_information['paths']['/sensor/{resource_id}'] = json_decode(file_get_contents($definition_location . 'sensor_record.json'));
 
-    $definition_location = __DIR__ . '/../Custom/Component/';
+    $definition_location = __DIR__ . '/../json/component/';
     $output_information['components']['schemas']['resourceNotFound'] = json_decode(file_get_contents($definition_location . '/resource_not_found.json'));
     $output_information['components']['schemas']['siteList'] = json_decode(file_get_contents($definition_location . '/siteList.json'));
     $output_information['components']['schemas']['affiliationItem'] = json_decode(file_get_contents($definition_location . '/affiliationItem.json'));

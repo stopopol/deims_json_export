@@ -1,0 +1,22 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "path": {
+            "type": "object",
+            "properties": {
+                "prefix": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "changed": {
+            "type": "string"
+        }
+    }
+}

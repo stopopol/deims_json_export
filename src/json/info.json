@@ -1,0 +1,14 @@
+{
+    "title": "DEIMS-SDR API",
+    "description": "This is an API for automated data export from the site and dataset registry DEIMS-SDR",
+    "termsOfService": "https://deims.org/terms",
+    "contact": {
+      "name": "DEIMS-SDR Support",
+      "url": "https://deims.org/contact"
+    },
+    "license": {
+      "name": "CC-BY-NC International 4.0",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "version": "0.1"
+  }

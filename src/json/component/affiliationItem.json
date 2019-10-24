@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "network": {
+            "type": "string"
+        },
+        "code": {
+            "type": "string"
+        },
+        "verified": {
+            "type": "boolean"
+        }
+    }
+}
