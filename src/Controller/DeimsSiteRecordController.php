@@ -3,7 +3,7 @@
 // https://www.metaltoad.com/blog/drupal-8-entity-api-cheat-sheet
 // https://www.drupal.org/docs/8/api/routing-system/parameters-in-routes/using-parameters-in-routes
 
-namespace Drupal\deims_json_export\Controller\components;
+namespace Drupal\deims_json_export\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 

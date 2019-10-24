@@ -12,7 +12,6 @@ class DeimsRecordRetrievalController extends ControllerBase {
 	 */
 	public function renderRecord($uuid, $content_type) {
 		
-		$DeimsRecordRetrievalController = new DeimsRecordRetrievalController();
 		$nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => $uuid]);
 		$record_information = [];
 

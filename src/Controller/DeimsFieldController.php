@@ -11,7 +11,7 @@ class DeimsFieldController extends ControllerBase {
 	 * Requires a node object as input and the fieldname
 	 */
 	public function parseEntityReferenceField($field, $single_value_field = null) {
-		$DeimsFieldController = new DeimsFieldController();
+
 		$RefEntity_collection = [];
 		
 		// case for empty field or single reference
