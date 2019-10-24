@@ -20,113 +20,21 @@ class DeimsLandingPageController extends ControllerBase {
     
     // https://app.swaggerhub.com/apis/klimeto/RPI2.0/0.0.1
     //$output_information['servers'] = array(array("description"=>"Official DEIMS-SDR API","url"=>"https://deims.org/api"));
-	  $output_information['openapi'] = '3.0.0';
-	  $output_information['info']['title'] = 'DEIMS-SDR API';
-	  $output_information['info']['description'] = 'This is an API for automated data export from the site and dataset registry DEIMS-SDR';
-    $output_information['info']['termsOfService'] = 'https://deims.org/terms';
-    $output_information['info']['contact']['name'] = 'DEIMS-SDR Support';
-    $output_information['info']['contact']['url'] = 'https://deims.org/contact';
-    $output_information['info']['license']['name'] = 'CC-BY-NC International 4.0';
-    $output_information['info']['license']['url'] = 'https://creativecommons.org/licenses/by-nc/4.0/';
-    $output_information['info']['version'] = '0.1';
-    //$output_information['tags'] = array("name" = "sites","datasets","sensors","activities");
+    $schema_folder_location = __DIR__ . '/../Schema/';
+    $output_information['openapi'] = '3.0.0';
+    $output_information['info']= json_decode(file_get_contents($schema_folder_location . 'info.json'));
+    $output_information['paths']['/site'] = json_decode(file_get_contents($schema_folder_location . 'site_list.json'));
+    $output_information['paths']['/site/{resource_id}'] = json_decode(file_get_contents($schema_folder_location . 'site_record.json'));
+    $output_information['paths']['/dataset'] = json_decode(file_get_contents($schema_folder_location . 'dataset_list.json'));
+    $output_information['paths']['/dataset/{resource_id}'] = json_decode(file_get_contents($schema_folder_location . 'dataset_record.json'));
+    $output_information['paths']['/activity'] = json_decode(file_get_contents($schema_folder_location . 'activity_list.json'));
+    $output_information['paths']['/activity/{resource_id}'] = json_decode(file_get_contents($schema_folder_location . 'activity_record.json'));
+    $output_information['paths']['/sensor'] = json_decode(file_get_contents($schema_folder_location . 'sensor_list.json'));
+    $output_information['paths']['/sensor/{resource_id}'] = json_decode(file_get_contents($schema_folder_location . 'sensor_record.json'));
 
-    $output_information['paths']['/site']['get']['description'] = 'Returns sites published on DEIMS-SDR';
-    $output_information['paths']['/site']['get']['responses']['200']['description'] = 'A list of sites';
-    $output_information['paths']['/site']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'array';
-    $output_information['paths']['/site']['get']['responses']['200']['content']['application/json']['schema']['items']['$ref'] = '#/components/schemas/siteList';
-   
-    $output_information['paths']['/site/{resource_id}']['get']['description'] = 'Returns a single site record';
-    $output_information['paths']['/site/{resource_id}']['get']['parameters'] = 
-      array(
-        array(
-          "name" => "resource_id",
-          "in" => "path",
-          "description" => 'The DEIMS.ID of the site record',
-          "required" => true,
-          "schema" => array("type" => "string"),
-          "example" => '8eda49e9-1f4e-4f3e-b58e-e0bb25dc32a6'
-          )
-    );
-    $output_information['paths']['/site/{resource_id}']['get']['responses']['200']['description'] = 'JSON object containing a complete site record';
-    $output_information['paths']['/site/{resource_id}']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'object';
-    $output_information['paths']['/site/{resource_id}']['get']['responses']['default']['description'] = 'error payload';
-    $output_information['paths']['/site/{resource_id}']['get']['responses']['default']['content']['application/json']['schema']['$ref'] = '#/components/schemas/resourceNotFound';
-
-    $output_information['paths']['/dataset']['get']['description'] = 'Returns datasets published on DEIMS-SDR';
-    $output_information['paths']['/dataset']['get']['responses']['200']['description'] = 'A list of datasets';
-    $output_information['paths']['/dataset']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'array';
-    $output_information['paths']['/dataset']['get']['responses']['200']['content']['application/json']['schema']['items']['$ref'] = '#/components/schemas/recordList';
-
-    $output_information['paths']['/dataset/{resource_id}']['get']['description'] = 'Returns a single dataset record';
-    $output_information['paths']['/dataset/{resource_id}']['get']['parameters'] = 
-      array(
-        array(
-          "name" => "resource_id",
-          "in" => "path",
-          "description" => 'The uuid of the dataset record',
-          "required" => true,
-          "schema" => array("type" => "string"),
-          "example" => '63b2325e-4eca-11e4-a597-005056ab003f'
-          )
-    );
-    $output_information['paths']['/dataset/{resource_id}']['get']['responses']['200']['description'] = 'JSON object containing all dataset information';
-    $output_information['paths']['/dataset/{resource_id}']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'object';
-    $output_information['paths']['/dataset/{resource_id}']['get']['responses']['default']['description'] = 'error payload';
-    $output_information['paths']['/dataset/{resource_id}']['get']['responses']['default']['content']['application/json']['schema']['$ref'] = '#/components/schemas/resourceNotFound';
-
-    $output_information['paths']['/activity']['get']['description'] = 'Returns activities published on DEIMS-SDR';
-    $output_information['paths']['/activity']['get']['responses']['200']['description'] = 'A list of activites';
-    $output_information['paths']['/activity']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'array';
-    $output_information['paths']['/activity']['get']['responses']['200']['content']['application/json']['schema']['items']['$ref'] = '#/components/schemas/recordList';
-    $output_information['paths']['/activity/{resource_id}']['get']['description'] = 'Returns an activity record';
-    $output_information['paths']['/activity/{resource_id}']['get']['parameters'] = 
-      array(
-        array(
-          "name" => "resource_id",
-          "in" => "path",
-          "description" => 'The uuid of the activity record',
-          "required" => true,
-          "schema" => array("type" => "string"),
-          "example" => '8689b125-ee46-4d09-9e46-640f9c5c6eab'
-          )
-    );
-    $output_information['paths']['/activity/{resource_id}']['get']['responses']['200']['description'] = 'JSON object containing all activity information';
-    $output_information['paths']['/activity/{resource_id}']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'object';
-    $output_information['paths']['/activity/{resource_id}']['get']['responses']['default']['description'] = 'error payload';
-    $output_information['paths']['/activity/{resource_id}']['get']['responses']['default']['content']['application/json']['schema']['$ref'] = '#/components/schemas/resourceNotFound';
-
-    $output_information['paths']['/sensor']['get']['description'] = 'Returns sensors published on DEIMS-SDR';
-    $output_information['paths']['/sensor']['get']['responses']['200']['description'] = 'A list of sensors';
-    $output_information['paths']['/sensor']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'array';
-    $output_information['paths']['/sensor']['get']['responses']['200']['content']['application/json']['schema']['items']['$ref'] = '#/components/schemas/recordList';
-
-    $output_information['paths']['/sensor/{resource_id}']['get']['description'] = 'Returns a single sensor record';
-    $output_information['paths']['/sensor/{resource_id}']['get']['parameters'] = 
-      array(
-        array(
-          "name" => "resource_id",
-          "in" => "path",
-          "description" => 'The uuid of the sensor record',
-          "required" => true,
-          "schema" => array("type" => "string"),
-          "example" => 'fb583610-fe71-4793-b1a9-43097ed5c3e3'
-          )
-    );
-    $output_information['paths']['/sensor/{resource_id}']['get']['responses']['200']['description'] = 'JSON object containing all sensor information';
-    $output_information['paths']['/sensor/{resource_id}']['get']['responses']['200']['content']['application/json']['schema']['type'] = 'object';
-    $output_information['paths']['/sensor/{resource_id}']['get']['responses']['default']['description'] = 'error payload';
-    $output_information['paths']['/sensor/{resource_id}']['get']['responses']['default']['content']['application/json']['schema']['$ref'] = '#/components/schemas/resourceNotFound';
-    
-
+  
     // resource not found error message
-    $output_information['components']['schemas']['resourceNotFound']['type'] = "object";
-    $output_information['components']['schemas']['resourceNotFound']['properties']['status']['type'] = "integer";
-    $output_information['components']['schemas']['resourceNotFound']['properties']['status']['format'] = "int32";
-    $output_information['components']['schemas']['resourceNotFound']['properties']['detail']['type'] = "string";
-    $output_information['components']['schemas']['resourceNotFound']['properties']['title']['type'] = "string";
-    $output_information['components']['schemas']['resourceNotFound']['properties']['source']['type'] = "object";
-    $output_information['components']['schemas']['resourceNotFound']['properties']['source']['properties']['pointer']['type'] = "string";
+    $output_information['components']['schemas']['resourceNotFound'] = json_decode(file_get_contents(__DIR__ . '/../Schema/resource_not_found.json'));
  
     // components for site list
     $output_information['components']['schemas']['siteList']['type'] = "object";
@@ -155,6 +63,12 @@ class DeimsLandingPageController extends ControllerBase {
     $output_information['components']['schemas']['recordList']['properties']['changed']['type'] = "string";
 
     // TO DO: record components
+    // Site
+    //$output_information['components']['schemas']['SiteRecord'] = json_decode(file_get_contents(__DIR__ . '/../Schema/site_record.json'));
+
+    // Dataset
+    // Sensor
+    // Activity
 
     return new JsonResponse($output_information);
   }

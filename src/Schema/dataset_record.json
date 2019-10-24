@@ -1,0 +1,39 @@
+{
+  "get": {
+    "description": "Returns a single dataset record",
+    "parameters": [
+      {
+        "name": "resource_id",
+        "in": "path",
+        "description": "The uuid of the dataset record",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "63b2325e-4eca-11e4-a597-005056ab003f"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "JSON object containing all dataset information",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "default": {
+        "description": "error payload",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/resourceNotFound"
+            }
+          }
+        }
+      }
+    }
+  }
+}
