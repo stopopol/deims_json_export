@@ -1,3 +1,3 @@
-# deims_json_export
+# DEIMS-SDR Rest API
 
-Container module for all routes and controllers that handle the customised JSON export
+Exposes information on DEIMS-SDR following the OpenAPI 3.0.0 specification
