@@ -111,10 +111,13 @@ class DeimsFieldController extends ControllerBase {
 				$node_information['type'] = $content_type;
 				switch ($content_type) {
 					case 'activity':
-						$node_information['id']['prefix'] = 'https://deims.org/activity';
+						$node_information['id']['prefix'] = 'https://deims.org/activity/';
 						break;
 					case 'dataset':
-						$node_information['id']['prefix'] = 'https://deims.org/dataset';
+						$node_information['id']['prefix'] = 'https://deims.org/dataset/';
+						break;
+					case 'sensor':
+						$node_information['id']['prefix'] = 'https://deims.org/sensor/';
 						break;	
 				}
 
