@@ -4,13 +4,13 @@
         "name": {
             "type": "string"
         },
-        "path": {
+        "id": {
             "type": "object",
             "properties": {
                 "prefix": {
                     "type": "string"
                 },
-                "id": {
+                "suffix": {
                     "type": "string"
                 }
             }

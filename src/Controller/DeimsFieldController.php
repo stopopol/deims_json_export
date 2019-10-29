@@ -108,12 +108,14 @@ class DeimsFieldController extends ControllerBase {
 		if ($RefEntity) {
 			$RefEntity_item = [];
 			switch ($RefEntity->bundle()) {
+				// to do: case for content type "dataset" and "activity"
+
 				// case for content type 'site'
 				case 'site':
 					$RefEntity_item['type'] = 'site';
 					$RefEntity_item['name'] = $RefEntity->field_name->value;
-					$RefEntity_item['deimsid']['prefix'] = 'https://deims.org/';
-					$RefEntity_item['deimsid']['id'] = $RefEntity->field_deims_id->value;
+					$RefEntity_item['id']['prefix'] = 'https://deims.org/';
+					$RefEntity_item['id']['suffix'] = $RefEntity->field_deims_id->value;
 					break;
 				// case for content type 'person'
 				case 'person':
