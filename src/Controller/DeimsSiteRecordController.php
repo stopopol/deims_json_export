@@ -55,7 +55,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['environmentalCharacteristics']['biome'] = $node->get('field_biome')->value;
 		$site_information['attributes']['environmentalCharacteristics']['ecosystemAndLanduse'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_ecosystem_land_use'));
 		$site_information['attributes']['environmentalCharacteristics']['eunisHabitat'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_eunis_habitat'));
-		$site_information['attributes']['environmentalCharacteristics']['geo_bon_biome'] = $node->get('field_geo_bon_biome')->value;
+		$site_information['attributes']['environmentalCharacteristics']['geoBonBiome'] = $node->get('field_geo_bon_biome')->value;
 		$site_information['attributes']['environmentalCharacteristics']['geology'] = $node->get('field_geology')->value;
 		$site_information['attributes']['environmentalCharacteristics']['hydrology'] = $node->get('field_hydrology')->value;
 		$site_information['attributes']['environmentalCharacteristics']['soils'] = $node->get('field_soils')->value;	
@@ -84,7 +84,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['observations']['scale'] = $node->get('field_scale_observation')->value;
 		
 		$site_information['attributes']['focusDesignScale']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
-		$site_information['attributes']['focusDesignScale']['research_topics'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_research_topics'));
+		$site_information['attributes']['focusDesignScale']['researchTopics'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_research_topics'));
 		
 		$site_information['attributes']['infrastructure']['accessibleAllYear'] = (!is_null($node->get('field_accessible_all_year')->value)) ? (($node->get('field_accessible_all_year')->value == 1) ? true : false) : null;
 		$site_information['attributes']['infrastructure']['accessType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_access_type', $single_value_field=true);		
