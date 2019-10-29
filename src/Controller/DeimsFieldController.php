@@ -32,6 +32,71 @@ class DeimsFieldController extends ControllerBase {
 		}
 
 	}
+
+	public function parseRegularField($field, $field_type, $single_value_field = null) {
+		if (count($field) > 0) {
+			$data_values = array();
+			// single-value case
+			if (count($field) == 1) {
+				switch ($field_type) {
+					case "multiText":
+						array_push($data_values, $field->value);
+						break;
+					case "url":
+						array_push($data_values, array('title'=>$field->title,'uri'=>$field->uri));
+						break;
+				}
+				
+			}
+			// multi-value case
+			else {
+				foreach ($field as $item) {
+					switch ($field_type) {
+						case "multiText":
+							array_push($data_values, $item->value);
+							break;
+						case "url":
+							array_push($data_values, array('title'=>$item->title,'uri'=>$item->uri));
+							break;
+					}
+				}
+			}
+			// only return result when field is filled, else empty
+			return $data_values;
+		}
+		
+	}
+
+	/*
+	 * Function that parses the fields within a referenced field
+	 *
+	 * Requires an entity as input and returns an array with the formatted values
+	 */
+	public function parseTextListField($node, $fieldname, $single_value_field = null) {
+
+		if (count($node->get($fieldname)) > 0) {
+			$data_values_list_labels = $node->getFieldDefinition($fieldname)->getSetting('allowed_values');
+			$data_values = array();
+			// single-value case
+			if (count($node->get($fieldname)) == 1) {
+				// case if this is a field with a 0:1 cardinality
+				if ($single_value_field) {
+					$data_values = $data_values_list_labels[$node->get($fieldname)->value];
+				}
+				else {
+					array_push($data_values, $data_values_list_labels[$node->get($fieldname)->value]);
+				}
+			}
+			// multi-value case
+			else {
+				foreach ($node->get($fieldname) as $item) {
+					array_push($data_values, $data_values_list_labels[$item->value]);
+				}
+			}
+			return $data_values;
+		}
+
+	}
 	
 	/*
 	 * Function that parses the fields within a referenced field
@@ -127,82 +192,4 @@ class DeimsFieldController extends ControllerBase {
 		}		
 	}
 
-	/*
-	 * Function that parses the fields within a referenced field
-	 *
-	 * Requires an entity as input and returns an array with the formatted values
-	 */
-	public function parseTextListField($node, $fieldname, $single_value_field = null) {
-
-		if (count($node->get($fieldname)) > 0) {
-			$data_values_list_labels = $node->getFieldDefinition($fieldname)->getSetting('allowed_values');
-			$data_values = array();
-			// single-value case
-			if (count($node->get($fieldname)) == 1) {
-				// case if this is a field with a 0:1 cardinality
-				if ($single_value_field) {
-					$data_values = $data_values_list_labels[$node->get($fieldname)->value];
-				}
-				else {
-					array_push($data_values, $data_values_list_labels[$node->get($fieldname)->value]);
-				}
-			}
-			// multi-value case
-			else {
-				foreach ($node->get($fieldname) as $item) {
-					array_push($data_values, $data_values_list_labels[$item->value]);
-				}
-			}
-			return $data_values;
-		}
-
-	}
-
-	/*
-	 * Function that parses the fields within a referenced field
-	 *
-	 * Requires an entity as input and returns an array with the formatted values
-	 */
-	public function parseURLField($field) {
-		// handle multi-values for text fields; turn into function
-		if (count($field) > 0) {
-			$data_values = array();
-			// single-value case
-			if (count($field) == 1) {
-				array_push($data_values, array('title'=>$field->title,'uri'=>$field->uri));
-				// field 0:1 relation
-			}
-			// multi-value case
-			else {
-				foreach ($field as $item) {
-					array_push($data_values, array('title'=>$item->title,'uri'=>$item->uri));
-				}
-			}
-			return $data_values;
-		}
-	}
-
-	/*
-	 * Function that parses the fields within a referenced field
-	 *
-	 * Requires an entity as input and returns an array with the formatted values
-	 */
-	public function parseMultiText($field) {
-		// handle multi-values for text fields; turn into function
-		if (count($field) > 0) {
-			$data_values = array();
-			// single-value case
-			if (count($field) == 1) {
-				array_push($data_values, $field->value);
-			}
-			// multi-value case
-			else {
-				foreach ($field as $item) {
-					array_push($data_values, $item->value);
-				}
-			}
-			return $data_values;
-		}
-		
-	}
 }

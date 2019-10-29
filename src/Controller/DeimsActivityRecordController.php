@@ -32,7 +32,7 @@ class DeimsActivityRecordController extends ControllerBase {
 		$activity_information['availability']['openData'] = (!is_null($node->get('field_open_data')->value)) ? (($node->get('field_open_data')->value == 1) ? true : false) : null;	
 		$activity_information['availability']['notes'] = $node->get('field_notes')->value;
 		$activity_information['availability']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
-		$activity_information['availability']['source']['url'] = $DeimsFieldController->parseURLField($node->get('field_url'));
+		$activity_information['availability']['source']['url'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
 		$activity_information['resolution']['spatial'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'), $single_value_field=true);
 		$activity_information['resolution']['temporal'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'), $single_value_field=true);
 
