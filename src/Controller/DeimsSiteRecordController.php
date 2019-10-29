@@ -30,6 +30,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['contact']['siteManager'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_site_manager'));
 		$site_information['_data']['contact']['siteOwner'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_site_owner'));
 		$site_information['_data']['contact']['fundingAgency'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_funding_agency'));
+		$site_information['_data']['contact']['SiteURL'] = $DeimsFieldController->parseURLField($node->get('field_url'));
 
 		$site_information['_data']['general']['abstract'] = $node->get('field_abstract')->value;
 		$site_information['_data']['general']['history'] = $node->get('field_history')->value;
@@ -42,7 +43,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['_data']['general']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));	
 		$site_information['_data']['general']['shortName'] = $node->get('field_name_short')->value;
 		$site_information['_data']['general']['siteType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type', $single_value_field=true);
-		$site_information['_data']['general']['SiteURL'] = $DeimsFieldController->parseURLField($node->get('field_url'));
 
 		// aggregate temperature fields; shorthand ifs to catch empty values
 		$site_information['_data']['environmentalCharacteristics']['airTemperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;

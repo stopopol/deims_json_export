@@ -12,29 +12,25 @@ class DeimsFieldController extends ControllerBase {
 	 */
 	public function parseEntityReferenceField($field, $single_value_field = null) {
 
-		$RefEntity_collection = [];
-		// case for empty field or single reference
-		if (sizeof($field) == 1) {
-			array_push($RefEntity_collection, $this->parseEntityFieldContent($field->entity));
-		}
-		// case for multiple references
-		else {
-			foreach ($field->referencedEntities() as $RefEntity) {
-				array_push($RefEntity_collection, $this->parseEntityFieldContent($RefEntity));
+		if (count($field) > 0) {
+			$RefEntity_collection = [];
+			// case for single reference
+			if (count($field) == 1) {
+				array_push($RefEntity_collection, $this->parseEntityFieldContent($field->entity));
+				if ($single_value_field) {
+					$sanitized_RefEntity_collection=reset($RefEntity_collection);
+				}
 			}
-			sort($RefEntity_collection);
+			// case for multiple references
+			else {
+				foreach ($field->referencedEntities() as $RefEntity) {
+					array_push($RefEntity_collection, $this->parseEntityFieldContent($RefEntity));
+				}
+				sort($RefEntity_collection);
+			}
+			return $RefEntity_collection;
 		}
 
-		// filter empty values in array, because there are cases when a node is insufficiently filled in or there are drupal leftovers due to the form API
-		$sanitized_RefEntity_collection = array_values(array_filter($RefEntity_collection));
-		if (!empty($sanitized_RefEntity_collection)) {
-			// case for fields that have 0:1 cardinality; only applied when an optional $single_value_field is provided
-			if ($single_value_field) {
-				$sanitized_RefEntity_collection=reset($RefEntity_collection);
-			}
-			return $sanitized_RefEntity_collection;
-		}
-		
 	}
 	
 	/*
@@ -137,9 +133,9 @@ class DeimsFieldController extends ControllerBase {
 	 * Requires an entity as input and returns an array with the formatted values
 	 */
 	public function parseTextListField($node, $fieldname, $single_value_field = null) {
-		// handle multi-values for text fields; turn into function
-		$data_values_list_labels = $node->getFieldDefinition($fieldname)->getSetting('allowed_values');
+
 		if (count($node->get($fieldname)) > 0) {
+			$data_values_list_labels = $node->getFieldDefinition($fieldname)->getSetting('allowed_values');
 			$data_values = array();
 			// single-value case
 			if (count($node->get($fieldname)) == 1) {
@@ -157,13 +153,9 @@ class DeimsFieldController extends ControllerBase {
 					array_push($data_values, $data_values_list_labels[$item->value]);
 				}
 			}
-		}
-		// no-value case
-		else {
-			$data_values = null;
+			return $data_values;
 		}
 
-		return $data_values;
 	}
 
 	/*
@@ -186,13 +178,8 @@ class DeimsFieldController extends ControllerBase {
 					array_push($data_values, array('title'=>$item->title,'uri'=>$item->uri));
 				}
 			}
+			return $data_values;
 		}
-		// no-value case
-		else {
-			$data_values = null;
-		}
-
-		return $data_values;
 	}
 
 	/*
@@ -214,12 +201,8 @@ class DeimsFieldController extends ControllerBase {
 					array_push($data_values, $item->value);
 				}
 			}
+			return $data_values;
 		}
-		// no-value case
-		else {
-			$data_values = null;
-		}
-
-		return $data_values;
+		
 	}
 }
