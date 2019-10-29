@@ -19,7 +19,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		
 		// mandatory block for every resource type
 		$site_information['id']['prefix'] = 'https://deims.org/site/';
-		$site_information['id']['suffix'] = (!empty($node->get('field_deims_id')->value)) ? 'https://deims.org/' . $node->get('field_deims_id')->value : null;
+		$site_information['id']['suffix'] = $node->get('field_deims_id')->value;
 		$site_information['type'] = "site";
 		$site_information['name'] = $node->get('field_name')->value;
 		$site_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
