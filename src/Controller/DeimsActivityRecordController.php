@@ -45,6 +45,10 @@ class DeimsActivityRecordController extends ControllerBase {
 		$activity_information['attributes']['resolution']['spatial'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'), $single_value_field=true);
 		$activity_information['attributes']['resolution']['temporal'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'), $single_value_field=true);
 
+		// list all referenced datasets
+		$activity_information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->condition('field_related_activity',$node->id())->execute());
+
+
 		return $activity_information;
 		
   }

@@ -98,6 +98,35 @@ class DeimsFieldController extends ControllerBase {
 
 	}
 	
+	// print list of all resources that are related to record
+	public function findRelatedResources($nids) {
+		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+		$node_list = array();
+		foreach ($nodes as $node) {
+				
+			if ($node->isPublished()) {
+				$node_information = [];
+				$node_information['name'] = $node->get('title')->value;
+				$content_type = $node->bundle();
+				$node_information['type'] = $content_type;
+				switch ($content_type) {
+					case 'activity':
+						$node_information['id']['prefix'] = 'https://deims.org/activity';
+						break;
+					case 'dataset':
+						$node_information['id']['prefix'] = 'https://deims.org/dataset';
+						break;	
+				}
+
+				$node_information['id']['suffix'] = $node->get('field_uuid')->value;
+				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+				
+				array_push($node_list, $node_information);
+			} 
+		}
+		return $node_list;
+	}
+
 	/*
 	 * Function that parses the fields within a referenced field
 	 *
@@ -109,7 +138,18 @@ class DeimsFieldController extends ControllerBase {
 			$RefEntity_item = [];
 			switch ($RefEntity->bundle()) {
 				// to do: case for content type "dataset" and "activity"
-
+				case 'activity':
+					$RefEntity_item['type'] = 'activity';
+					$RefEntity_item['name'] = $RefEntity->field_name->value;
+					$RefEntity_item['id']['prefix'] = 'https://deims.org/activity/';
+					$RefEntity_item['id']['suffix'] = $RefEntity->field_uuid->value;
+					break;
+				case 'dataset':
+					$RefEntity_item['type'] = 'dataset';
+					$RefEntity_item['name'] = $RefEntity->field_name->value;
+					$RefEntity_item['id']['prefix'] = 'https://deims.org/dataset/';
+					$RefEntity_item['id']['suffix'] = $RefEntity->field_uuid->value;
+					break;
 				// case for content type 'site'
 				case 'site':
 					$RefEntity_item['type'] = 'site';

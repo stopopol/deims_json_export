@@ -107,6 +107,10 @@ class DeimsSiteRecordController extends ControllerBase {
 		// field_images -> TBD when necessary
 		$site_information['attributes']['images'] = null;
 
+		// list all referenced sites and datasets
+		$site_information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->execute());
+
+
 		return $site_information;
   }
 
