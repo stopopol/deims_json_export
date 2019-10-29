@@ -18,10 +18,11 @@ class DeimsSiteRecordController extends ControllerBase {
 		$DeimsFieldController = new DeimsFieldController();
 		
 		// mandatory block for every resource type
+		
+		$site_information['title'] = $node->get('title')->value;
+		$site_information['type'] = "site";
 		$site_information['id']['prefix'] = 'https://deims.org/site/';
 		$site_information['id']['suffix'] = $node->get('field_deims_id')->value;
-		$site_information['type'] = "site";
-		$site_information['name'] = $node->get('field_name')->value;
 		$site_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 		
 		$site_information['attributes']['affiliation']['network'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
@@ -42,7 +43,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['general']['yearClosed'] = intval($node->get('field_year_closed')->value);	 
 		$site_information['attributes']['general']['yearEstablished'] = intval($node->get('field_year_established')->value);
 		$site_information['attributes']['general']['hierarchy']['parent'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parent_site'));	
-		$site_information['attributes']['general']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));	
+		$site_information['attributes']['general']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));
+		$site_information['attributes']['general']['siteName'] = $node->get('field_name')->value;
 		$site_information['attributes']['general']['shortName'] = $node->get('field_name_short')->value;
 		$site_information['attributes']['general']['siteType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type', $single_value_field=true);
 

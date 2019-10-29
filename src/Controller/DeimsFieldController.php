@@ -106,7 +106,7 @@ class DeimsFieldController extends ControllerBase {
 				
 			if ($node->isPublished()) {
 				$node_information = [];
-				$node_information['name'] = $node->get('title')->value;
+				$node_information['title'] = $node->get('title')->value;
 				$content_type = $node->bundle();
 				$node_information['type'] = $content_type;
 				switch ($content_type) {

@@ -17,10 +17,10 @@ class DeimsDatasetRecordController extends ControllerBase {
 		// loading controller functions
 		$DeimsFieldController = new DeimsFieldController();
 
+		$dataset_information['title'] = $node->get('title')->value;
+		$dataset_information['type'] = 'dataset';
 		$dataset_information['id']['prefix'] = 'https://deims.org/dataset/';
 		$dataset_information['id']['suffix'] = $node->get('uuid')->value;
-		$dataset_information['type'] = 'dataset';
-		$dataset_information['name'] = $node->get('title')->value;
 		$dataset_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 		
 		$dataset_information['attributes']['general']['abstract'] = (!is_null($node->get('field_abstract')->value)) ? ($node->get('field_abstract')->value) : null; 
