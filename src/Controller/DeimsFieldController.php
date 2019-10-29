@@ -13,22 +13,22 @@ class DeimsFieldController extends ControllerBase {
 	public function parseEntityReferenceField($field, $single_value_field = null) {
 
 		if (count($field) > 0) {
-			$RefEntity_collection = [];
+			$data_values = array();
 			// case for single reference
 			if (count($field) == 1) {
-				array_push($RefEntity_collection, $this->parseEntityFieldContent($field->entity));
+				array_push($data_values, $this->parseEntityFieldContent($field->entity));
 				if ($single_value_field) {
-					$sanitized_RefEntity_collection=reset($RefEntity_collection);
+					$data_values=reset($data_values);
 				}
 			}
 			// case for multiple references
 			else {
 				foreach ($field->referencedEntities() as $RefEntity) {
-					array_push($RefEntity_collection, $this->parseEntityFieldContent($RefEntity));
+					array_push($data_values, $this->parseEntityFieldContent($RefEntity));
 				}
-				sort($RefEntity_collection);
+				sort($data_values);
 			}
-			return $RefEntity_collection;
+			return $data_values;
 		}
 
 	}
