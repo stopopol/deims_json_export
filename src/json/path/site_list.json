@@ -16,7 +16,7 @@
               "site": {
                 "summary": "A site example of the site list",
                 "value": {
-                  "name": "LTER Zöbelboden",
+                  "title": "LTER Zöbelboden - Austria",
                   "id": {
                     "prefix": "https://deims.org/",
                     "suffix": "8eda49e9-1f4e-4f3e-b58e-e0bb25dc32a6"

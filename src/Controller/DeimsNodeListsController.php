@@ -29,7 +29,7 @@ class DeimsNodeListsController {
 				if ($node->isPublished()) {
 					
 					$node_information = [];
-					$node_information['name'] = $node->get('field_name')->value;
+					$node_information['title'] = $node->get('title')->value;
 					$node_information['id']['prefix'] = 'https://deims.org/';
 					$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
 					$node_information['coordinates'] = $node->get('field_coordinates')->value;
@@ -51,7 +51,7 @@ class DeimsNodeListsController {
 				
 				if ($node->isPublished()) {
 					
-					$node_information['name'] = $node->get('title')->value;
+					$node_information['title'] = $node->get('title')->value;
 					$node_information['id']['prefix'] = "https://deims.org/" . $content_type . "/";
 					$node_information['id']['suffix'] = $node->get('uuid')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');

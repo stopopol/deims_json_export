@@ -4,13 +4,13 @@
         "name": {
             "type": "string"
         },
-        "deimsid": {
+        "id": {
             "type": "object",
             "properties": {
                 "prefix": {
                     "type": "string"
                 },
-                "id": {
+                "suffix": {
                     "type": "string"
                 }
             }
