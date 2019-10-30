@@ -15,7 +15,7 @@ class DeimsNodeListsController {
    * Callback for the API.
    */
   public function renderRecordList($content_type) {
-	$node_list = [];
+	$node_list = array();
 
 	// only return defined contents
 	switch ($content_type) {
@@ -28,7 +28,6 @@ class DeimsNodeListsController {
 				
 				if ($node->isPublished()) {
 					
-					$node_information = [];
 					$node_information['title'] = $node->get('title')->value;
 					$node_information['id']['prefix'] = 'https://deims.org/';
 					$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
