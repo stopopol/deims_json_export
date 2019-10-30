@@ -73,18 +73,16 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['geographic']['size']['value']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;
 		$site_information['attributes']['geographic']['size']['unit']= "ha";
 
-		$site_information['attributes']['experiments']['design'] = $node->get('field_design_experiments')->value;
-		$site_information['attributes']['experiments']['scale'] = $node->get('field_scale_experiments')->value;
-
 		// special case for boolean fields
 		$site_information['attributes']['managementOfResources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
 		$site_information['attributes']['managementOfResources']['notes'] = $node->get('field_management_resources_notes')->value;
 		$site_information['attributes']['managementOfResources']['percentage']  = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_management_resources_pct');
 
 		// group observations
-		$site_information['attributes']['observations']['design'] = $node->get('field_design_observation')->value;
-		$site_information['attributes']['observations']['scale'] = $node->get('field_scale_observation')->value;
-		
+		$site_information['attributes']['focusDesignScale']['experiments']['design'] = $node->get('field_design_experiments')->value;
+		$site_information['attributes']['focusDesignScale']['experiments']['scale'] = $node->get('field_scale_experiments')->value;
+		$site_information['attributes']['focusDesignScale']['observations']['design'] = $node->get('field_design_observation')->value;
+		$site_information['attributes']['focusDesignScale']['observations']['scale'] = $node->get('field_scale_observation')->value;
 		$site_information['attributes']['focusDesignScale']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
 		$site_information['attributes']['focusDesignScale']['researchTopics'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_research_topics'));
 		
@@ -107,7 +105,7 @@ class DeimsSiteRecordController extends ControllerBase {
 
 		// TO DO:
 		// field_images -> TBD when necessary
-		$site_information['attributes']['images'] = null;
+		$site_information['attributes']['general']['images'] = null;
 
 		// list all referenced sites and datasets
 		$site_information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->execute());
