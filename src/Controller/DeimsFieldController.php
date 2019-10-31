@@ -186,7 +186,8 @@ class DeimsFieldController extends ControllerBase {
 				case 'protection_programme':
 					// always just 0:1 values
 					$RefEntity_item['name'] = $RefEntity->field_protection_programme->entity->getName();
-					$RefEntity_item['cover'] = $RefEntity->field_protection_programme_cover->value;
+					$data_values_list_labels = $RefEntity->getFieldDefinition('field_protection_programme_cover')->getSetting('allowed_values');
+					$RefEntity_item['cover'] = $data_values_list_labels[$RefEntity->field_protection_programme_cover->value];
 					$RefEntity_item['notes'] = $RefEntity->field_protection_programme_notes->value;
 					break;
 				// paragraphs of type 'observation'
