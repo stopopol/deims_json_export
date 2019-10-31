@@ -130,6 +130,174 @@
                             "type": "string"
                         }
                     }
+                },
+                "general": {
+                    "type": "object",
+                    "properties": {
+                        "abstract": {
+                            "type": "string"
+                        },
+                        "history": {
+                            "type": "string"
+                        },
+                        "keywords": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "purpose": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "yearEstablished": {
+                            "type": "integer"
+                        },
+                        "yearClosed": {
+                            "type": "integer"
+                        },
+                        "general": {
+                            "type": "object",
+                            "properties": {
+                                "hierarchy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "parent": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/recordList"
+                                            }
+                                        },
+                                        "children": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/recordList"
+                                            }
+                                        }
+                                    }
+                                },
+                                "siteName": {
+                                    "type": "string"
+                                },
+                                "shortName": {
+                                    "type": "string"
+                                },
+                                "siteType": {
+                                    "type": "string"
+                                },
+                                "images": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "environmentalCharacteristics": {
+                    "type": "object",
+                    "properties": {
+                        "airTemperature": {
+                            "type": "object",
+                            "properties": {
+                                "avg": {
+                                    "type": "integer",
+                                    "minimum": -100,
+                                    "maximum": 100
+                                },
+                                "min": {
+                                    "type": "integer",
+                                    "minimum": -100,
+                                    "maximum": 100
+                                },
+                                "max": {
+                                    "type": "integer",
+                                    "minimum": -100,
+                                    "maximum": 100
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "biogeographicalRegion": {
+                            "type": "string"
+                        },
+                        "biome": {
+                            "type": "string"
+                        },
+                        "ecosystemAndLanduse": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "geoBonBiome": {
+                            "type": "string"
+                        },
+                        "geology": {
+                            "type": "string"
+                        },
+                        "hydrology": {
+                            "type": "string"
+                        },
+                        "soils": {
+                            "type": "string"
+                        },
+                        "vegetation": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "geographic": {
+                    "type": "object",
+                    "properties": {
+                        "boundaries": {
+                            "type": "string"
+                        },
+                        "coordinates": {
+                            "type": "string"
+                        },
+                        "country": {
+                            "type": "array",
+                            "items": {}
+                        },
+                        "elevation": {
+                            "type": "object",
+                            "properties": {
+                                "avg": {
+                                    "type": "integer",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                },
+                                "min": {
+                                    "type": "integer",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                },
+                                "max": {
+                                    "type": "integer",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "size": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
