@@ -1,0 +1,39 @@
+{
+  "get": {
+    "description": "Returns an activity record",
+    "parameters": [
+      {
+        "name": "resource_id",
+        "in": "path",
+        "description": "The uuid of the activity record",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "8689b125-ee46-4d09-9e46-640f9c5c6eab"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "JSON object containing all activity information",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/completeActivityRecord"
+            }
+          }
+        }
+      },
+      "default": {
+        "description": "error payload",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/resourceNotFound"
+            }
+          }
+        }
+      }
+    }
+  }
+}

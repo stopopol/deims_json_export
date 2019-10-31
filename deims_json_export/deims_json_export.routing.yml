@@ -1,0 +1,51 @@
+landing_page.content:
+    path: '/api'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsLandingPageController::renderLandingPage'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
+
+deims_lists.content:
+    path: '/api/{content_type}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsNodeListsController::renderRecordList'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
+    
+site_record.content:
+    path: '/api/site/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
+      content_type: 'site'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
+
+dataset_record.content:
+    path: '/api/dataset/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
+      content_type: 'dataset'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
+
+activity_record.content:
+    path: '/api/activity/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
+      content_type: 'activity'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
+
+sensor_record.content:
+    path: '/api/sensor/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
+      content_type: 'sensor'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'
