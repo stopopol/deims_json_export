@@ -298,6 +298,139 @@
                             }
                         }
                     }
+                },
+                "managementOfResources": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean"
+                        },
+                        "notes": {
+                            "type": "string"
+                        },
+                        "percentage": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "focusDesignScale": {
+                    "type": "object",
+                    "properties": {
+                        "experiments": {
+                            "type": "object",
+                            "properties": {
+                                "design": {
+                                    "type": "string"
+                                },
+                                "scale": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "observations": {
+                            "type": "object",
+                            "properties": {
+                                "design": {
+                                    "type": "string"
+                                },
+                                "scale": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "parameters": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "researchTopics": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
+                },
+                "infrastructure": {
+                    "type": "object",
+                    "properties": {
+                        "accessibleAllYear": {
+                            "type": "boolean"
+                        },
+                        "accessType": {
+                            "type": "string"
+                        },
+                        "allPartsAccessible": {
+                            "type": "boolean"
+                        },
+                        "maintenanceInterval": {
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "permanentPowerSupply": {
+                            "type": "boolean"
+                        },
+                        "operation": {
+                            "type": "object",
+                            "properties": {
+                                "permanent": {
+                                    "type": "boolean"
+                                },
+                                "notes": {
+                                    "type": "string"
+                                },
+                                "siteVisitInterval": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "notes": {
+                            "type": "string"
+                        },
+                        "collection": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "data": {
+                            "type": "object",
+                            "properties": {
+                                "notes": {
+                                    "type": "string"
+                                },
+                                "policy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "url": {
+                                            "type": "string"
+                                        },
+                                        "right": {
+                                            "type": "array",
+                                            "items": {}
+                                        },
+                                        "notes": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "services": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "location": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "relatedResources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/referencedRecord"
+                    }
                 }
             }
         }

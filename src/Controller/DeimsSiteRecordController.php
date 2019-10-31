@@ -76,7 +76,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		// special case for boolean fields
 		$site_information['attributes']['managementOfResources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
 		$site_information['attributes']['managementOfResources']['notes'] = $node->get('field_management_resources_notes')->value;
-		$site_information['attributes']['managementOfResources']['percentage']  = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_management_resources_pct');
+		$site_information['attributes']['managementOfResources']['percentage']  = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_management_resources_pct', $single_value_field=true);
 
 		// group observations
 		$site_information['attributes']['focusDesignScale']['experiments']['design'] = $node->get('field_design_experiments')->value;
@@ -93,13 +93,13 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['infrastructure']['permanentPowerSupply'] = (!is_null($node->get('field_permanent_power_supply')->value)) ? (($node->get('field_permanent_power_supply')->value == 1) ? true : false) : null;
 		$site_information['attributes']['infrastructure']['operation']['permanent'] = (!is_null($node->get('field_permanent_operation')->value)) ? (($node->get('field_permanent_operation')->value == 1) ? true : false) : null;	
 		$site_information['attributes']['infrastructure']['operation']['notes'] = $node->get('field_operation_notes')->value;
-		$site_information['attributes']['infrastructure']['operation']['SiteVisitInterval']= (!is_null($node->get('field_site_visit_interval')->value)) ? floatval($node->get('field_site_visit_interval')->value) : null;
+		$site_information['attributes']['infrastructure']['operation']['siteVisitInterval']= (!is_null($node->get('field_site_visit_interval')->value)) ? floatval($node->get('field_site_visit_interval')->value) : null;
 		$site_information['attributes']['infrastructure']['notes'] = $node->get('field_infrastructure_notes')->value;
 		$site_information['attributes']['infrastructure']['collection'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_infrastructure'));
 		$site_information['attributes']['infrastructure']['data']['notes'] = $node->get('field_data_notes')->value;
-		$site_information['attributes']['infrastructure']['data']['policy']['notes'] = $node->get('field_site_data_policy')->value;
 		$site_information['attributes']['infrastructure']['data']['policy']['url'] = $node->get('field_data_policy_url')->uri;
 		$site_information['attributes']['infrastructure']['data']['policy']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
+		$site_information['attributes']['infrastructure']['data']['policy']['notes'] = $node->get('field_site_data_policy')->value;
 		$site_information['attributes']['infrastructure']['data']['services'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_dataservi');
 		$site_information['attributes']['infrastructure']['data']['location'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_datastorloc', $single_value_field=true);	
 

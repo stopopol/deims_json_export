@@ -45,6 +45,7 @@ class DeimsLandingPageController extends ControllerBase {
     $output_information['components']['schemas']['personRecord'] = json_decode(file_get_contents($definition_location . '/person_record.json'));
     $output_information['components']['schemas']['organisationRecord'] = json_decode(file_get_contents($definition_location . '/organisation_record.json'));
     $output_information['components']['schemas']['taxonomyTerm'] = json_decode(file_get_contents($definition_location . '/taxonomy_term.json'));
+    $output_information['components']['schemas']['referencedRecord'] = json_decode(file_get_contents($definition_location . '/referenced_record.json'));
 
     return new JsonResponse($output_information);
   }
