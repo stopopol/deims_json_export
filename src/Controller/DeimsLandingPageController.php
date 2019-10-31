@@ -35,16 +35,13 @@ class DeimsLandingPageController extends ControllerBase {
 
     $definition_location = __DIR__ . '/../json/component/';
     $output_information['components']['schemas']['resourceNotFound'] = json_decode(file_get_contents($definition_location . '/resource_not_found.json'));
-    $output_information['components']['schemas']['siteList'] = json_decode(file_get_contents($definition_location . '/siteList.json'));
-    $output_information['components']['schemas']['affiliationItem'] = json_decode(file_get_contents($definition_location . '/affiliationItem.json'));
-    $output_information['components']['schemas']['recordList'] = json_decode(file_get_contents($definition_location . '/recordList.json'));
-
-
-    // TO DO: record components
-    // Site
-    // Dataset
-    // Sensor
-    // Activity
+    $output_information['components']['schemas']['siteList'] = json_decode(file_get_contents($definition_location . '/site_list.json'));
+    $output_information['components']['schemas']['affiliationItem'] = json_decode(file_get_contents($definition_location . '/affiliation_item.json'));
+    $output_information['components']['schemas']['recordList'] = json_decode(file_get_contents($definition_location . '/record_list.json'));
+    $output_information['components']['schemas']['completeSiteRecord'] = json_decode(file_get_contents($definition_location . '/complete_site_record.json'));
+    $output_information['components']['schemas']['completeDatasetRecord'] = json_decode(file_get_contents($definition_location . '/complete_dataset_record.json'));
+    $output_information['components']['schemas']['completeActivityRecord'] = json_decode(file_get_contents($definition_location . '/complete_activity_record.json'));
+    $output_information['components']['schemas']['completeSensorRecord'] = json_decode(file_get_contents($definition_location . '/complete_sensor_record.json'));
 
     return new JsonResponse($output_information);
   }
