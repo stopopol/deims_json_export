@@ -25,38 +25,43 @@
             "type": "object",
             "properties": {
                 "affiliation": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/components/schemas/affiliationItem"
-                    }
-                },
-                "projects": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "label": {
-                                "type": "string"
-                            },
-                            "uri": {
-                                "type": "string"
+                    "type": "object",
+                    "properties": {
+                        "network": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/affiliationItem"
                             }
-                        }
-                    }
-                },
-                "protectionProgramme": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string"
-                            },
-                            "cover": {
-                                "type": "string"
-                            },
-                            "notes": {
-                                "type": "string"
+                        },
+                        "projects": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "label": {
+                                        "type": "string"
+                                    },
+                                    "uri": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "protectionProgramme": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "cover": {
+                                        "type": "string"
+                                    },
+                                    "notes": {
+                                        "type": "string"
+                                    }
+                                }
                             }
                         }
                     }
