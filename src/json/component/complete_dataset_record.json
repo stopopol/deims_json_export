@@ -171,6 +171,121 @@
                             }
                         }
                     }
+                },
+                "onlineDistribution": {
+                    "type": "object",
+                    "properties": {
+                        "dataSource": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "dataPolicyUrl": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/urlObject"
+                            }
+                        },
+                        "doi": {
+                            "type": "string"
+                        },
+                        "onlineLocation": {
+                            "type": "array",
+                            "items": {
+                                "properties": {
+                                    "function": {
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "type": "object",
+                                        "properties": {
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "legal": {
+                    "type": "object",
+                    "properties": {
+                        "accesUse": {
+                            "type": "object",
+                            "properties": {
+                                "label": {
+                                    "type": "string"
+                                },
+                                "uri": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "rights": {
+                            "type": "array",
+                            "items": {}
+                        },
+                        "legalAct": {
+                            "type": "string"
+                        },
+                        "citation": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "method": {
+                    "type": "object",
+                    "properties": {
+                        "instrumentation": {
+                            "type": "array",
+                            "items": {}
+                        },
+                        "qualityAssurance": {
+                            "type": "array",
+                            "items": {}
+                        },
+                        "methodUrl": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/urlObject"
+                            }
+                        },
+                        "samplingTimeUnit": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "spatialDesign": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "spatialScale": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "temporalResolution": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
                 }
             }
         }

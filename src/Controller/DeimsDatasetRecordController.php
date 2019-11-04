@@ -42,7 +42,7 @@ class DeimsDatasetRecordController extends ControllerBase {
 
 		// TO DO: extend to all fields of dataSource
 		$dataset_information['attributes']['onlineDistribution']['dataSource'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_data_sources'));
-		$dataset_information['attributes']['onlineDistribution']['dataPolicyUrl'] = (!is_null($node->get('field_data_policy_url')->value)) ? ($node->get('field_data_policy_url')->value) : null; 
+		$dataset_information['attributes']['onlineDistribution']['dataPolicyUrl']= $DeimsFieldController->parseRegularField($node->get('field_data_policy_url'), "url");
 		$dataset_information['attributes']['onlineDistribution']['doi'] = (!is_null($node->get('field_doi')->value)) ? ($node->get('field_doi')->value) : null; 
 		$dataset_information['attributes']['onlineDistribution']['onlineLocation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_online_locator')); 
 		
@@ -52,9 +52,9 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['attributes']['legal']['citation'] = (!is_null($node->get('field_citation')->value)) ? ($node->get('field_citation')->value) : null; 
 		
 		$dataset_information['attributes']['method']['instrumentation'] = $DeimsFieldController->parseRegularField($node->get('field_instrumentation'), "multiText");
-		$dataset_information['attributes']['method']['qualityAssurance'] = $DeimsFieldController->parseRegularField($node->get('field_quality_assurance'), "multiText");
-		$dataset_information['attributes']['method']['methodURL']['title'] = $node->get('field_method')->title;
-		$dataset_information['attributes']['method']['methodURL']['uri'] = $node->get('field_method')->uri;
+		$dataset_information['attributes']['method']['qualityAssurance'] = $DeimsFieldController->parseRegularField($node->get('field_quality_assurance'), "multiText");		
+		$dataset_information['attributes']['method']['methodUrl']= $DeimsFieldController->parseRegularField($node->get('field_method'), "url");
+
 		$dataset_information['attributes']['method']['methodDescription']= $DeimsFieldController->parseRegularField($node->get('field_method_description'), "multiText");
 		$dataset_information['attributes']['method']['samplingTimeUnit'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_sampling_time_unit'), $single_value_field=true);
 		$dataset_information['attributes']['method']['spatialDesign'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_design'), $single_value_field=true);

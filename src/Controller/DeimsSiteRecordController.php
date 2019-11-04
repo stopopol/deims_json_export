@@ -97,7 +97,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['infrastructure']['notes'] = $node->get('field_infrastructure_notes')->value;
 		$site_information['attributes']['infrastructure']['collection'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_infrastructure'));
 		$site_information['attributes']['infrastructure']['data']['notes'] = $node->get('field_data_notes')->value;
-		$site_information['attributes']['infrastructure']['data']['policy']['url'] = $node->get('field_data_policy_url')->uri;
+		$site_information['attributes']['infrastructure']['data']['policy']['url'] = $DeimsFieldController->parseRegularField($node->get('field_data_policy_url'), "url");
 		$site_information['attributes']['infrastructure']['data']['policy']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
 		$site_information['attributes']['infrastructure']['data']['policy']['notes'] = $node->get('field_site_data_policy')->value;
 		$site_information['attributes']['infrastructure']['data']['services'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_dataservi');
