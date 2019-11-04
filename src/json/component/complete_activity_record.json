@@ -134,9 +134,33 @@
                         }
                     }
                 },
+                "observation": {
+                    "type": "object",
+                    "properties": {
+                        "parameter": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
+                },
                 "resolution": {
                     "type": "object",
-                    "properties": {}
+                    "properties": {
+                        "spatial": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "temporal": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
                 },
                 "relatedResources": {
                     "type": "array",

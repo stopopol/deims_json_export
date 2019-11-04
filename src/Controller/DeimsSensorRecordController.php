@@ -32,7 +32,8 @@ class DeimsSensorRecordController extends ControllerBase {
 
 		$sensor_information['attributes']['geographic']['coordinates'] = $node->get('field_coordinates')->value;
 		$sensor_information['attributes']['geographic']['trajectory'] = $node->get('field_boundaries')->value;
-		$sensor_information['attributes']['geographic']['elevation'] = (!is_null($node->get('field_elevation_avg')->value)) ? floatval($node->get('field_elevation_avg')->value)  : null;
+		$sensor_information['attributes']['geographic']['elevation']['value'] = (!is_null($node->get('field_elevation_avg')->value)) ? floatval($node->get('field_elevation_avg')->value)  : null;
+		$sensor_information['attributes']['geographic']['elevation']['unit'] = 'msl';
 
 		$sensor_information['attributes']['observation']['sensorType'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_sensor_type'), true);
 		$sensor_information['attributes']['observation']['resultAcquisitionSource'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_result_acquisition_source', $single_value_field=true);	

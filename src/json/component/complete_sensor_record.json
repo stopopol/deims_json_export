@@ -22,7 +22,109 @@
             "type": "string"
         },
         "attributes": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "general": {
+                    "type": "object",
+                    "properties": {
+                        "relatedSite": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/referencedRecord"
+                            }
+                        },
+                        "abstract": {
+                            "type": "string"
+                        },
+                        "contact": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/personRecord"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/organisationRecord"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "dateRange": {
+                            "type": "object",
+                            "properties": {
+                                "from": {
+                                    "type": "string"
+                                },
+                                "to": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "keywords": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
+                },
+                "geographic": {
+                    "type": "object",
+                    "properties": {
+                        "coordinates": {
+                            "type": "string"
+                        },
+                        "trajectory": {
+                            "type": "string"
+                        },
+                        "elevation": {
+                            "type": "object",
+                            "properties": {
+                                "value": {
+                                    "type": "string"
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "observation": {
+                    "type": "object",
+                    "properties": {
+                        "sensorType": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "resultAcquisitionSource": {
+                            "type": "string"
+                        },
+                        "observedProperty": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "property": {
+                                        "type": "string"
+                                    },
+                                    "unitofMeasurement": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

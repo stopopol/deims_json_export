@@ -193,7 +193,7 @@ class DeimsFieldController extends ControllerBase {
 				// paragraphs of type 'observation'
 				case 'observation':
 					$RefEntity_item['property'] = $RefEntity->field_media_monitored->entity->getName();
-					$RefEntity_item['unitOfMeasurment'] = 'not implemented';
+					$RefEntity_item['unitOfMeasurement'] = 'not implemented';
 					break;
 				// case for 'data_source'; currently incomplete
 				case 'data_source':
