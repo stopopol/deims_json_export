@@ -30,7 +30,7 @@ class DeimsActivityRecordController extends ControllerBase {
 		$activity_information['attributes']['general']['dateRange']['from'] = (!is_null($node->get('field_date_range')->value)) ? ($node->get('field_date_range')->value) : null;
 		$activity_information['attributes']['general']['dateRange']['to'] = (!is_null($node->get('field_date_range')->end_value)) ? ($node->get('field_date_range')->end_value) : null;
 
-		$activity_information['attributes']['contact']['contact'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_contact'));
+		$activity_information['attributes']['contact']['corresponding'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_contact'));
 		$activity_information['attributes']['contact']['metadataProvider'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_metadata_provider'));
 
 		$activity_information['attributes']['geographic']['boundaries'] = (!is_null($node->get('field_related_site')->entity)) ? (($node->get('field_related_site')->entity->field_boundaries->value)) : null;	
@@ -39,9 +39,10 @@ class DeimsActivityRecordController extends ControllerBase {
 		$activity_information['attributes']['availability']['forEcopotential'] = (!is_null($node->get('field_data_available_ecopot')->value)) ? (($node->get('field_data_available_ecopot')->value == 1) ? true : false) : null;	
 		$activity_information['attributes']['availability']['openData'] = (!is_null($node->get('field_open_data')->value)) ? (($node->get('field_open_data')->value == 1) ? true : false) : null;	
 		$activity_information['attributes']['availability']['notes'] = $node->get('field_notes')->value;
-		$activity_information['attributes']['availability']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
 		$activity_information['attributes']['availability']['source']['url'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
 		
+		$activity_information['attributes']['observation']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
+
 		$activity_information['attributes']['resolution']['spatial'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_spatial_scale'), $single_value_field=true);
 		$activity_information['attributes']['resolution']['temporal'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_temporal_resolution'), $single_value_field=true);
 
