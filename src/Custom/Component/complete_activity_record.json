@@ -1,0 +1,174 @@
+{
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string"
+        },
+        "id": {
+            "type": "object",
+            "properties": {
+                "prefix": {
+                    "type": "string"
+                },
+                "suffix": {
+                    "type": "string"
+                }
+            }
+        },
+        "changed": {
+            "type": "string"
+        },
+        "attributes": {
+            "type": "object",
+            "properties": {
+                "general": {
+                    "type": "object",
+                    "properties": {
+                        "relatedSite": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/referencedRecord"
+                            }
+                        },
+                        "abstract": {
+                            "type": "string"
+                        },
+                        "keywords": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "dateRange": {
+                            "type": "object",
+                            "properties": {
+                                "from": {
+                                    "type": "string"
+                                },
+                                "to": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "contact": {
+                    "type": "object",
+                    "properties": {
+                        "corresponding": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/personRecord"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/organisationRecord"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "metadataProvider": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/personRecord"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/organisationRecord"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "geographic": {
+                    "type": "object",
+                    "properties": {
+                        "boundaries": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "availability": {
+                    "type": "object",
+                    "properties": {
+                        "digitally": {
+                            "type": "boolean"
+                        },
+                        "forEcopotential": {
+                            "type": "boolean"
+                        },
+                        "openData": {
+                            "type": "boolean"
+                        },
+                        "notes": {
+                            "type": "string"
+                        },
+                        "source": {
+                            "type": "object",
+                            "properties": {
+                                "url": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/urlObject"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "observation": {
+                    "type": "object",
+                    "properties": {
+                        "parameter": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
+                },
+                "resolution": {
+                    "type": "object",
+                    "properties": {
+                        "spatial": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "temporal": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
+                },
+                "relatedResources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/referencedRecord"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,444 @@
+{
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string"
+        },
+        "id": {
+            "type": "object",
+            "properties": {
+                "prefix": {
+                    "type": "string"
+                },
+                "suffix": {
+                    "type": "string"
+                }
+            }
+        },
+        "changed": {
+            "type": "string"
+        },
+        "attributes": {
+            "type": "object",
+            "properties": {
+                "affiliation": {
+                    "type": "object",
+                    "properties": {
+                        "network": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/affiliationItem"
+                            }
+                        },
+                        "projects": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "label": {
+                                        "type": "string"
+                                    },
+                                    "uri": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "protectionProgramme": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "cover": {
+                                        "type": "string"
+                                    },
+                                    "notes": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "contact": {
+                    "type": "object",
+                    "properties": {
+                        "siteManager": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/personRecord"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/organisationRecord"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "siteOwner": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/personRecord"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/organisationRecord"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "fundingAgency": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/personRecord"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/organisationRecord"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "siteUrl": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/urlObject"
+                            }
+                        }
+                    }
+                },
+                "general": {
+                    "type": "object",
+                    "properties": {
+                        "abstract": {
+                            "type": "string"
+                        },
+                        "history": {
+                            "type": "string"
+                        },
+                        "keywords": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "purpose": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "yearEstablished": {
+                            "type": "integer"
+                        },
+                        "yearClosed": {
+                            "type": "integer"
+                        },
+                        "general": {
+                            "type": "object",
+                            "properties": {
+                                "hierarchy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "parent": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/recordList"
+                                            }
+                                        },
+                                        "children": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/recordList"
+                                            }
+                                        }
+                                    }
+                                },
+                                "siteName": {
+                                    "type": "string"
+                                },
+                                "shortName": {
+                                    "type": "string"
+                                },
+                                "siteType": {
+                                    "type": "string"
+                                },
+                                "images": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "environmentalCharacteristics": {
+                    "type": "object",
+                    "properties": {
+                        "airTemperature": {
+                            "type": "object",
+                            "properties": {
+                                "avg": {
+                                    "type": "integer",
+                                    "minimum": -100,
+                                    "maximum": 100
+                                },
+                                "min": {
+                                    "type": "integer",
+                                    "minimum": -100,
+                                    "maximum": 100
+                                },
+                                "max": {
+                                    "type": "integer",
+                                    "minimum": -100,
+                                    "maximum": 100
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "biogeographicalRegion": {
+                            "type": "string"
+                        },
+                        "biome": {
+                            "type": "string"
+                        },
+                        "ecosystemAndLanduse": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "geoBonBiome": {
+                            "type": "string"
+                        },
+                        "geology": {
+                            "type": "string"
+                        },
+                        "hydrology": {
+                            "type": "string"
+                        },
+                        "soils": {
+                            "type": "string"
+                        },
+                        "vegetation": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "geographic": {
+                    "type": "object",
+                    "properties": {
+                        "boundaries": {
+                            "type": "string"
+                        },
+                        "coordinates": {
+                            "type": "string"
+                        },
+                        "country": {
+                            "type": "array",
+                            "items": {}
+                        },
+                        "elevation": {
+                            "type": "object",
+                            "properties": {
+                                "avg": {
+                                    "type": "integer",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                },
+                                "min": {
+                                    "type": "integer",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                },
+                                "max": {
+                                    "type": "integer",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "size": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "managementOfResources": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean"
+                        },
+                        "notes": {
+                            "type": "string"
+                        },
+                        "percentage": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "focusDesignScale": {
+                    "type": "object",
+                    "properties": {
+                        "experiments": {
+                            "type": "object",
+                            "properties": {
+                                "design": {
+                                    "type": "string"
+                                },
+                                "scale": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "observations": {
+                            "type": "object",
+                            "properties": {
+                                "design": {
+                                    "type": "string"
+                                },
+                                "scale": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "parameters": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "researchTopics": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        }
+                    }
+                },
+                "infrastructure": {
+                    "type": "object",
+                    "properties": {
+                        "accessibleAllYear": {
+                            "type": "boolean"
+                        },
+                        "accessType": {
+                            "type": "string"
+                        },
+                        "allPartsAccessible": {
+                            "type": "boolean"
+                        },
+                        "maintenanceInterval": {
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "permanentPowerSupply": {
+                            "type": "boolean"
+                        },
+                        "operation": {
+                            "type": "object",
+                            "properties": {
+                                "permanent": {
+                                    "type": "boolean"
+                                },
+                                "notes": {
+                                    "type": "string"
+                                },
+                                "siteVisitInterval": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "notes": {
+                            "type": "string"
+                        },
+                        "collection": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
+                        },
+                        "data": {
+                            "type": "object",
+                            "properties": {
+                                "notes": {
+                                    "type": "string"
+                                },
+                                "policy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "url": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/urlObject"
+                                            }
+                                        },
+                                        "right": {
+                                            "type": "array",
+                                            "items": {}
+                                        },
+                                        "notes": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "services": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "location": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "relatedResources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/referencedRecord"
+                    }
+                }
+            }
+        }
+    }
+}

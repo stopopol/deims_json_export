@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "status": {
+            "type": "integer",
+            "format": "int32"
+        },
+        "detail": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "source": {
+            "type": "object",
+            "properties": {
+                "pointer": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
