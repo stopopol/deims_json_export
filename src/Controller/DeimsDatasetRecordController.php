@@ -40,8 +40,6 @@ class DeimsDatasetRecordController extends ControllerBase {
 		
 		$dataset_information['attributes']['geographic'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_observation_location'));
 
-		// TO DO: extend to all fields of dataSource
-		$dataset_information['attributes']['onlineDistribution']['dataSource'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_data_sources'));
 		$dataset_information['attributes']['onlineDistribution']['dataPolicyUrl']= $DeimsFieldController->parseRegularField($node->get('field_data_policy_url'), "url");
 		$dataset_information['attributes']['onlineDistribution']['doi'] = (!is_null($node->get('field_doi')->value)) ? ($node->get('field_doi')->value) : null; 
 		$dataset_information['attributes']['onlineDistribution']['onlineLocation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_online_locator')); 
