@@ -129,7 +129,13 @@ class DeimsFieldController extends ControllerBase {
 				array_push($node_list, $node_information);
 			} 
 		}
-		return $node_list;
+		
+		if(!empty($node_list)) {
+			return $node_list;
+		}
+		else {
+			return null;
+		}
 	}
 
 	/*
