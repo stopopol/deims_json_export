@@ -103,12 +103,14 @@ class DeimsFieldController extends ControllerBase {
 		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 		$node_list = array();
 		foreach ($nodes as $node) {
-				
 			if ($node->isPublished()) {
 				$node_information = [];
-				$node_information['title'] = $node->get('title')->value;
 				$content_type = $node->bundle();
-				$node_information['type'] = $content_type;
+				
+				if ($content_type == 'observation_location') {
+					continue;
+				}
+				
 				switch ($content_type) {
 					case 'activity':
 						$node_information['id']['prefix'] = 'https://deims.org/activity/';
@@ -120,7 +122,7 @@ class DeimsFieldController extends ControllerBase {
 						$node_information['id']['prefix'] = 'https://deims.org/sensor/';
 						break;	
 				}
-
+				$node_information['title'] = $node->get('title')->value;
 				$node_information['id']['suffix'] = $node->get('field_uuid')->value;
 				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 				
