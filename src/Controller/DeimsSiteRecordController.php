@@ -33,7 +33,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['contact']['siteManager'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_site_manager'));
 		$site_information['attributes']['contact']['siteOwner'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_site_owner'));
 		$site_information['attributes']['contact']['fundingAgency'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_funding_agency'));
-		$site_information['attributes']['contact']['SiteURL'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
+		$site_information['attributes']['contact']['siteURL'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
 
 		$site_information['attributes']['general']['abstract'] = $node->get('field_abstract')->value;
 		$site_information['attributes']['general']['history'] = $node->get('field_history')->value;
