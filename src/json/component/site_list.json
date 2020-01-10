@@ -20,12 +20,6 @@
         },
         "changed": {
             "type": "string"
-        },
-        "affiliation": {
-            "type": "array",
-            "items": {
-                "$ref": "#/components/schemas/affiliationItem"
-            }
         }
     }
 }

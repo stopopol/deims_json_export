@@ -22,19 +22,7 @@
                     "suffix": "8eda49e9-1f4e-4f3e-b58e-e0bb25dc32a6"
                   },
                   "coordinates": "POINT(14.444136161386 47.842246069311)",
-                  "changed": "2019-10-03T09:40:57+0200",
-                  "affiliation": [
-                    {
-                      "network": "LTER Austria",
-                      "code": "LTER_EU_AT_003",
-                      "verified": true
-                    },
-                    {
-                      "network": "LTER Europe",
-                      "code": "LTER_EU_AT_003",
-                      "verified": true
-                    }
-                  ]
+                  "changed": "2019-10-03T09:40:57+0200"
                 }
               }
             }

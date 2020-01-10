@@ -25,8 +25,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['id']['suffix'] = $node->get('field_deims_id')->value;
 		$site_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 		
-		$site_information['attributes']['affiliation']['network'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
-		$site_information['attributes']['affiliation']['project'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_projects'));
+		$site_information['attributes']['affiliation']['networks'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
+		$site_information['attributes']['affiliation']['projects'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_projects'));
 		$site_information['attributes']['affiliation']['protectionProgramme'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_protection_programme'));	
 
 		// parses both referenced fields of content type 'person' and/or 'organisation'

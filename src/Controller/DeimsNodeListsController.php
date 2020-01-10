@@ -33,7 +33,7 @@ class DeimsNodeListsController {
 					$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
 					$node_information['coordinates'] = $node->get('field_coordinates')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-					$node_information['affiliation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
+					//$node_information['affiliation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 					
 					array_push($node_list, $node_information);
 				}

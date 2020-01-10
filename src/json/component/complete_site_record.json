@@ -27,7 +27,7 @@
                 "affiliation": {
                     "type": "object",
                     "properties": {
-                        "network": {
+                        "networks": {
                             "type": "array",
                             "items": {
                                 "$ref": "#/components/schemas/affiliationItem"
