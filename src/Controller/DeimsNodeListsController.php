@@ -54,11 +54,15 @@ class DeimsNodeListsController {
 					$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
 					$node_information['coordinates'] = $node->get('field_coordinates')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-					$node_information['affiliation'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
+					//$node_information['affiliation'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 
 					if ($query_value_network || $query_value_sitecode || $query_value_verified) {
 						$affiliation = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 					}
+
+					// TO DO:
+					//
+					// Site Code Filter
 
 					// if a network id is provided, filter accordingly
 					if ($query_value_network) {
