@@ -27,7 +27,7 @@ class DeimsNodeListsController {
 		case 'site':
 
 			$DeimsFieldController = new DeimsFieldController();
-			$nids = \Drupal::entityQuery('node')->condition('type',$content_type)->execute();
+			$nids = \Drupal::entityQuery('node')->condition('type', $content_type)->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 
 			// site filter parameters
@@ -35,70 +35,76 @@ class DeimsNodeListsController {
 			$query_value_sitecode = \Drupal::request()->query->get('sitecode') ?: null;
 			$query_value_verified = \Drupal::request()->query->get('verified') ?: null;
 
-			$number_of_loops = 0;
+			$number_of_parsed_nodes = 0;
 			$number_of_listed_nodes = 0;
 			foreach ($nodes as $node) {
 				
 				if ($node->isPublished()) {
 
-					// continue if offset
-					if ($number_of_loops <= $offset) {
-						$number_of_loops++;
-						continue;
-					}
-					
-					$node_information['title'] = $node->get('title')->value;
-					$node_information['id']['prefix'] = 'https://deims.org/';
-					$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
-					$node_information['coordinates'] = $node->get('field_coordinates')->value;
-					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-					$node_information['affiliation'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
-
+					$search_criteria_matched = true;
+					// check for network-related filters
 					if ($query_value_network || $query_value_sitecode || $query_value_verified) {
 						$affiliation = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
-					}
 
-					// Site Code Filter
-					if ($query_value_sitecode) {
 						if ($affiliation) {
-							$site_code_match = false;
-							foreach ($affiliation as $network_item) {
-								if (is_int(stripos($network_item['siteCode'], $query_value_sitecode)))	$site_code_match = true; // case insensitive string
+
+							if ($query_value_sitecode) {
+								// Site Code Filter	
+								$site_code_matched = null;	
+								foreach ($affiliation as $network_item) {
+									if (is_int(stripos($network_item['siteCode'], $query_value_sitecode)))	{
+										$site_code_matched = true; // case insensitive string
+									}
+								}
 							}
-							if ($site_code_match == false) continue;
-						}
-						else continue;
+							
+							// if a network id is provided, filter accordingly
+							if ($query_value_network) {
+								
+								$network_id_match = null;
+								$verified_member_match = null;
+								foreach ($affiliation as $network_item) {
+									
+									if ($network_item['network']['id']['suffix'] == $query_value_network) $network_id_match = true;
+									// if verified parameter is provided, check if site is a verified network member
+									if ($query_value_verified) {
+										// need to cast true/false boolean to true/false string
+										$verified_value_string = $network_item['verified'] ? 'true' : 'false';
+										if ($query_value_verified == $verified_value_string) $verified_member_match = true;
+									} 
+								}
+
+							} 
+
+						} 
+
+						if ($query_value_network && !isset($network_id_match))  $search_criteria_matched = false;
+						if ($query_value_sitecode && !isset($site_code_matched)) $search_criteria_matched = false;
+						if ($query_value_verified && !isset($verified_member_match)) $search_criteria_matched = false;
+
 					}
 
-					// if a network id is provided, filter accordingly
-					if ($query_value_network) {
-						if ($affiliation) {
-							$network_id_match = false;
-							$verified_member_match = false;
+					if ($search_criteria_matched == true) {
 
-							foreach ($affiliation as $network_item) {
-								if ($network_item['network']['id']['suffix'] == $query_value_network) $network_id_match = true;
-								else continue;
-								// if verified parameter is provided, check if site is a verified network member
-								if ($query_value_verified) {
-									// need to cast true/false boolean to true/false string
-									$verified_value_string = $network_item['verified'] ? 'true' : 'false';
-									if ($query_value_verified == $verified_value_string) $verified_member_match = true;
-								} 
-							}
-							if (!$network_id_match)	continue;
-							if ($query_value_verified && !$verified_member_match) continue;
-						}
-						else continue;
+						// offset not working properly
+						if ($offset && ($number_of_parsed_nodes < $offset)) {
+							$number_of_parsed_nodes++;
+							continue;
+						} 
+
+						// get record values
+						$node_information['title'] = $node->get('title')->value;
+						$node_information['id']['prefix'] = 'https://deims.org/';
+						$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
+						$node_information['coordinates'] = $node->get('field_coordinates')->value;
+						$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+						//$node_information['affiliation'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
+		
+						array_push($node_list, $node_information);
+						$number_of_listed_nodes++;
 					}
 
-					array_push($node_list, $node_information);
-					
-					$number_of_listed_nodes++;
-					if ($number_of_listed_nodes == $limit) {
-						break;
-					}
-					
+					if ($limit && $number_of_listed_nodes == $limit)	break;					
 				}
 			}
 			break;
@@ -108,15 +114,15 @@ class DeimsNodeListsController {
 		case 'dataset':
 			$nids = \Drupal::entityQuery('node')->condition('type', $content_type)->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
-			$number_of_loops = 0;
+			$number_of_parsed_nodes = 0;
 			$number_of_listed_nodes = 0;
 			foreach ($nodes as $node) {
 
 				if ($node->isPublished()) {
 
 					// continue if offset
-					if ($number_of_loops <= $offset) {
-						$number_of_loops++;
+					if ($number_of_parsed_nodes < $offset) {
+						$number_of_parsed_nodes++;
 						continue;
 					}
 					
@@ -128,9 +134,7 @@ class DeimsNodeListsController {
 					array_push($node_list, $node_information);
 
 					$number_of_listed_nodes++;
-					if ($number_of_listed_nodes == $limit) {
-						break;
-					}
+					if ($number_of_listed_nodes == $limit)		break;
 
 				}
 			} 
