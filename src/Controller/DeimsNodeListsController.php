@@ -65,13 +65,15 @@ class DeimsNodeListsController {
 								$verified_member_match = null;
 								foreach ($affiliation as $network_item) {
 									
-									if ($network_item['network']['id']['suffix'] == $query_value_network) $network_id_match = true;
-									// if verified parameter is provided, check if site is a verified network member
-									if ($query_value_verified) {
-										// need to cast true/false boolean to true/false string
-										$verified_value_string = $network_item['verified'] ? 'true' : 'false';
-										if ($query_value_verified == $verified_value_string) $verified_member_match = true;
-									} 
+									if ($network_item['network']['id']['suffix'] == $query_value_network) {
+										$network_id_match = true;
+										// if verified parameter is provided, check if site is a verified network member
+										if ($query_value_verified) {
+											// need to cast true/false boolean to true/false string
+											$verified_value_string = $network_item['verified'] ? 'true' : 'false';
+											if ($query_value_verified == $verified_value_string) $verified_member_match = true;
+										} 
+									}
 								}
 
 							} 
