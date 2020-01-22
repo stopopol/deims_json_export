@@ -107,6 +107,25 @@
                                 ]
                             }
                         },
+                        "metadataProvider": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/personRecord"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/organisationRecord"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
                         "fundingAgency": {
                             "type": "array",
                             "items": {
