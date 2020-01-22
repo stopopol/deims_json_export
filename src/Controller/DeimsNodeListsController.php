@@ -78,7 +78,8 @@ class DeimsNodeListsController {
 
 							} 
 
-						} 
+						} else $search_criteria_matched = false;
+							// check for network-related filter}
 
 						if ($query_value_network && !isset($network_id_match))  $search_criteria_matched = false;
 						if ($query_value_sitecode && !isset($site_code_matched)) $search_criteria_matched = false;
