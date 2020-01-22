@@ -242,6 +242,29 @@
                                 }
                             }
                         },
+                        "precipitation": {
+                            "type": "object",
+                            "properties": {
+                                "annual": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 99999999
+                                },
+                                "min": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 99999999
+                                },
+                                "max": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 99999999
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        },
                         "biogeographicalRegion": {
                             "type": "string"
                         },

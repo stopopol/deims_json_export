@@ -54,6 +54,10 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? floatval($node->get('field_air_temp_min')->value) : null;
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['max'] = (!is_null($node->get('field_air_temp_max')->value)) ? floatval($node->get('field_air_temp_max')->value) : null;
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['unit'] = '°C';
+		$site_information['attributes']['environmentalCharacteristics']['precipitation']['annual'] = (!is_null($node->get('field_precipitation_annual')->value)) ? floatval($node->get('field_precipitation_annual')->value) : null;
+		$site_information['attributes']['environmentalCharacteristics']['precipitation']['min'] = (!is_null($node->get('field_precipitation_min')->value)) ? floatval($node->get('field_precipitation_min')->value) : null;
+		$site_information['attributes']['environmentalCharacteristics']['precipitation']['max'] = (!is_null($node->get('field_precipitation_max')->value)) ? floatval($node->get('field_precipitation_max')->value) : null;
+		$site_information['attributes']['environmentalCharacteristics']['precipitation']['unit'] = 'mm';
 		$site_information['attributes']['environmentalCharacteristics']['biogeographicalRegion'] = $node->get('field_biogeographical_region')->value;
 		$site_information['attributes']['environmentalCharacteristics']['biome'] = $node->get('field_biome')->value;
 		$site_information['attributes']['environmentalCharacteristics']['ecosystemAndLanduse'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_ecosystem_land_use'));
