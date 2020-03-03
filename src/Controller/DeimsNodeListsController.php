@@ -155,15 +155,30 @@ class DeimsNodeListsController {
 
 	// case for csv export
 	if ($format == "csv" && !isset($node_list['errors'])) {
-
-		$fp = fopen('php://output', 'w');
-		fputcsv($fp, array("title","id_prefix","id_suffix","coordinates","changed"), ";");
-
+			
+		$csv_friendly_node_list = array();
+		array_push($csv_friendly_node_list, array("title", "id_prefix", "id_suffix", "coordinates", "changed"));
 		foreach ($node_list as $fields) {
-			$splitted_fields = array($fields["title"],$fields["id"]['prefix'],$fields["id"]['suffix'],$fields["coordinates"],$fields["changed"]);
-			fputcsv($fp, $splitted_fields, ";"); 
+			array_push($csv_friendly_node_list, array($fields["title"],$fields["id"]['prefix'],$fields["id"]['suffix'],$fields["coordinates"],$fields["changed"]));
+		} 
+
+		$out = "";
+		foreach($csv_friendly_node_list as $arr) {
+			$out .= implode(",", $arr) . "\r\n";
+
 		}
-		return new Response();
+
+		$response = new Response($out);
+        $response->headers->set('Content-Type', 'Content-Encoding: UTF-8');
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $response->headers->set('Content-Type', 'application/vnd.ms-excel');
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Type', 'application/force-download');
+        $response->headers->set('Content-Disposition', 'attachment;filename="result_list.csv"');
+		// necessary for excel to realise it's utf-8
+		echo "\xEF\xBB\xBF";
+        
+		return $response;
 
 	}
     return new JsonResponse($node_list);
