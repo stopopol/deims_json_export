@@ -165,7 +165,6 @@ class DeimsNodeListsController {
 		$out = "";
 		foreach($csv_friendly_node_list as $arr) {
 			$out .= implode(",", $arr) . "\r\n";
-
 		}
 
 		$response = new Response($out);
