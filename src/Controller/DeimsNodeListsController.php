@@ -4,6 +4,7 @@
 
 namespace Drupal\deims_json_export\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -20,6 +21,7 @@ class DeimsNodeListsController {
 	// get integer values of parameters limit and offset
 	$limit = \Drupal::request()->query->get('limit') ? ((int)\Drupal::request()->query->get('limit')) : null;
 	$offset = \Drupal::request()->query->get('offset') ? ((int)\Drupal::request()->query->get('offset')) : null;
+	$format = \Drupal::request()->query->get('format') ? ((int)\Drupal::request()->query->get('format')) : null;
 
 	// only return defined contents
 	switch ($content_type) {
@@ -137,7 +139,7 @@ class DeimsNodeListsController {
 					array_push($node_list, $node_information);
 
 					$number_of_listed_nodes++;
-					if ($number_of_listed_nodes == $limit)		break;
+					if ($number_of_listed_nodes == $limit) break;
 
 				}
 			} 
@@ -149,6 +151,20 @@ class DeimsNodeListsController {
 			$error_message['title'] = 'Resource type not found';
 			$error_message['detail'] = "This is not a valid request because DEIMS-SDR doesn't have a resource type with this name :(";
 			$node_list['errors'] = $error_message;
+	}
+
+	// case for csv export
+	if ($format == "csv" && !isset($node_list['errors'])) {
+
+		$fp = fopen('php://output', 'w');
+		fputcsv($fp, array("title","id_prefix","id_suffix","coordinates","changed"), ";");
+
+		foreach ($node_list as $fields) {
+			$splitted_fields = array($fields["title"],$fields["id"]['prefix'],$fields["id"]['suffix'],$fields["coordinates"],$fields["changed"]);
+			fputcsv($fp, $splitted_fields, ";"); 
+		}
+		return new Response();
+
 	}
     return new JsonResponse($node_list);
   }
