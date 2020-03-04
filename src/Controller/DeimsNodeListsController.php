@@ -156,25 +156,33 @@ class DeimsNodeListsController {
 	// case for csv export
 	if ($format == "csv" && !isset($node_list['errors'])) {
 			
-		$csv_friendly_node_list = array();
-		array_push($csv_friendly_node_list, array("title", "id_prefix", "id_suffix", "coordinates", "changed"));
-		foreach ($node_list as $fields) {
-			array_push($csv_friendly_node_list, array($fields["title"],$fields["id"]['prefix'],$fields["id"]['suffix'],$fields["coordinates"],$fields["changed"]));
-		} 
+		$delimiter = ";";
+		$enclosure = '"';
 
-		$out = "";
-		foreach($csv_friendly_node_list as $arr) {
-			$out .= implode(",", $arr) . "\r\n";
+		$fp = fopen('php://temp', 'r+b');
+		$header = array("title", "id_prefix", "id_suffix", "coordinates", "changed");
+		fputcsv($fp, $header, $delimiter, $enclosure);
+
+		foreach ($node_list as $node) {
+			$line = array($node["title"],$node["id"]['prefix'],$node["id"]['suffix'],$node["coordinates"],$node["changed"]);
+			fputcsv($fp, $line, $delimiter, $enclosure);
 		}
+				
+		rewind($fp);
+		// ... read the entire line into a variable...
+		$data = fread($fp, 1048576);
+		fclose($fp);
+		// ... and return the $data to the caller, with the trailing newline from fgets() removed.
+		$result_csv = rtrim($data, "\n");
 
-		$response = new Response($out);
+		$response = new Response($result_csv);
         $response->headers->set('Content-Type', 'Content-Encoding: UTF-8');
         $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
         $response->headers->set('Content-Type', 'application/vnd.ms-excel');
         $response->headers->set('Content-Type', 'application/octet-stream');
         $response->headers->set('Content-Type', 'application/force-download');
         $response->headers->set('Content-Disposition', 'attachment;filename="result_list.csv"');
-		// necessary for excel to realise it's utf-8
+		// necessary for excel to realise it's utf-8 ... stupid excel
 		echo "\xEF\xBB\xBF";
         
 		return $response;
