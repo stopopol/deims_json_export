@@ -152,7 +152,7 @@ class DeimsNodeListsController {
 			$error_message['status'] = "404";
 			$error_message['source'] = ["pointer" => "/api/{type}"];
 			$error_message['title'] = 'Resource type not found';
-			$error_message['detail'] = "This is not a valid request because DEIMS-SDR doesn't have a resource type with this name :(";
+			$error_message['detail'] = "This is not a valid request because DEIMS-SDR doesn't have a resource type that is called '" . $content_type . "' :(";
 			$node_list['errors'] = $error_message;
 	}
 
