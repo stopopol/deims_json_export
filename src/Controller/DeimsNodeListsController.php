@@ -26,10 +26,10 @@ class DeimsNodeListsController {
 	// only return defined contents
 	switch ($content_type) {
 	
-		case 'site':
+		case 'sites':
 
 			$DeimsFieldController = new DeimsFieldController();
-			$nids = \Drupal::entityQuery('node')->condition('type', $content_type)->execute();
+			$nids = \Drupal::entityQuery('node')->condition('type', 'site')->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 
 			// site filter parameters
@@ -114,10 +114,13 @@ class DeimsNodeListsController {
 			}
 			break;
 		
-		case 'activity':
-		case 'sensor':
-		case 'dataset':
-			$nids = \Drupal::entityQuery('node')->condition('type', $content_type)->execute();
+		case 'activities':
+		case 'sensors':
+		case 'datasets':
+			if ($content_type == 'activities') $nids = \Drupal::entityQuery('node')->condition('type', 'activity')->execute();
+			if ($content_type == 'sensors') $nids = \Drupal::entityQuery('node')->condition('type', 'sensor')->execute();
+			if ($content_type == 'datasets') $nids = \Drupal::entityQuery('node')->condition('type', 'dataset')->execute();
+			
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 			$number_of_parsed_nodes = 0;
 			$number_of_listed_nodes = 0;

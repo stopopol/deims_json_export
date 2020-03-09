@@ -15,7 +15,7 @@ deims_lists.content:
       _access: 'TRUE'
     
 site_record.content:
-    path: '/api/site/{uuid}'
+    path: '/api/sites/{uuid}'
     defaults:
       _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'site'
@@ -24,7 +24,7 @@ site_record.content:
       _access: 'TRUE'
 
 dataset_record.content:
-    path: '/api/dataset/{uuid}'
+    path: '/api/datasets/{uuid}'
     defaults:
       _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'dataset'
@@ -33,7 +33,7 @@ dataset_record.content:
       _access: 'TRUE'
 
 activity_record.content:
-    path: '/api/activity/{uuid}'
+    path: '/api/activities/{uuid}'
     defaults:
       _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'activity'
@@ -42,7 +42,7 @@ activity_record.content:
       _access: 'TRUE'
 
 sensor_record.content:
-    path: '/api/sensor/{uuid}'
+    path: '/api/sensors/{uuid}'
     defaults:
       _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
       content_type: 'sensor'
