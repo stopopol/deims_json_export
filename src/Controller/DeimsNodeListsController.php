@@ -29,6 +29,8 @@ class DeimsNodeListsController {
 		case 'sites':
 
 			$DeimsFieldController = new DeimsFieldController();
+			// for future filters refer to 
+			// https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21Query%21QueryInterface.php/function/QueryInterface%3A%3Acondition/8.2.x
 			$nids = \Drupal::entityQuery('node')->condition('type', 'site')->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 
