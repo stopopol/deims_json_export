@@ -24,10 +24,12 @@ class DeimsFieldController extends ControllerBase {
 			// case for multiple references
 			else {
 				foreach ($field->referencedEntities() as $RefEntity) {
-					array_push($data_values, $this->parseEntityFieldContent($RefEntity));
+					$RefEntity_item = $this->parseEntityFieldContent($RefEntity);
+					if ($RefEntity_item) array_push($data_values, $RefEntity_item);
 				}
 				sort($data_values);
 			}
+
 			return $data_values;
 		}
 
@@ -146,7 +148,7 @@ class DeimsFieldController extends ControllerBase {
 	public function parseEntityFieldContent($RefEntity) {
 		
 		if ($RefEntity) {
-			$RefEntity_item = [];
+			$RefEntity_item = array();
 			switch ($RefEntity->bundle()) {
 				// to do: case for content type "dataset" and "activity"
 				case 'activity':
@@ -202,12 +204,10 @@ class DeimsFieldController extends ControllerBase {
 					break;
 				// paragraphs of type 'observation'
 				case 'observation':
-					$RefEntity_item['property'] = $RefEntity->field_media_monitored->entity->getName();
-					$RefEntity_item['unitOfMeasurement'] = 'not implemented';
-					break;
-				// case for 'data_source'; currently incomplete
-				case 'data_source':
-					$RefEntity_item['title'] = $RefEntity->getTitle();
+					if ($RefEntity->field_media_monitored->entity) {
+						$RefEntity_item['property'] = $RefEntity->field_media_monitored->entity->getName();
+						$RefEntity_item['unitOfMeasurement'] = 'nA';
+					}
 					break;
 				case 'observation_location':
 					$RefEntity_item['boundaries'] = $RefEntity->field_boundaries->value;
