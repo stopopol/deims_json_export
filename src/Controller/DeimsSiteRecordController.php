@@ -22,6 +22,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['title'] = $node->get('title')->value;
 		$site_information['id']['prefix'] = 'https://deims.org/';
 		$site_information['id']['suffix'] = $node->get('field_deims_id')->value;
+		$site_information['type'] = 'site';
 		$site_information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
 		$site_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 		
