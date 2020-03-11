@@ -19,9 +19,9 @@ class DeimsActivityRecordController extends ControllerBase {
 		$DeimsFieldController = new DeimsFieldController();
 
 		$activity_information['title'] = $node->get('title')->value;
-		$activity_information['type'] = "activity";
 		$activity_information['id']['prefix'] = 'https://deims.org/activity/';
 		$activity_information['id']['suffix'] = $node->get('uuid')->value;
+		$activity_information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
 		$activity_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 		
 		$activity_information['attributes']['general']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'));

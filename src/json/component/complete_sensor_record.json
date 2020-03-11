@@ -4,9 +4,6 @@
         "title": {
             "type": "string"
         },
-        "type": {
-            "type": "string"
-        },
         "id": {
             "type": "object",
             "properties": {
@@ -17,6 +14,9 @@
                     "type": "string"
                 }
             }
+        },
+        "created": {
+            "type": "string"
         },
         "changed": {
             "type": "string"
