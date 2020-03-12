@@ -256,6 +256,10 @@
                                 "$ref": "#/components/schemas/urlObject"
                             }
                         },
+                        "methodDescription": {
+                            "type": "array",
+                            "items": {}
+                        },
                         "samplingTimeUnit": {
                             "type": "array",
                             "items": {
