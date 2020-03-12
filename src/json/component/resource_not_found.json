@@ -2,8 +2,7 @@
     "type": "object",
     "properties": {
         "status": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string"
         },
         "detail": {
             "type": "string"

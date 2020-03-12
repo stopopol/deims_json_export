@@ -229,7 +229,9 @@
                         },
                         "rights": {
                             "type": "array",
-                            "items": {}
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "legalAct": {
                             "type": "string"
@@ -244,11 +246,15 @@
                     "properties": {
                         "instrumentation": {
                             "type": "array",
-                            "items": {}
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "qualityAssurance": {
                             "type": "array",
-                            "items": {}
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "methodUrl": {
                             "type": "array",
@@ -258,7 +264,9 @@
                         },
                         "methodDescription": {
                             "type": "array",
-                            "items": {}
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "samplingTimeUnit": {
                             "type": "array",

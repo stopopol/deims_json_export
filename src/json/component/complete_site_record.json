@@ -308,7 +308,9 @@
                         },
                         "country": {
                             "type": "array",
-                            "items": {}
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "elevation": {
                             "type": "object",
@@ -457,9 +459,11 @@
                                                 "$ref": "#/components/schemas/urlObject"
                                             }
                                         },
-                                        "right": {
+                                        "rights": {
                                             "type": "array",
-                                            "items": {}
+                                            "items": {
+                                                "type": "string"
+                                            }
                                         },
                                         "notes": {
                                             "type": "string"
@@ -468,7 +472,9 @@
                                 },
                                 "services": {
                                     "type": "array",
-                                    "items": {}
+                                    "items": {
+                                        "type": "string"
+                                    }
                                 },
                                 "location": {
                                     "type": "string"
