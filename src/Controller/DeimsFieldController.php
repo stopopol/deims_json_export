@@ -166,7 +166,7 @@ class DeimsFieldController extends ControllerBase {
 				// case for content type 'site'
 				case 'site':
 					$RefEntity_item['type'] = 'site';
-					$RefEntity_item['name'] = $RefEntity->field_name->value;
+					$RefEntity_item['title'] = $RefEntity->get('title')->value;
 					$RefEntity_item['id']['prefix'] = 'https://deims.org/';
 					$RefEntity_item['id']['suffix'] = $RefEntity->field_deims_id->value;
 					break;

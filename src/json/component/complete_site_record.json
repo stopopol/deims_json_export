@@ -75,39 +75,19 @@
                         "siteManager": {
                             "type": "array",
                             "items": {
-                                "oneOf": [
-                                    {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/components/schemas/personRecord"
-                                        }
-                                    },
-                                    {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/components/schemas/organisationRecord"
-                                        }
-                                    }
-                                ]
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/personRecord"
+                                }
                             }
                         },
-                        "siteOwner": {
+                        "operatingOrganisation": {
                             "type": "array",
                             "items": {
-                                "oneOf": [
-                                    {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/components/schemas/personRecord"
-                                        }
-                                    },
-                                    {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/components/schemas/organisationRecord"
-                                        }
-                                    }
-                                ]
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/organisationRecord"
+                                }
                             }
                         },
                         "metadataProvider": {
@@ -183,39 +163,34 @@
                         "yearClosed": {
                             "type": "integer"
                         },
-                        "general": {
+                        "hierarchy": {
                             "type": "object",
                             "properties": {
-                                "hierarchy": {
-                                    "type": "object",
-                                    "properties": {
-                                        "parent": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/recordList"
-                                            }
-                                        },
-                                        "children": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/recordList"
-                                            }
-                                        }
+                                "parent": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/recordList"
                                     }
                                 },
-                                "siteName": {
-                                    "type": "string"
-                                },
-                                "shortName": {
-                                    "type": "string"
-                                },
-                                "siteType": {
-                                    "type": "string"
-                                },
-                                "images": {
-                                    "type": "string"
+                                "children": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/recordList"
+                                    }
                                 }
                             }
+                        },
+                        "siteName": {
+                            "type": "string"
+                        },
+                        "shortName": {
+                            "type": "string"
+                        },
+                        "siteType": {
+                            "type": "string"
+                        },
+                        "images": {
+                            "type": "string"
                         }
                     }
                 },
