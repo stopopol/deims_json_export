@@ -169,6 +169,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['title'] = $RefEntity->get('title')->value;
 					$RefEntity_item['id']['prefix'] = 'https://deims.org/';
 					$RefEntity_item['id']['suffix'] = $RefEntity->field_deims_id->value;
+					$RefEntity_item['changed'] = \Drupal::service('date.formatter')->format($RefEntity->getChangedTime(), 'html_datetime');
 					break;
 				// case for content type 'person'
 				case 'person':
