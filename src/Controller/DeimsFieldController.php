@@ -45,7 +45,7 @@ class DeimsFieldController extends ControllerBase {
 						array_push($data_values, $field->value);
 						break;
 					case "url":
-						array_push($data_values, array('title'=>$field->title,'uri'=>$field->uri));
+						array_push($data_values, array('title'=>$field->title,'value'=>$field->uri));
 						break;
 				}
 				
@@ -58,7 +58,7 @@ class DeimsFieldController extends ControllerBase {
 							array_push($data_values, $item->value);
 							break;
 						case "url":
-							array_push($data_values, array('title'=>$item->title,'uri'=>$item->uri));
+							array_push($data_values, array('title'=>$item->title,'value'=>$item->uri));
 							break;
 					}
 				}
