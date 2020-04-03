@@ -27,6 +27,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item = $this->parseEntityFieldContent($RefEntity);
 					if ($RefEntity_item) array_push($data_values, $RefEntity_item);
 				}
+				// remove potential duplicates (parameters field) and sort alphabetically
 				$data_values = array_values(array_unique($data_values, SORT_REGULAR));
 				sort($data_values);
 			}
