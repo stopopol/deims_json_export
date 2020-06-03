@@ -119,9 +119,18 @@ class DeimsNodeListsController {
 		case 'activities':
 		case 'sensors':
 		case 'datasets':
-			if ($content_type == 'activities') $nids = \Drupal::entityQuery('node')->condition('type', 'activity')->execute();
-			if ($content_type == 'sensors') $nids = \Drupal::entityQuery('node')->condition('type', 'sensor')->execute();
-			if ($content_type == 'datasets') $nids = \Drupal::entityQuery('node')->condition('type', 'dataset')->execute();
+			if ($content_type == 'activities') {
+				$nids = \Drupal::entityQuery('node')->condition('type', 'activity')->execute();
+				$content_type = 'activity';
+			}
+			if ($content_type == 'sensors') {
+				$nids = \Drupal::entityQuery('node')->condition('type', 'sensor')->execute();
+				$content_type = 'sensor';
+			}
+			if ($content_type == 'datasets') {
+				$nids = \Drupal::entityQuery('node')->condition('type', 'dataset')->execute();
+				$content_type = 'dataset';
+			}
 			
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 			$number_of_parsed_nodes = 0;
