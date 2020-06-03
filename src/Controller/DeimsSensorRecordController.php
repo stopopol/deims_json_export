@@ -18,7 +18,7 @@ class DeimsSensorRecordController extends ControllerBase {
 		$DeimsFieldController = new DeimsFieldController();
 
 		$sensor_information['title'] = $node->get('title')->value;
-		$sensor_information['id']['prefix'] = 'https://deims.org/sensors/';
+		$sensor_information['id']['prefix'] = 'https://deims.org/sensor/';
 		$sensor_information['id']['suffix'] = $node->get('uuid')->value;
 		$sensor_information['type'] = 'sensor';
 		$sensor_information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
