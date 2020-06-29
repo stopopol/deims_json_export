@@ -152,7 +152,6 @@ class DeimsFieldController extends ControllerBase {
 		if ($RefEntity) {
 			$RefEntity_item = array();
 			switch ($RefEntity->bundle()) {
-				// to do: case for content type "dataset" and "activity"
 				case 'activity':
 					$RefEntity_item['type'] = 'activity';
 					$RefEntity_item['name'] = $RefEntity->field_name->value;
@@ -239,6 +238,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['uri'] = null;
 					break;
 				// case for taxonomies with uri fields
+				case 'site_reporting_status':
 				case 'projects':
 				case 'inspire_data_themes':
 				case 'parameters':
