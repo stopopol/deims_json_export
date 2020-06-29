@@ -41,7 +41,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['general']['history'] = $node->get('field_history')->value;
 		$site_information['attributes']['general']['keywords']= $DeimsFieldController->parseEntityReferenceField($node->get('field_keywords'));
 		$site_information['attributes']['general']['purpose'] = $node->get('field_purpose')->value;
-		$site_information['attributes']['general']['status'] = $node->get('field_site_status')->value;
+		$site_information['attributes']['general']['status'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_status'));
 		$site_information['attributes']['general']['yearEstablished'] = (!is_null($node->get('field_year_established')->value)) ? intval($node->get('field_year_established')->value) : null;
 		$site_information['attributes']['general']['yearClosed'] = (!is_null($node->get('field_year_closed')->value)) ? intval($node->get('field_year_closed')->value) : null;
 	  	$site_information['attributes']['general']['hierarchy']['parent'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parent_site'));	
