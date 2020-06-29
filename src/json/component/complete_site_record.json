@@ -155,7 +155,10 @@
                             "type": "string"
                         },
                         "status": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/taxonomyTerm"
+                            }
                         },
                         "yearEstablished": {
                             "type": "integer"
