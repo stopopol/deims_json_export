@@ -177,6 +177,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['type'] = 'person';
 					$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
+					$RefEntity_item['orcid'] = $RefEntity->field_orcid->value;
 					break;
 				// case for content type 'organisation'
 				case 'organisation':
