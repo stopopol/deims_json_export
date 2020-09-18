@@ -16,10 +16,14 @@ class DeimsFieldController extends ControllerBase {
 			$data_values = array();
 			// case for single reference
 			if (count($field) == 1) {
-				array_push($data_values, $this->parseEntityFieldContent($field->entity));
-				if ($single_value_field) {
-					$data_values=reset($data_values);
+				$current_value = $this->parseEntityFieldContent($field->entity);
+				if ($current_value) {
+					array_push($data_values, $this->parseEntityFieldContent($field->entity));
+					if ($single_value_field) {
+						$data_values=reset($data_values);
+					}
 				}
+				else return;
 			}
 			// case for multiple references
 			else {
