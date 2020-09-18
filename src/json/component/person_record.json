@@ -9,8 +9,7 @@
         },
         "email": {
             "type": "string"
-        }
-        ,
+        },
         "orcid": {
             "type": "string"
         }
