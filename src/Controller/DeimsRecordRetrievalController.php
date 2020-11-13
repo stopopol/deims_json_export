@@ -58,7 +58,7 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			}
 			$error_message['source'] = ["pointer" => '/api/' . $content_type_label . '/{id}'];
 			$error_message['title'] = 'Resource not found';
-			$error_message['detail'] = "There is no " . $content_type_label . " with the ID '" . $uuid . "' :(";
+			$error_message['detail'] = "There is no " . $content_type . " with the ID '" . $uuid . "' :(";
 			$record_information['errors'] = $error_message;
 		}
 
