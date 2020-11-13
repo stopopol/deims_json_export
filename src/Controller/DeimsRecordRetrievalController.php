@@ -42,9 +42,23 @@ class DeimsRecordRetrievalController extends ControllerBase {
 		}
 		else {
 			$error_message['status'] = "404";
-			$error_message['source'] = ["pointer" => '/api/' . $content_type . '/{id}'];
+			switch ($content_type) {
+			  case site:
+			    $content_type_label = "sites";
+			    break;
+			  case dataset:
+			    $content_type_label = "datasets";
+			    break;
+			  case activity:
+			    $content_type_label = "activities";
+			    break;
+			  case sensor:
+			    $content_type_label = "sensors";
+			    break;
+			}
+			$error_message['source'] = ["pointer" => '/api/' . $content_type_label . '/{id}'];
 			$error_message['title'] = 'Resource not found';
-			$error_message['detail'] = "There is no " . $content_type . " with the ID '" . $uuid . "' :(";
+			$error_message['detail'] = "There is no " . $content_type_label . " with the ID '" . $uuid . "' :(";
 			$record_information['errors'] = $error_message;
 		}
 
