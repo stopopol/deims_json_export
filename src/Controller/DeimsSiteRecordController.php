@@ -28,8 +28,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		
 		$site_information['attributes']['affiliation']['networks'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 		$site_information['attributes']['affiliation']['projects'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_projects'));
-		$site_information['attributes']['affiliation']['protectionProgramme'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_protection_programme'));	
-
+		
 		// parses both referenced fields of content type 'person' and/or 'organisation'
 		$site_information['attributes']['contact']['siteManager'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_site_manager'));
 		$site_information['attributes']['contact']['operatingOrganisation'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_site_owner'));
@@ -38,7 +37,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['contact']['siteUrl'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
 
 		$site_information['attributes']['general']['abstract'] = $node->get('field_abstract')->value;
-		$site_information['attributes']['general']['history'] = $node->get('field_history')->value;
 		$site_information['attributes']['general']['keywords']= $DeimsFieldController->parseEntityReferenceField($node->get('field_keywords'));
 		$site_information['attributes']['general']['purpose'] = $node->get('field_purpose')->value;
 		$site_information['attributes']['general']['status'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_status'), $single_value_field=true);
@@ -79,11 +77,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['geographic']['size']['value']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;
 		$site_information['attributes']['geographic']['size']['unit']= "ha";
 
-		// special case for boolean fields
-		$site_information['attributes']['managementOfResources']['status'] = (!is_null($node->get('field_management_resources')->value)) ? (($node->get('field_management_resources')->value == 1) ? true : false) : null;	
-		$site_information['attributes']['managementOfResources']['notes'] = $node->get('field_management_resources_notes')->value;
-		$site_information['attributes']['managementOfResources']['percentage']  = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_management_resources_pct', $single_value_field=true);
-
 		// group observations
 		$site_information['attributes']['focusDesignScale']['experiments']['design'] = $node->get('field_design_experiments')->value;
 		$site_information['attributes']['focusDesignScale']['experiments']['scale'] = $node->get('field_scale_experiments')->value;
@@ -102,12 +95,9 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['infrastructure']['operation']['siteVisitInterval']= (!is_null($node->get('field_site_visit_interval')->value)) ? floatval($node->get('field_site_visit_interval')->value) : null;
 		$site_information['attributes']['infrastructure']['notes'] = $node->get('field_infrastructure_notes')->value;
 		$site_information['attributes']['infrastructure']['collection'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_infrastructure'));
-		$site_information['attributes']['infrastructure']['data']['notes'] = $node->get('field_data_notes')->value;
 		$site_information['attributes']['infrastructure']['data']['policy']['url'] = $DeimsFieldController->parseRegularField($node->get('field_data_policy_url'), "url");
 		$site_information['attributes']['infrastructure']['data']['policy']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
 		$site_information['attributes']['infrastructure']['data']['policy']['notes'] = $node->get('field_site_data_policy')->value;
-		$site_information['attributes']['infrastructure']['data']['services'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_dataservi');
-		$site_information['attributes']['infrastructure']['data']['location'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_datastorloc', $single_value_field=true);	
 
 		// TO DO:
 		// field_images -> TBD when necessary
