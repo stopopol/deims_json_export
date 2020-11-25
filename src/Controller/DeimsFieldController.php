@@ -201,14 +201,6 @@ class DeimsFieldController extends ControllerBase {
 						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
 					}
 					break;
-				// case for paragraphs of type 'protection_programme'
-				case 'protection_programme':
-					// always just 0:1 values
-					$RefEntity_item['name'] = $RefEntity->field_protection_programme->entity->getName();
-					$data_values_list_labels = $RefEntity->getFieldDefinition('field_protection_programme_cover')->getSetting('allowed_values');
-					$RefEntity_item['cover'] = $data_values_list_labels[$RefEntity->field_protection_programme_cover->value];
-					$RefEntity_item['notes'] = $RefEntity->field_protection_programme_notes->value;
-					break;
 				// paragraphs of type 'observation'
 				case 'observation':
 					if ($RefEntity->field_media_monitored->entity) {
@@ -243,6 +235,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['uri'] = null;
 					break;
 				// case for taxonomies with uri fields
+				case 'iucn_category':
 				case 'site_reporting_status':
 				case 'projects':
 				case 'inspire_data_themes':
