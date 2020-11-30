@@ -172,6 +172,12 @@
             "siteType": {
               "type": "string"
             },
+            "protectionLevel": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/taxonomyTerm"
+              }
+            },
             "images": {
               "type": "string"
             }
