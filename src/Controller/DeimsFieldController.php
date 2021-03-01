@@ -235,6 +235,8 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['uri'] = null;
 					break;
 				// case for taxonomies with uri fields
+				// hilucs ^ management of resources
+				case 'hilucs':
 				case 'iucn_category':
 				case 'site_reporting_status':
 				case 'projects':
