@@ -47,7 +47,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['general']['shortName'] = $node->get('field_name_short')->value;
 		$site_information['attributes']['general']['siteType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type', $single_value_field=true);
 		$site_information['attributes']['general']['protectionLevel'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_protection_level'));
-		$site_information['attributes']['general']['protectionLevel'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_management_of_resources'));
+		$site_information['attributes']['general']['managementOfResources'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_management_of_resources'));
 
 		// aggregate temperature fields; shorthand ifs to catch empty values
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
