@@ -41,7 +41,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['general']['status'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_status'), $single_value_field=true);
 		$site_information['attributes']['general']['yearEstablished'] = (!is_null($node->get('field_year_established')->value)) ? intval($node->get('field_year_established')->value) : null;
 		$site_information['attributes']['general']['yearClosed'] = (!is_null($node->get('field_year_closed')->value)) ? intval($node->get('field_year_closed')->value) : null;
-	  	$site_information['attributes']['general']['hierarchy']['parent'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parent_site'));	
+	  	$site_information['attributes']['general']['hierarchy']['parent'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parent_site'));
 		$site_information['attributes']['general']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));
 		$site_information['attributes']['general']['siteName'] = $node->get('field_name')->value;
 		$site_information['attributes']['general']['shortName'] = $node->get('field_name_short')->value;
@@ -64,7 +64,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['environmentalCharacteristics']['geoBonBiome'] = $node->get('field_geo_bon_biome')->value;
 		$site_information['attributes']['environmentalCharacteristics']['geology'] = $node->get('field_geology')->value;
 		$site_information['attributes']['environmentalCharacteristics']['hydrology'] = $node->get('field_hydrology')->value;
-		$site_information['attributes']['environmentalCharacteristics']['soils'] = $node->get('field_soils')->value;	
+		$site_information['attributes']['environmentalCharacteristics']['soils'] = $node->get('field_soils')->value;
 		$site_information['attributes']['environmentalCharacteristics']['vegetation'] = $node->get('field_vegetation')->value;
 		
 		$site_information['attributes']['geographic']['boundaries'] = $node->get('field_boundaries')->value;
