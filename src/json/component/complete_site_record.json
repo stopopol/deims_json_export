@@ -178,6 +178,12 @@
                 "$ref": "#/components/schemas/taxonomyTerm"
               }
             },
+            "managementOfResources": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/taxonomyTerm"
+              }
+            },
             "images": {
               "type": "string"
             }
