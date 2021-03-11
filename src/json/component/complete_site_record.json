@@ -250,6 +250,12 @@
                 "$ref": "#/components/schemas/taxonomyTerm"
               }
             },
+            "landforms": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/taxonomyTerm"
+              }
+            },
             "geoBonBiome": {
               "type": "string"
             },
