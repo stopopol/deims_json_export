@@ -222,6 +222,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
 					break;
 				// case for taxonomies without uri fields
+				case 'landforms':
 				case 'spatial_design':
 				case 'spatial_scale':
 				case 'temporal_resolution':
