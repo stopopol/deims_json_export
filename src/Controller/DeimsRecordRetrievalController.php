@@ -43,16 +43,16 @@ class DeimsRecordRetrievalController extends ControllerBase {
 		else {
 			$error_message['status'] = "404";
 			switch ($content_type) {
-			  case site:
+			  case 'site':
 			    $content_type_label = "sites";
 			    break;
-			  case dataset:
+			  case 'dataset':
 			    $content_type_label = "datasets";
 			    break;
-			  case activity:
+			  case 'activity':
 			    $content_type_label = "activities";
 			    break;
-			  case sensor:
+			  case 'sensor':
 			    $content_type_label = "sensors";
 			    break;
 			}
