@@ -121,10 +121,22 @@ class DeimsNodeListsController {
 		case 'datasets':
 		case 'locations':
 		
-			if ($content_type == 'activities') $entity_machine_name = 'activity';
-			if ($content_type == 'sensors') $entity_machine_name = 'sensor';
-			if ($content_type == 'locations') $entity_machine_name = 'observation_location';
-			if ($content_type == 'datasets') $entity_machine_name = 'dataset';
+			if ($content_type == 'activities') {
+				$entity_machine_name = 'activity';
+				$landing_page_label = 'activity';
+			}
+			if ($content_type == 'sensors') {
+				$entity_machine_name = 'sensor';
+				$landing_page_label = 'sensors';
+			}
+			if ($content_type == 'locations') {
+				$entity_machine_name = 'observation_location';
+				$landing_page_label = 'locations';
+			}
+			if ($content_type == 'datasets') {
+				$entity_machine_name = 'dataset';
+				$landing_page_label = 'dataset';
+			}
 
 			$nids = \Drupal::entityQuery('node')->condition('type', $entity_machine_name)->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
@@ -142,7 +154,7 @@ class DeimsNodeListsController {
 					}
 					
 					$node_information['title'] = $node->get('title')->value;
-					$node_information['id']['prefix'] = "https://deims.org/" . $content_type . "/";
+					$node_information['id']['prefix'] = "https://deims.org/" . $landing_page_label . "/";
 					$node_information['id']['suffix'] = $node->get('uuid')->value;
 					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 
