@@ -23,7 +23,7 @@ class DeimsNodeListsController {
 	$offset = \Drupal::request()->query->get('offset') ? ((int)\Drupal::request()->query->get('offset')) : null;
 	$format = \Drupal::request()->query->get('format') ? ((int)\Drupal::request()->query->get('format')) : null;
 
-	// only return defined contents
+	// only return defined content types
 	switch ($content_type) {
 	
 		case 'sites':
@@ -119,20 +119,16 @@ class DeimsNodeListsController {
 		case 'activities':
 		case 'sensors':
 		case 'datasets':
-			if ($content_type == 'activities') {
-				$nids = \Drupal::entityQuery('node')->condition('type', 'activity')->execute();
-				$content_type = 'activity';
-			}
-			if ($content_type == 'sensors') {
-				$nids = \Drupal::entityQuery('node')->condition('type', 'sensor')->execute();
-				$content_type = 'sensor';
-			}
-			if ($content_type == 'datasets') {
-				$nids = \Drupal::entityQuery('node')->condition('type', 'dataset')->execute();
-				$content_type = 'dataset';
-			}
-			
+		case 'locations':
+		
+			if ($content_type == 'activities') $entity_machine_name = 'activity';
+			if ($content_type == 'sensors') $entity_machine_name = 'sensor';
+			if ($content_type == 'locations') $entity_machine_name = 'observation_location';
+			if ($content_type == 'datasets') $entity_machine_name = 'dataset';
+
+			$nids = \Drupal::entityQuery('node')->condition('type', $entity_machine_name)->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+			
 			$number_of_parsed_nodes = 0;
 			$number_of_listed_nodes = 0;
 			foreach ($nodes as $node) {
@@ -204,4 +200,5 @@ class DeimsNodeListsController {
 	}
     return new JsonResponse($node_list);
   }
+  
 }
