@@ -49,3 +49,12 @@ sensor_record.content:
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
+      
+location_record.content:
+    path: '/api/locations/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
+      content_type: 'observation_location'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'

@@ -36,6 +36,10 @@ class DeimsRecordRetrievalController extends ControllerBase {
 							$DeimsSensorRecordController = new DeimsSensorRecordController();
 							$record_information = $DeimsSensorRecordController->parseSensorFields($node);
 							break;
+						case 'observation_location':
+							$DeimsLocationRecordController = new DeimsLocationRecordController();
+							$record_information = $DeimsLocationRecordController->parseLocationFields($node);
+							break;
 					}
 				}
 			}
@@ -54,6 +58,9 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			    break;
 			  case 'sensor':
 			    $content_type_label = "sensors";
+			    break;
+			  case 'location':
+			    $content_type_label = "locations";
 			    break;
 			}
 			$error_message['source'] = ["pointer" => '/api/' . $content_type_label . '/{id}'];

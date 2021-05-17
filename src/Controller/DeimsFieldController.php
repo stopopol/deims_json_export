@@ -127,7 +127,7 @@ class DeimsFieldController extends ControllerBase {
 						$node_information['id']['prefix'] = 'https://deims.org/dataset/';
 						break;
 					case 'sensor':
-						$node_information['id']['prefix'] = 'https://deims.org/sensor/';
+						$node_information['id']['prefix'] = 'https://deims.org/sensors/';
 						break;	
 				}
 				$node_information['title'] = $node->get('title')->value;
@@ -236,7 +236,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['uri'] = null;
 					break;
 				// case for taxonomies with uri fields
-				// hilucs ^ management of resources
+				// hilucs management of resources
 				case 'hilucs':
 				case 'iucn_category':
 				case 'site_reporting_status':
@@ -244,6 +244,7 @@ class DeimsFieldController extends ControllerBase {
 				case 'inspire_data_themes':
 				case 'parameters':
 				case 'research_topics':
+				case 'observation_location_type':
 					$RefEntity_item['label'] = $RefEntity->label();
 					$RefEntity_item['uri'] = $RefEntity->field_uri->uri;
 					break;
