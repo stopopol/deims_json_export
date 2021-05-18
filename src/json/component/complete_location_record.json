@@ -1,71 +1,85 @@
 {
-  "type": "object",
-  "properties": {
-    "type": {
-      "type": "string"
-    },
+    "type": "object",
     "properties": {
-      "type": "object",
-      "properties": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "id": {
+        "geometry": {
             "type": "object",
             "properties": {
-              "prefix": {
-                "type": "string"
-              },
-              "suffix": {
-                "type": "string"
-              }
-            }
-          },
-          "created": {
-            "type": "string"
-          },
-          "changed": {
-            "type": "string"
-          },
-          "relatedSite": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/referencedRecord"
-            }
-          },
-          "abstract": {
-            "type": "string"
-          },
-          "elevation": {
-              "type": "object",
-              "properties": {
-                "avg": {
-                  "type": "integer",
-                  "minimum": -10000,
-                  "maximum": 10000
+                "type": {
+                    "type": "string"
                 },
-                "min": {
-                  "type": "integer",
-                  "minimum": -10000,
-                  "maximum": 10000
-                },
-                "max": {
-                  "type": "integer",
-                  "minimum": -10000,
-                  "maximum": 10000
-                },
-                "unit": {
-                  "type": "string"
+                "coordinates": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
                 }
-              }
-            },
-            "images": {
-              "type": "string"
+            }
+        },
+        "propertios": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "object",
+                    "properties": {
+                        "prefix": {
+                            "type": "string"
+                        },
+                        "suffix": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "created": {
+                    "type": "string"
+                },
+                "changed": {
+                    "type": "string"
+                },
+				"locationType": {
+					"type": "array",
+					"items": {
+						"$ref": "#/components/schemas/taxonomyTerm"
+					}					
+				},
+                "relatedSite": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/referencedRecord"
+                    }
+                },
+                "abstract": {
+                    "type": "string"
+                },
+                "elevation": {
+                    "type": "object",
+                    "properties": {
+                        "avg": {
+                            "type": "integer",
+                            "minimum": -10000,
+                            "maximum": 10000
+                        },
+                        "min": {
+                            "type": "integer",
+                            "minimum": -10000,
+                            "maximum": 10000
+                        },
+                        "max": {
+                            "type": "integer",
+                            "minimum": -10000,
+                            "maximum": 10000
+                        },
+                        "unit": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "images": {
+                    "type": "string"
+                }
             }
         }
-      }
     }
-  }
 }
