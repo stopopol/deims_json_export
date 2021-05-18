@@ -18,7 +18,6 @@ class DeimsLandingPageController extends ControllerBase {
    */
   public function renderLandingPage() {
     
-    // https://app.swaggerhub.com/apis/klimeto/RPI2.0/0.0.1
     $output_information['openapi'] = '3.0.0';
     $output_information['info']= json_decode(file_get_contents(__DIR__ . '/../json/info.json'));
     //$output_information['servers'] = array(array("description"=>"Official DEIMS-SDR API","url"=>"https://deims.org/api"));
@@ -32,6 +31,8 @@ class DeimsLandingPageController extends ControllerBase {
     $output_information['paths']['/activities/{resource_id}'] = json_decode(file_get_contents($definition_location . 'activity_record.json'));
     $output_information['paths']['/sensors'] = json_decode(file_get_contents($definition_location . 'sensor_list.json'));
     $output_information['paths']['/sensors/{resource_id}'] = json_decode(file_get_contents($definition_location . 'sensor_record.json'));
+	// a list of locations shouldn't be necessary/useful
+    $output_information['paths']['/locations/{resource_id}'] = json_decode(file_get_contents($definition_location . 'location_record.json'));
 
     $definition_location = __DIR__ . '/../json/component/';
     $output_information['components']['schemas']['resourceNotFound'] = json_decode(file_get_contents($definition_location . '/resource_not_found.json'));
@@ -42,6 +43,7 @@ class DeimsLandingPageController extends ControllerBase {
     $output_information['components']['schemas']['completeDatasetRecord'] = json_decode(file_get_contents($definition_location . '/complete_dataset_record.json'));
     $output_information['components']['schemas']['completeActivityRecord'] = json_decode(file_get_contents($definition_location . '/complete_activity_record.json'));
     $output_information['components']['schemas']['completeSensorRecord'] = json_decode(file_get_contents($definition_location . '/complete_sensor_record.json'));
+    $output_information['components']['schemas']['completeLocationRecord'] = json_decode(file_get_contents($definition_location . '/complete_location_record.json'));
     $output_information['components']['schemas']['personRecord'] = json_decode(file_get_contents($definition_location . '/person_record.json'));
     $output_information['components']['schemas']['organisationRecord'] = json_decode(file_get_contents($definition_location . '/organisation_record.json'));
     $output_information['components']['schemas']['taxonomyTerm'] = json_decode(file_get_contents($definition_location . '/taxonomy_term.json'));

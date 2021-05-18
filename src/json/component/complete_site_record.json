@@ -322,7 +322,13 @@
                   "type": "string"
                 }
               }
-            }
+            },
+			"relatedLocations": {
+			  "type": "array",
+			  "items": {
+				"$ref": "#/components/schemas/referencedRecord"
+			  }
+			} 
           }
         },
         "focusDesignScale": {

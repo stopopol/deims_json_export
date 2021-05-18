@@ -1,0 +1,39 @@
+{
+  "get": {
+    "description": "Returns a single location record",
+    "parameters": [
+      {
+        "name": "resource_id",
+        "in": "path",
+        "description": "The uuid of the location record",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "85dc6019-9654-4ba0-8338-08c4ffe8fe47"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "JSON object containing all location information",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/completeLocationRecord"
+            }
+          }
+        }
+      },
+      "default": {
+        "description": "error payload",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/resourceNotFound"
+            }
+          }
+        }
+      }
+    }
+  }
+}
