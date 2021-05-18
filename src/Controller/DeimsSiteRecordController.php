@@ -77,7 +77,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['geographic']['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? floatval($node->get('field_elevation_max')->value)  : null;
 		$site_information['attributes']['geographic']['elevation']['unit'] = 'msl';
 		$site_information['attributes']['geographic']['size']['value']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;
-		$site_information['attributes']['geographic']['size']['unit']= "ha";
+		$site_information['attributes']['geographic']['size']['unit']= 'ha';
+		$site_information['attributes']['geographic']['relatedLocations'] = $DeimsFieldController->findRelatedLocations(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->condition('type', 'observation_location')->execute());
 
 		// group observations
 		$site_information['attributes']['focusDesignScale']['experiments']['design'] = $node->get('field_design_experiments')->value;
@@ -105,7 +106,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		// field_images -> TBD when necessary
 		$site_information['attributes']['general']['images'] = null;
 
-		// list all referenced sites and datasets
+		// list all referenced activities, datasets, sensors
 		$site_information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->execute());
 
 

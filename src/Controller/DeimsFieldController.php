@@ -106,7 +106,7 @@ class DeimsFieldController extends ControllerBase {
 
 	}
 	
-	// print list of all resources that are related to record
+	// print list of all resources that are related to record except for locations
 	public function findRelatedResources($nids) {
 		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 		$node_list = array();
@@ -128,7 +128,7 @@ class DeimsFieldController extends ControllerBase {
 						break;
 					case 'sensor':
 						$node_information['id']['prefix'] = 'https://deims.org/sensors/';
-						break;	
+						break;
 				}
 				$node_information['title'] = $node->get('title')->value;
 				$node_information['id']['suffix'] = $node->get('field_uuid')->value;
@@ -145,6 +145,31 @@ class DeimsFieldController extends ControllerBase {
 			return null;
 		}
 	}
+
+	// print list of all locations that are related to a site - the field query already filters for observation locations
+	public function findRelatedLocations($nids) {
+		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+		$node_list = array();
+		foreach ($nodes as $node) {
+			if ($node->isPublished()) {
+				$node_information = [];
+				$node_information['title'] = $node->get('title')->value;
+				$node_information['id']['prefix'] = 'https://deims.org/locations/';
+				$node_information['id']['suffix'] = $node->get('field_uuid')->value;
+				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+				
+				array_push($node_list, $node_information);
+			} 
+		}
+
+		if(!empty($node_list)) {
+			return $node_list;
+		}
+		else {
+			return null;
+		}
+	}
+
 
 	/*
 	 * Function that parses the fields within a referenced field
