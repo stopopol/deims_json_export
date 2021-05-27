@@ -131,9 +131,6 @@
                 "$ref": "#/components/schemas/taxonomyTerm"
               }
             },
-            "purpose": {
-              "type": "string"
-            },
             "status": {
               "type": "array",
               "items": {
@@ -178,7 +175,7 @@
                 "$ref": "#/components/schemas/taxonomyTerm"
               }
             },
-            "managementOfResources": {
+            "landUse": {
               "type": "array",
               "items": {
                 "$ref": "#/components/schemas/taxonomyTerm"
@@ -244,7 +241,7 @@
             "biome": {
               "type": "string"
             },
-            "ecosystemAndLanduse": {
+            "ecosystemType": {
               "type": "array",
               "items": {
                 "$ref": "#/components/schemas/taxonomyTerm"
