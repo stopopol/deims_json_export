@@ -255,6 +255,7 @@ class DeimsFieldController extends ControllerBase {
 				case 'eunis_habitat':
 				case 'lter_controlled_vocabulary':
 				case 'infrastructure':
+				case 'biological_classification':
 				case 'ecosystem_types_and_land_use':
 				case 'sensortype':
 					$RefEntity_item['label'] = $RefEntity->label();
