@@ -37,8 +37,8 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$dataset_information['attributes']['contact']['metadataProvider'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_metadata_provider'));
 
 		$dataset_information['attributes']['observations']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
-		$dataset_information['attributes']['observations']['speciesGroups'] = (!is_null($node->get('field_biological_classification')->value)) ? ($node->get('field_biological_classification')->value) : null; 
-		
+	  	$dataset_information['attributes']['observations']['speciesGroups'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_biological_classification'));
+	  
 		$dataset_information['attributes']['geographic'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_observation_location'));
 
 		$dataset_information['attributes']['onlineDistribution']['dataPolicyUrl']= $DeimsFieldController->parseRegularField($node->get('field_data_policy_url'), "url");
