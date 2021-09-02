@@ -109,6 +109,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		// list all referenced activities, datasets, sensors
 		$site_information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->execute());
 
+	  	$site_information['attributes']['projectRelated']['lter']['lterSiteClassification'] = $node->get('field_lter_site_classification')->value;
+	  
 
 		return $site_information;
   }
