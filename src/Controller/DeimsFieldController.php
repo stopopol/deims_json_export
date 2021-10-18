@@ -170,6 +170,34 @@ class DeimsFieldController extends ControllerBase {
 		}
 	}
 
+	/*
+	 * Function that parses image fields
+	 *
+	 * Requires an image field reference as input and returns an array with the formatted values
+	 */
+	public function parseImageField ($field) {
+				
+		$url_list = array();
+		$image_list = array();
+		$i=0;
+		
+		foreach($field->referencedEntities() as $entity) {		
+			array_push($url_list,"https://" .$_SERVER['HTTP_HOST'] . $entity->createFileUrl());
+		}
+
+		foreach($field->getValue() as $image) {
+			array_push($image_list, array("url"=>$url_list[$i], "alt"=>$image['alt']));
+			$i++;
+		}
+		
+		if ($image_list) {
+			return $image_list;
+		}
+		else {
+			return;
+		}
+	}
+
 
 	/*
 	 * Function that parses the fields within a referenced field
@@ -274,6 +302,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['label'] = $RefEntity->label();
 					$RefEntity_item['uri'] = $RefEntity->field_uri->uri;
 					break;
+
 			}
 			return $RefEntity_item;
 		}		
