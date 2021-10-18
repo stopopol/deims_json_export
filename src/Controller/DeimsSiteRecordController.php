@@ -102,9 +102,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['infrastructure']['data']['policy']['rights'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_dataset_rights');
 		$site_information['attributes']['infrastructure']['data']['policy']['notes'] = $node->get('field_site_data_policy')->value;
 
-		// TO DO:
-		// field_images -> TBD when necessary
-		$site_information['attributes']['general']['images'] = null;
+		// to be refined?
+		$site_information['attributes']['general']['images'] = $DeimsFieldController->parseImageField($node->get('field_images'));
 
 		// list all referenced activities, datasets, sensors
 		$site_information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->execute());
