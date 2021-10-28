@@ -63,7 +63,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['environmentalCharacteristics']['ecosystemType'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_ecosystem_land_use'));
 		$site_information['attributes']['environmentalCharacteristics']['eunisHabitat'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_eunis_habitat'));
 		$site_information['attributes']['environmentalCharacteristics']['landforms'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_landforms'));	
-	  	$site_information['attributes']['environmentalCharacteristics']['geoBonBiome'] = $node->get('field_geo_bon_biome')->value;
+	  	$site_information['attributes']['environmentalCharacteristics']['geoBonBiome'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_geo_bon_biome');
 		$site_information['attributes']['environmentalCharacteristics']['geology'] = $node->get('field_geology')->value;
 		$site_information['attributes']['environmentalCharacteristics']['hydrology'] = $node->get('field_hydrology')->value;
 		$site_information['attributes']['environmentalCharacteristics']['soils'] = $node->get('field_soils')->value;
