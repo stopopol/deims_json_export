@@ -15,7 +15,7 @@
                 }
             }
         },
-        "propertios": {
+        "properties": {
             "type": "object",
             "properties": {
                 "title": {
