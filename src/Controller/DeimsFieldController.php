@@ -66,6 +66,12 @@ class DeimsFieldController extends ControllerBase {
 						case "url":
 							array_push($data_values, array('title'=>$item->title,'value'=>$item->uri));
 							break;
+						case "number_float":
+							array_push($data_values, $item->value);
+							break;
+						case "number_integer":
+							array_push($data_values, $item->value);
+							break;
 					}
 				}
 			}
@@ -197,8 +203,7 @@ class DeimsFieldController extends ControllerBase {
 			return;
 		}
 	}
-
-
+	
 	/*
 	 * Function that parses the fields within a referenced field
 	 *
@@ -286,6 +291,7 @@ class DeimsFieldController extends ControllerBase {
 				case 'biological_classification':
 				case 'ecosystem_types_and_land_use':
 				case 'sensortype':
+				case 'standard_reference_period':
 					$RefEntity_item['label'] = $RefEntity->label();
 					$RefEntity_item['uri'] = null;
 					break;
