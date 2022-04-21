@@ -37,7 +37,6 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['contact']['siteUrl'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
 
 		$site_information['attributes']['general']['abstract'] = $node->get('field_abstract')->value;
-		$site_information['attributes']['general']['keywords']= $DeimsFieldController->parseEntityReferenceField($node->get('field_keywords'));
 		$site_information['attributes']['general']['status'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_status'), $single_value_field=true);
 		$site_information['attributes']['general']['yearEstablished'] = (!is_null($node->get('field_year_established')->value)) ? intval($node->get('field_year_established')->value) : null;
 		$site_information['attributes']['general']['yearClosed'] = (!is_null($node->get('field_year_closed')->value)) ? intval($node->get('field_year_closed')->value) : null;
@@ -51,12 +50,10 @@ class DeimsSiteRecordController extends ControllerBase {
 
 		// aggregate temperature fields; shorthand ifs to catch empty values
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
-		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['min'] = (!is_null($node->get('field_air_temp_min')->value)) ? floatval($node->get('field_air_temp_min')->value) : null;
-		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['max'] = (!is_null($node->get('field_air_temp_max')->value)) ? floatval($node->get('field_air_temp_max')->value) : null;
+		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['values'] = (!is_null($node->get('field_air_temp_min')->value)) ? floatval($node->get('field_air_temp_min')->value) : null;
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['unit'] = '°C';
 		$site_information['attributes']['environmentalCharacteristics']['precipitation']['annual'] = (!is_null($node->get('field_precipitation_annual')->value)) ? floatval($node->get('field_precipitation_annual')->value) : null;
-		$site_information['attributes']['environmentalCharacteristics']['precipitation']['min'] = (!is_null($node->get('field_precipitation_min')->value)) ? floatval($node->get('field_precipitation_min')->value) : null;
-		$site_information['attributes']['environmentalCharacteristics']['precipitation']['max'] = (!is_null($node->get('field_precipitation_max')->value)) ? floatval($node->get('field_precipitation_max')->value) : null;
+		$site_information['attributes']['environmentalCharacteristics']['precipitation']['values'] = (!is_null($node->get('field_precipitation_min')->value)) ? floatval($node->get('field_precipitation_min')->value) : null;
 		$site_information['attributes']['environmentalCharacteristics']['precipitation']['unit'] = 'mm';
 		$site_information['attributes']['environmentalCharacteristics']['biogeographicalRegion'] = $node->get('field_biogeographical_region')->value;
 		$site_information['attributes']['environmentalCharacteristics']['biome'] = $node->get('field_biome')->value;
@@ -85,9 +82,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['focusDesignScale']['experiments']['scale'] = $node->get('field_scale_experiments')->value;
 		$site_information['attributes']['focusDesignScale']['observations']['design'] = $node->get('field_design_observation')->value;
 		$site_information['attributes']['focusDesignScale']['observations']['scale'] = $node->get('field_scale_observation')->value;
-		$site_information['attributes']['focusDesignScale']['parameters'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));
-		$site_information['attributes']['focusDesignScale']['researchTopics'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_research_topics'));
-		
+		$site_information['attributes']['focusDesignScale']['observedProperties'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parameters'));		
 		$site_information['attributes']['infrastructure']['accessibleAllYear'] = (!is_null($node->get('field_accessible_all_year')->value)) ? (($node->get('field_accessible_all_year')->value == 1) ? true : false) : null;
 		$site_information['attributes']['infrastructure']['accessType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_access_type', $single_value_field=true);		
 		$site_information['attributes']['infrastructure']['allPartsAccessible'] = (!is_null($node->get('field_all_parts_accessible')->value)) ? (($node->get('field_all_parts_accessible')->value == 1) ? true : false) : null;
