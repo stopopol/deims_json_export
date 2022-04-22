@@ -32,22 +32,30 @@ class DeimsNodeListsController {
 			// for future filters refer to 
 			// https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21Query%21QueryInterface.php/function/QueryInterface%3A%3Acondition/8.2.x
 			
-			$query_value_observedProperties = \Drupal::request()->query->get('observedproperty') ?: null;
-			$query = \Drupal::entityQuery('node');
-			$query->condition('type', 'site');
-			
-			// if filters are provided add additional conditions
-			if ($query_value_observedProperties) {
-				$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);
-			}
-			
-			$nids = $query->execute();
-			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
-
 			// site filter parameters
 			$query_value_network = \Drupal::request()->query->get('network') ?: null;
 			$query_value_sitecode = \Drupal::request()->query->get('sitecode') ?: null;
 			$query_value_verified = \Drupal::request()->query->get('verified') ?: null;
+			$query_value_observedProperties = \Drupal::request()->query->get('observedproperty') ?: null;
+			
+			// network query v2 test
+			$query_value_network2 = \Drupal::request()->query->get('network2') ?: null;
+			
+			$query = \Drupal::entityQuery('node');
+			$query->condition('type', 'site');
+			
+			// if filters are provided add additional filter conditions
+			if ($query_value_observedProperties) {
+				$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);
+			}
+			
+			if ($query_value_network2) {
+				$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network2);
+			}
+			
+			
+			$nids = $query->execute();
+			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 
 			$number_of_parsed_nodes = 0;
 			$number_of_listed_nodes = 0;
