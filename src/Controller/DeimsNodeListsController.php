@@ -40,6 +40,7 @@ class DeimsNodeListsController {
 						
 			$query = \Drupal::entityQuery('node');
 			$query->condition('type', 'site');
+			$query->condition('status', 1);
 			
 			// if filters are provided, add additional filter conditions
 			if ($query_value_observedProperties) {
@@ -61,55 +62,52 @@ class DeimsNodeListsController {
 			$number_of_listed_nodes = 0;
 			foreach ($nodes as $node) {
 				
-				if ($node->isPublished()) {
-
-					$search_criteria_matched = true;
-					// check for network-related filters
-					if ($query_value_network && $query_value_verified) {
-						$affiliation = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
+				$search_criteria_matched = true;
+				// check for network-related filters
+				if ($query_value_network && $query_value_verified) {
+					$affiliation = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 							
-							// if a network id is provided, filter accordingly
-							$network_id_match = null;
-							$verified_member_match = null;
-							foreach ($affiliation as $network_item) {
+						// if a network id is provided, filter accordingly
+						$network_id_match = null;
+						$verified_member_match = null;
+						foreach ($affiliation as $network_item) {
 									
-								if ($network_item['network']['id']['suffix'] == $query_value_network) {
-									$network_id_match = true;
-									// if verified parameter is provided, check if site is a verified network member
-									if ($query_value_verified) {
-										// need to cast true/false boolean to true/false string
-										$verified_value_string = $network_item['verified'] ? 'true' : 'false';
-										if ($query_value_verified == $verified_value_string) $verified_member_match = true;
-									} 
-								}
-							}	
+							if ($network_item['network']['id']['suffix'] == $query_value_network) {
+								$network_id_match = true;
+								// if verified parameter is provided, check if site is a verified network member
+								if ($query_value_verified) {
+									// need to cast true/false boolean to true/false string
+									$verified_value_string = $network_item['verified'] ? 'true' : 'false';
+									if ($query_value_verified == $verified_value_string) $verified_member_match = true;
+								} 
+							}
+						}	
 
-						if ($query_value_network && !isset($network_id_match))  $search_criteria_matched = false;
-						if ($query_value_verified && !isset($verified_member_match)) $search_criteria_matched = false;
+					if (!isset($verified_member_match) || !isset($network_id_match))  $search_criteria_matched = false;
 
-					}
-
-					if ($search_criteria_matched == true) {
-
-						// offset not working properly
-						if ($offset && ($number_of_parsed_nodes < $offset)) {
-							$number_of_parsed_nodes++;
-							continue;
-						} 
-
-						// get record values
-						$node_information['title'] = $node->get('title')->value;
-						$node_information['id']['prefix'] = 'https://deims.org/';
-						$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
-						$node_information['coordinates'] = $node->get('field_coordinates')->value;
-						$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-		
-						array_push($node_list, $node_information);
-						$number_of_listed_nodes++;
-					}
-
-					if ($limit && $number_of_listed_nodes == $limit)	break;					
 				}
+
+				if ($search_criteria_matched == true) {
+
+					// offset not working properly
+					if ($offset && ($number_of_parsed_nodes < $offset)) {
+						$number_of_parsed_nodes++;
+						continue;
+					} 
+
+					// get record values
+					$node_information['title'] = $node->get('title')->value;
+					$node_information['id']['prefix'] = 'https://deims.org/';
+					$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
+					$node_information['coordinates'] = $node->get('field_coordinates')->value;
+					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+		
+					array_push($node_list, $node_information);
+					$number_of_listed_nodes++;
+				}
+
+				if ($limit && $number_of_listed_nodes == $limit)	break;					
+				
 			}
 			break;
 		
