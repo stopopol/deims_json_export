@@ -33,17 +33,15 @@ class DeimsNodeListsController {
 			// https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21Query%21QueryInterface.php/function/QueryInterface%3A%3Acondition/8.2.x
 			
 			$query_value_observedProperties = \Drupal::request()->query->get('observedproperty') ?: null;
+			$query = \Drupal::entityQuery('node');
+			$query->condition('type', 'site');
 			
+			// if filters are provided add additional conditions
 			if ($query_value_observedProperties) {
-				$nids = \Drupal::entityQuery('node')
-				->condition('type', 'site')
-				->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties)
-				->execute();
-			}
-			else {
-				$nids = \Drupal::entityQuery('node')->condition('type', 'site')->execute();
+				$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);
 			}
 			
+			$nids = $query->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 
 			// site filter parameters
