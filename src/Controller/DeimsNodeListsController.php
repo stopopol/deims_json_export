@@ -37,22 +37,22 @@ class DeimsNodeListsController {
 			$query_value_sitecode = \Drupal::request()->query->get('sitecode') ?: null;
 			$query_value_verified = \Drupal::request()->query->get('verified') ?: null;
 			$query_value_observedProperties = \Drupal::request()->query->get('observedproperty') ?: null;
-			
-			// network query v2 test
-			$query_value_network2 = \Drupal::request()->query->get('network2') ?: null;
-			
+						
 			$query = \Drupal::entityQuery('node');
 			$query->condition('type', 'site');
 			
-			// if filters are provided add additional filter conditions
+			// if filters are provided, add additional filter conditions
 			if ($query_value_observedProperties) {
 				$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);
 			}
 			
-			if ($query_value_network2) {
-				$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network2);
+			if ($query_value_network) {
+				$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network);			
 			}
 			
+			if ($query_value_sitecode) {	
+				$query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
+			}
 			
 			$nids = $query->execute();
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
@@ -65,46 +65,26 @@ class DeimsNodeListsController {
 
 					$search_criteria_matched = true;
 					// check for network-related filters
-					if ($query_value_network || $query_value_sitecode || $query_value_verified) {
+					if ($query_value_network && $query_value_verified) {
 						$affiliation = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
-
-						if ($affiliation) {
-
-							if ($query_value_sitecode) {
-								// Site Code Filter	
-								$site_code_matched = null;	
-								foreach ($affiliation as $network_item) {
-									if (is_int(stripos($network_item['siteCode'], $query_value_sitecode)))	{
-										$site_code_matched = true; // case insensitive string
-									}
-								}
-							}
 							
 							// if a network id is provided, filter accordingly
-							if ($query_value_network) {
-								
-								$network_id_match = null;
-								$verified_member_match = null;
-								foreach ($affiliation as $network_item) {
+							$network_id_match = null;
+							$verified_member_match = null;
+							foreach ($affiliation as $network_item) {
 									
-									if ($network_item['network']['id']['suffix'] == $query_value_network) {
-										$network_id_match = true;
-										// if verified parameter is provided, check if site is a verified network member
-										if ($query_value_verified) {
-											// need to cast true/false boolean to true/false string
-											$verified_value_string = $network_item['verified'] ? 'true' : 'false';
-											if ($query_value_verified == $verified_value_string) $verified_member_match = true;
-										} 
-									}
+								if ($network_item['network']['id']['suffix'] == $query_value_network) {
+									$network_id_match = true;
+									// if verified parameter is provided, check if site is a verified network member
+									if ($query_value_verified) {
+										// need to cast true/false boolean to true/false string
+										$verified_value_string = $network_item['verified'] ? 'true' : 'false';
+										if ($query_value_verified == $verified_value_string) $verified_member_match = true;
+									} 
 								}
-
-							} 
-
-						} else $search_criteria_matched = false;
-							// check for network-related filter}
+							}	
 
 						if ($query_value_network && !isset($network_id_match))  $search_criteria_matched = false;
-						if ($query_value_sitecode && !isset($site_code_matched)) $search_criteria_matched = false;
 						if ($query_value_verified && !isset($verified_member_match)) $search_criteria_matched = false;
 
 					}
@@ -123,7 +103,6 @@ class DeimsNodeListsController {
 						$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
 						$node_information['coordinates'] = $node->get('field_coordinates')->value;
 						$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-						//$node_information['affiliation'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 		
 						array_push($node_list, $node_information);
 						$number_of_listed_nodes++;
