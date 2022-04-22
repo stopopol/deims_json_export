@@ -49,12 +49,12 @@ class DeimsSiteRecordController extends ControllerBase {
 		$site_information['attributes']['general']['landUse'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_management_of_resources'));
 
 		// aggregate temperature fields; shorthand ifs to catch empty values
-		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['avg'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
-		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['values'] = $DeimsFieldController->parseRegularField($node->get('field_air_temp'), "number_float");
+		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['yearlyAverage'] = (!is_null($node->get('field_air_temp_avg')->value)) ? floatval($node->get('field_air_temp_avg')->value) : null;
+		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['monthlyAverage'] = $DeimsFieldController->parseRegularField($node->get('field_air_temp'), "number_float");
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['unit'] = '°C';
 		$site_information['attributes']['environmentalCharacteristics']['airTemperature']['referencePeriod'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_standard_reference_period'), $single_value_field=true);
-		$site_information['attributes']['environmentalCharacteristics']['precipitation']['annual'] = (!is_null($node->get('field_precipitation_annual')->value)) ? floatval($node->get('field_precipitation_annual')->value) : null;
-		$site_information['attributes']['environmentalCharacteristics']['precipitation']['values'] = $DeimsFieldController->parseRegularField($node->get('field_precipitation'), "number_integer");
+		$site_information['attributes']['environmentalCharacteristics']['precipitation']['yearlyAverage'] = (!is_null($node->get('field_precipitation_annual')->value)) ? floatval($node->get('field_precipitation_annual')->value) : null;
+		$site_information['attributes']['environmentalCharacteristics']['precipitation']['monthlyAverage'] = $DeimsFieldController->parseRegularField($node->get('field_precipitation'), "number_integer");
 		$site_information['attributes']['environmentalCharacteristics']['precipitation']['unit'] = 'mm';
 		$site_information['attributes']['environmentalCharacteristics']['precipitation']['referencePeriod'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_standard_reference_period'), $single_value_field=true);
 		$site_information['attributes']['environmentalCharacteristics']['biogeographicalRegion'] = $node->get('field_biogeographical_region')->value;
