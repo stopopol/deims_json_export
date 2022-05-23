@@ -37,6 +37,8 @@ class DeimsNodeListsController {
 			$query_value_sitecode = \Drupal::request()->query->get('sitecode') ?: null;
 			$query_value_verified = \Drupal::request()->query->get('verified') ?: null;
 			$query_value_observedProperties = \Drupal::request()->query->get('observedproperty') ?: null;
+			$query_value_sitename = \Drupal::request()->query->get('name') ?: null;
+			$query_value_country = \Drupal::request()->query->get('country') ?: null;
 						
 			$query = \Drupal::entityQuery('node');
 			$query->condition('type', 'site');
@@ -53,6 +55,15 @@ class DeimsNodeListsController {
 			
 			if ($query_value_sitecode) {	
 				$query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
+			}
+			
+			// ISO two digit code
+			if ($query_value_country) {	
+				$query->condition('field_country', $query_value_country);
+			}
+			
+			if ($query_value_sitename) {	
+				$query->condition('field_name', $query_value_sitename, 'CONTAINS');
 			}
 			
 			$nids = $query->execute();
