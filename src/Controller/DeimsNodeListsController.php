@@ -21,7 +21,7 @@ class DeimsNodeListsController {
 	// get integer values of parameters limit and offset
 	$limit = \Drupal::request()->query->get('limit') ? ((int)\Drupal::request()->query->get('limit')) : null;
 	$offset = \Drupal::request()->query->get('offset') ? ((int)\Drupal::request()->query->get('offset')) : null;
-	$format = \Drupal::request()->query->get('format') ? ((int)\Drupal::request()->query->get('format')) : null;
+	$format = \Drupal::request()->query->get('format') ?: null;
 
 	// only return defined content types
 	switch ($content_type) {
@@ -43,6 +43,15 @@ class DeimsNodeListsController {
 			$query = \Drupal::entityQuery('node');
 			$query->condition('type', 'site');
 			$query->condition('status', 1);
+			
+			
+			// Create the orConditionGroup
+			$orGroup = $query->orConditionGroup()
+			  ->condition('field_status', NULL, 'IS NULL')
+			  ->condition('field_status.entity:taxonomy_term.tid', 54180, '!='); // exclude all inactive/closed sites
+			  
+			// Add the group to the query.
+			$query->condition($orGroup);
 			
 			// if filters are provided, add additional filter conditions
 			if ($query_value_observedProperties) {
