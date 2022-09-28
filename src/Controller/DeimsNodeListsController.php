@@ -47,8 +47,8 @@ class DeimsNodeListsController {
 			
 			// Create the orConditionGroup
 			$orGroup = $query->orConditionGroup()
-			  ->condition('field_status', NULL, 'IS NULL')
-			  ->condition('field_status.entity:taxonomy_term.tid', 54180, '!='); // exclude all inactive/closed sites
+			  ->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
+			  ->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
 			  
 			// Add the group to the query.
 			$query->condition($orGroup);
