@@ -134,7 +134,11 @@ class DeimsNodeListsController {
 		case 'activities':
 		case 'sensors':
 		case 'datasets':
+		case 'networks':
 		case 'locations':
+		
+			$query = \Drupal::entityQuery('node');
+			$query->condition('status', 1);
 		
 			if ($content_type == 'activities') {
 				$entity_machine_name = 'activity';
@@ -147,13 +151,30 @@ class DeimsNodeListsController {
 			if ($content_type == 'locations') {
 				$entity_machine_name = 'observation_location';
 				$landing_page_label = 'locations';
+			
+				$query_value_locationType = \Drupal::request()->query->get('type') ?: null;
+				$query_value_relatedSite = \Drupal::request()->query->get('relatedSite') ?: null;				
+				// if filters are provided, add additional filter conditions
+				if ($query_value_locationType) {
+					$query->condition('field_location_type.entity:taxonomy_term.field_uri', $query_value_locationType);
+				}
+				if ($query_value_relatedSite) {
+					$query->condition('field_related_site.entity:node.uuid', $query_value_relatedSite);
+				}
+				
 			}
 			if ($content_type == 'datasets') {
 				$entity_machine_name = 'dataset';
 				$landing_page_label = 'dataset';
 			}
+			
+			if ($content_type == 'networks') {
+				$entity_machine_name = 'network';
+				$landing_page_label = 'networks';
+			}
 
-			$nids = \Drupal::entityQuery('node')->condition('type', $entity_machine_name)->execute();
+			$query->condition('type', $entity_machine_name);
+			$nids = $query->execute();			
 			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 			
 			$number_of_parsed_nodes = 0;
