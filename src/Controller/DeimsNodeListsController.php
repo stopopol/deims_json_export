@@ -153,7 +153,7 @@ class DeimsNodeListsController {
 				$landing_page_label = 'locations';
 			
 				$query_value_locationType = \Drupal::request()->query->get('type') ?: null;
-				$query_value_relatedSite = \Drupal::request()->query->get('relatedSite') ?: null;				
+				$query_value_relatedSite = \Drupal::request()->query->get('relatedsite') ?: null;				
 				// if filters are provided, add additional filter conditions
 				if ($query_value_locationType) {
 					$query->condition('field_location_type.entity:taxonomy_term.field_uri', $query_value_locationType);
