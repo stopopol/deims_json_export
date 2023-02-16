@@ -24,6 +24,13 @@ class DeimsNetworkRecordController extends ControllerBase {
 		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
 		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 
+		$information['attributes']['abstract'] = $node->get('field_abstract')->value;
+		$information['attributes']['url'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
+		$information['attributes']['images'] = $DeimsFieldController->parseImageField($node->get('field_images'));
+		
+		$information['attributes']['belongsTo'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_belongs_to'));
+		$information['attributes']['consistsOf'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_consists_of'));
+		
 		return $information;
 		
   }

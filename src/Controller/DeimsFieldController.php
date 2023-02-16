@@ -223,10 +223,15 @@ class DeimsFieldController extends ControllerBase {
 				case 'dataset':
 					$RefEntity_item['type'] = 'dataset';
 					$RefEntity_item['name'] = $RefEntity->field_name->value;
-					$RefEntity_item['id']['prefix'] = 'https://deims.org/dataset/';
+					$RefEntity_item['id']['prefix'] = 'https://deims.org/datasets/';
 					$RefEntity_item['id']['suffix'] = $RefEntity->field_uuid->value;
 					break;
-				// case for content type 'site'
+				case 'network':
+					$RefEntity_item['type'] = 'network';
+					$RefEntity_item['title'] = $RefEntity->get('title')->value;
+					$RefEntity_item['id']['prefix'] = 'https://deims.org/networks/';
+					$RefEntity_item['id']['suffix'] = $RefEntity->field_uuid->value;
+					break;
 				case 'site':
 					$RefEntity_item['type'] = 'site';
 					$RefEntity_item['title'] = $RefEntity->get('title')->value;
@@ -234,14 +239,12 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['id']['suffix'] = $RefEntity->field_deims_id->value;
 					$RefEntity_item['changed'] = \Drupal::service('date.formatter')->format($RefEntity->getChangedTime(), 'html_datetime');
 					break;
-				// case for content type 'person'
 				case 'person':
 					$RefEntity_item['type'] = 'person';
 					$RefEntity_item['name'] = $RefEntity->field_person_name->given . ' ' . $RefEntity->field_person_name->family;
 					$RefEntity_item['email'] = $RefEntity->field_email->value;
 					$RefEntity_item['orcid'] = $RefEntity->field_orcid->value;
 					break;
-				// case for content type 'organisation'
 				case 'organisation':
 					$RefEntity_item['type'] = 'organisation';
 					$RefEntity_item['name'] = $RefEntity->field_name->value;
@@ -249,7 +252,7 @@ class DeimsFieldController extends ControllerBase {
 						$RefEntity_item['url'] = $url -> uri;
 					}
 					break;
-				// case for paragraphs of type 'network_pg'
+				// case for paragraphs of type 'network_pg' (NOT content type network)
 				case 'network_pg':
 					if ($RefEntity->field_network->entity) {
 						$RefEntity_item['network']['name'] = $RefEntity->field_network->entity->getTitle();
