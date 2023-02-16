@@ -230,7 +230,7 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['type'] = 'network';
 					$RefEntity_item['title'] = $RefEntity->get('title')->value;
 					$RefEntity_item['id']['prefix'] = 'https://deims.org/networks/';
-					$RefEntity_item['id']['suffix'] = $RefEntity->field_uuid->value;
+					$RefEntity_item['id']['suffix'] = $RefEntity->get('uuid')->value;
 					break;
 				case 'site':
 					$RefEntity_item['type'] = 'site';
