@@ -26,7 +26,7 @@ class DeimsNetworkRecordController extends ControllerBase {
 
 		$information['attributes']['abstract'] = $node->get('field_abstract')->value;
 		$information['attributes']['url'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
-		$information['attributes']['images'] = $DeimsFieldController->parseImageField($node->get('field_images'));
+		$information['attributes']['logo'] = $DeimsFieldController->parseImageField($node->get('field_images'));
 		
 		$information['attributes']['belongsTo'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_belongs_to'));
 		$information['attributes']['consistsOf'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_consists_of'));
