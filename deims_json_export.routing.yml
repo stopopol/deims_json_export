@@ -58,3 +58,12 @@ location_record.content:
       _title: 'JSON api'
     requirements:
       _access: 'TRUE'
+      
+network_record.content:
+    path: '/api/networks/{uuid}'
+    defaults:
+      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
+      content_type: 'network'
+      _title: 'JSON api'
+    requirements:
+      _access: 'TRUE'

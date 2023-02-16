@@ -21,26 +21,25 @@ class DeimsRecordRetrievalController extends ControllerBase {
 				if ($node->bundle() == $content_type && $node->isPublished()) {
 					switch ($content_type) {
 						case 'site':
-							$DeimsSiteRecordController = new DeimsSiteRecordController();
-							$record_information = $DeimsSiteRecordController->parseSiteFields($node);
+							$DeimsRecordController = new DeimsSiteRecordController();
 							break;
 						case 'dataset':
-							$DeimsDatasetRecordController = new DeimsDatasetRecordController();
-							$record_information = $DeimsDatasetRecordController->parseDatasetFields($node);
+							$DeimsRecordController = new DeimsDatasetRecordController();
 							break;
 						case 'activity':
-							$DeimsActivityRecordController = new DeimsActivityRecordController();
-							$record_information = $DeimsActivityRecordController->parseActivityFields($node);
+							$DeimsRecordController = new DeimsActivityRecordController();
 							break;
 						case 'sensor':
-							$DeimsSensorRecordController = new DeimsSensorRecordController();
-							$record_information = $DeimsSensorRecordController->parseSensorFields($node);
+							$DeimsRecordController = new DeimsSensorRecordController();
 							break;
 						case 'observation_location':
-							$DeimsLocationRecordController = new DeimsLocationRecordController();
-							$record_information = $DeimsLocationRecordController->parseLocationFields($node);
+							$DeimsRecordController = new DeimsLocationRecordController();
+							break;
+						case 'network':
+							$DeimsRecordController = new DeimsNetworkRecordController();
 							break;
 					}
+					$record_information = $DeimsRecordController->parseFields($node);
 				}
 			}
 		}
@@ -59,8 +58,11 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			  case 'sensor':
 			    $content_type_label = "sensors";
 			    break;
-			  case 'location':
+			  case 'observation_location':
 			    $content_type_label = "locations";
+			    break;
+			  case 'network':
+			    $content_type_label = "networks";
 			    break;
 			}
 			$error_message['source'] = ["pointer" => '/api/' . $content_type_label . '/{id}'];
