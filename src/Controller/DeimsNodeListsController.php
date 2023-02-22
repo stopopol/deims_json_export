@@ -41,7 +41,7 @@ class DeimsNodeListsController {
 				foreach (array_keys($url_parameters) as $parameter) {
 					if (!in_array($parameter, $allowed_query_parameters)) {
 						$error_message['status'] = "400";
-						$error_message['source'] = ["pointer" => "/api/{type}"];
+						$error_message['source'] = ["pointer" => "/api/sites?{$parameter}="];
 						$error_message['title'] = 'Bad request';
 						$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
 						$node_list['errors'] = $error_message;
@@ -161,7 +161,7 @@ class DeimsNodeListsController {
 				foreach (array_keys($url_parameters) as $parameter) {
 					if (!in_array($parameter, $allowed_query_parameters)) {
 						$error_message['status'] = "400";
-						$error_message['source'] = ["pointer" => "/api/{type}"];
+						$error_message['source'] = ["pointer" => "/api/locations?{$parameter}="];
 						$error_message['title'] = 'Bad request';
 						$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
 						$node_list['errors'] = $error_message;
