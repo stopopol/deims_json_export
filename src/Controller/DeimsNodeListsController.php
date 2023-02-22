@@ -18,11 +18,14 @@ class DeimsNodeListsController {
   public function renderRecordList($content_type) {
 	$node_list = array();
 
+	// load url parameters and make them lower case
+	$url_parameters = array_change_key_case(\Drupal::request()->query->all(), CASE_LOWER);
+	
 	// get integer values of parameters limit and offset
-	$limit = \Drupal::request()->query->get('limit') ? ((int)\Drupal::request()->query->get('limit')) : null;
-	$offset = \Drupal::request()->query->get('offset') ? ((int)\Drupal::request()->query->get('offset')) : null;
-	$format = \Drupal::request()->query->get('format') ?: null;
-
+	$limit =  array_key_exists('limit', $url_parameters) ? ((int)$url_parameters['limit']) : null;
+	$offset = array_key_exists('offset', $url_parameters) ? ((int)$url_parameters['offset']) : null;
+	$format = array_key_exists('format', $url_parameters) ?: null;
+	
 	// only return defined content types
 	switch ($content_type) {
 	
@@ -32,13 +35,28 @@ class DeimsNodeListsController {
 			// for future filters refer to 
 			// https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21Query%21QueryInterface.php/function/QueryInterface%3A%3Acondition/8.2.x
 			
+			// check if query parameters are valid
+			if (isset($url_parameters)) {
+				$allowed_query_parameters = array('network', 'sitecode', 'verified', 'observedproperty', 'name', 'country');
+				foreach (array_keys($url_parameters) as $parameter) {
+					if (!in_array($parameter, $allowed_query_parameters)) {
+						$error_message['status'] = "400";
+						$error_message['source'] = ["pointer" => "/api/{type}"];
+						$error_message['title'] = 'Bad request';
+						$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
+						$node_list['errors'] = $error_message;
+						break 2;
+					}
+				}	
+			}
+			
 			// site filter parameters
-			$query_value_network = \Drupal::request()->query->get('network') ?: null;
-			$query_value_sitecode = \Drupal::request()->query->get('sitecode') ?: null;
-			$query_value_verified = \Drupal::request()->query->get('verified') ?: null;
-			$query_value_observedProperties = \Drupal::request()->query->get('observedproperty') ?: null;
-			$query_value_sitename = \Drupal::request()->query->get('name') ?: null;
-			$query_value_country = \Drupal::request()->query->get('country') ?: null;
+			$query_value_network = array_key_exists('network', $url_parameters) ? $url_parameters['network']: null;
+			$query_value_sitecode = array_key_exists('sitecode', $url_parameters) ? $url_parameters['sitecode']: null;
+			$query_value_verified = array_key_exists('verified', $url_parameters) ? $url_parameters['verified']: null;
+			$query_value_observedProperties = array_key_exists('observedproperty', $url_parameters) ? $url_parameters['observedproperty']: null;
+			$query_value_sitename = array_key_exists('name', $url_parameters) ? $url_parameters['name']: null;
+			$query_value_country = array_key_exists('country', $url_parameters) ? $url_parameters['country']: null;
 						
 			$query = \Drupal::entityQuery('node');
 			$query->condition('type', 'site');
@@ -137,6 +155,21 @@ class DeimsNodeListsController {
 		case 'networks':
 		case 'locations':
 		
+			// check if query parameters are valid
+			if (isset($url_parameters)) {
+				$allowed_query_parameters = array('type', 'relatedsite');
+				foreach (array_keys($url_parameters) as $parameter) {
+					if (!in_array($parameter, $allowed_query_parameters)) {
+						$error_message['status'] = "400";
+						$error_message['source'] = ["pointer" => "/api/{type}"];
+						$error_message['title'] = 'Bad request';
+						$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
+						$node_list['errors'] = $error_message;
+						break 2;
+					}
+				}	
+			}
+		
 			$query = \Drupal::entityQuery('node');
 			$query->condition('status', 1);
 		
@@ -152,8 +185,8 @@ class DeimsNodeListsController {
 				$entity_machine_name = 'observation_location';
 				$landing_page_label = 'locations';
 			
-				$query_value_locationType = \Drupal::request()->query->get('type') ?: null;
-				$query_value_relatedSite = \Drupal::request()->query->get('relatedsite') ?: null;				
+				$query_value_locationType = array_key_exists('type', $url_parameters) ? $url_parameters['type']: null;
+				$query_value_relatedSite = array_key_exists('relatedsite', $url_parameters) ? $url_parameters['relatedsite']: null;	
 				// if filters are provided, add additional filter conditions
 				if ($query_value_locationType) {
 					$query->condition('field_location_type.entity:taxonomy_term.field_uri', $query_value_locationType);
