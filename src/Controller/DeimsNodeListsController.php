@@ -155,21 +155,6 @@ class DeimsNodeListsController {
 		case 'networks':
 		case 'locations':
 		
-			// check if query parameters are valid
-			if (isset($url_parameters)) {
-				$allowed_query_parameters = array('type', 'relatedsite', 'format', 'limit', 'offset');
-				foreach (array_keys($url_parameters) as $parameter) {
-					if (!in_array($parameter, $allowed_query_parameters)) {
-						$error_message['status'] = "400";
-						$error_message['source'] = ["pointer" => "/api/locations?{$parameter}="];
-						$error_message['title'] = 'Bad request';
-						$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
-						$node_list['errors'] = $error_message;
-						break 2;
-					}
-				}	
-			}
-		
 			$query = \Drupal::entityQuery('node');
 			$query->condition('status', 1);
 		
@@ -182,6 +167,22 @@ class DeimsNodeListsController {
 				$landing_page_label = 'sensors';
 			}
 			if ($content_type == 'locations') {
+				
+				// check if query parameters are valid
+				if (isset($url_parameters)) {
+					$allowed_query_parameters = array('type', 'relatedsite', 'format', 'limit', 'offset');
+					foreach (array_keys($url_parameters) as $parameter) {
+						if (!in_array($parameter, $allowed_query_parameters)) {
+							$error_message['status'] = "400";
+							$error_message['source'] = ["pointer" => "/api/locations?{$parameter}="];
+							$error_message['title'] = 'Bad request';
+							$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
+							$node_list['errors'] = $error_message;
+							break 2;
+						}
+					}	
+				}
+				
 				$entity_machine_name = 'observation_location';
 				$landing_page_label = 'locations';
 			
