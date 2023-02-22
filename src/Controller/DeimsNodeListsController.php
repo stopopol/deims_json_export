@@ -24,7 +24,7 @@ class DeimsNodeListsController {
 	// get integer values of parameters limit and offset
 	$limit =  array_key_exists('limit', $url_parameters) ? ((int)$url_parameters['limit']) : null;
 	$offset = array_key_exists('offset', $url_parameters) ? ((int)$url_parameters['offset']) : null;
-	$format = array_key_exists('format', $url_parameters) ?: null;
+	$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
 	
 	// only return defined content types
 	switch ($content_type) {
@@ -37,7 +37,7 @@ class DeimsNodeListsController {
 			
 			// check if query parameters are valid
 			if (isset($url_parameters)) {
-				$allowed_query_parameters = array('network', 'sitecode', 'verified', 'observedproperty', 'name', 'country');
+				$allowed_query_parameters = array('network', 'sitecode', 'verified', 'observedproperty', 'name', 'country', 'format', 'limit', 'offset');
 				foreach (array_keys($url_parameters) as $parameter) {
 					if (!in_array($parameter, $allowed_query_parameters)) {
 						$error_message['status'] = "400";
@@ -157,7 +157,7 @@ class DeimsNodeListsController {
 		
 			// check if query parameters are valid
 			if (isset($url_parameters)) {
-				$allowed_query_parameters = array('type', 'relatedsite');
+				$allowed_query_parameters = array('type', 'relatedsite', 'format', 'limit', 'offset');
 				foreach (array_keys($url_parameters) as $parameter) {
 					if (!in_array($parameter, $allowed_query_parameters)) {
 						$error_message['status'] = "400";
