@@ -80,6 +80,26 @@ class DeimsNodeListsController {
 				$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network);			
 			}
 			
+			if ($query_value_verified) {
+				// throw error if verified flag has been provided but no network
+				if (is_null($query_value_network)) {
+					$error_message['status'] = "400";
+					$error_message['source'] = ["pointer" => "/api/sites?verified="];
+					$error_message['title'] = 'Bad request';
+					$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
+					$node_list['errors'] = $error_message;
+					break;
+				}
+				
+				if ($query_value_verified == 'true') {
+					$query->condition('field_affiliation.entity:paragraph.field_network_verified', true);		
+				}
+				if ($query_value_verified == 'false') {
+					$query->condition('field_affiliation.entity:paragraph.field_network_verified', false);
+				}
+							
+			} 
+			
 			if ($query_value_sitecode) {	
 				$query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
 			}
@@ -100,6 +120,8 @@ class DeimsNodeListsController {
 			$number_of_listed_nodes = 0;
 			foreach ($nodes as $node) {
 				
+				
+				// refactor this part?
 				$search_criteria_matched = true;
 				// check for network-related filters
 				if ($query_value_network && $query_value_verified) {
@@ -238,9 +260,9 @@ class DeimsNodeListsController {
 			break;
 
 		default:
-			$error_message['status'] = "404";
+			$error_message['status'] = "400";
 			$error_message['source'] = ["pointer" => "/api/{type}"];
-			$error_message['title'] = 'Resource type not found';
+			$error_message['title'] = 'Bad request';
 			$error_message['detail'] = "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :(";
 			$node_list['errors'] = $error_message;
 	}
