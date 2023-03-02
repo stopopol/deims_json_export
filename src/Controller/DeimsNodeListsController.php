@@ -132,7 +132,6 @@ class DeimsNodeListsController {
 				array_push($node_list, $node_information);
 				$number_of_listed_nodes++;
 				
-
 				if ($limit && $number_of_listed_nodes == $limit)	break;					
 				
 			}
