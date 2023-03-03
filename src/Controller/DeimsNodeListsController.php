@@ -26,225 +26,218 @@ class DeimsNodeListsController {
 	$offset = array_key_exists('offset', $url_parameters) ? ((int)$url_parameters['offset']) : null;
 	$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
 	
-	// only return defined content types
-	switch ($content_type) {
+	$allowed_query_parameters = array('format', 'limit', 'offset');
+	$allowed_entity_types = array('sites', 'activities', 'sensors', 'datasets', 'networks', 'locations');
 	
-		case 'sites':
-			
-			// check if query parameters are valid
-			if (isset($url_parameters)) {
-				$allowed_query_parameters = array('network', 'sitecode', 'verified', 'observedproperty', 'name', 'country', 'format', 'limit', 'offset');
-				foreach (array_keys($url_parameters) as $parameter) {
-					if (!in_array($parameter, $allowed_query_parameters)) {
-						$error_message['status'] = "400";
-						$error_message['source'] = ["pointer" => "/api/sites?{$parameter}="];
-						$error_message['title'] = 'Bad request';
-						$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
-						$node_list['errors'] = $error_message;
-						break 2;
-					}
-				}	
-			}
-			
-			// site filter parameters
-			$query_value_network = array_key_exists('network', $url_parameters) ? $url_parameters['network']: null;
-			$query_value_sitecode = array_key_exists('sitecode', $url_parameters) ? $url_parameters['sitecode']: null;
-			$query_value_verified = array_key_exists('verified', $url_parameters) ? $url_parameters['verified']: null;
-			$query_value_observedProperties = array_key_exists('observedproperty', $url_parameters) ? $url_parameters['observedproperty']: null;
-			$query_value_sitename = array_key_exists('name', $url_parameters) ? $url_parameters['name']: null;
-			$query_value_country = array_key_exists('country', $url_parameters) ? $url_parameters['country']: null;
+	if (in_array($content_type, $allowed_entity_types)) {
+	
+		// catch invalid filter parameters which depend on the content type
+		if (isset($url_parameters)) {
+			switch ($content_type) {
+				case 'sites':
+					array_push($allowed_query_parameters, 'network', 'sitecode', 'verified', 'observedproperty', 'name', 'country');
+					
+					// site filter parameters
+					$query_value_network = array_key_exists('network', $url_parameters) ? $url_parameters['network']: null;
+					$query_value_sitecode = array_key_exists('sitecode', $url_parameters) ? $url_parameters['sitecode']: null;
+					$query_value_verified = array_key_exists('verified', $url_parameters) ? $url_parameters['verified']: null;
+					$query_value_observedProperties = array_key_exists('observedproperty', $url_parameters) ? $url_parameters['observedproperty']: null;
+					$query_value_sitename = array_key_exists('name', $url_parameters) ? $url_parameters['name']: null;
+					$query_value_country = array_key_exists('country', $url_parameters) ? $url_parameters['country']: null;
+					
+					if ($query_value_verified) {
 						
-			$query = \Drupal::entityQuery('node');
-			$query->condition('type', 'site');
-			$query->condition('status', 1);
-			
-			
-			// Create the orConditionGroup
-			$orGroup = $query->orConditionGroup()
-			  ->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
-			  ->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
-			  
-			// Add the group to the query.
-			$query->condition($orGroup);
-			
-			// if filters are provided, add additional filter conditions
-			if ($query_value_observedProperties) {
-				$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);
-			}
-			
-			if ($query_value_network) {
-				$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network);			
-			}
-			
-			if ($query_value_verified) {
-				// throw error if verified flag has been provided but no network
-				if (is_null($query_value_network)) {
-					$error_message['status'] = "400";
-					$error_message['source'] = ["pointer" => "/api/sites?verified="];
-					$error_message['title'] = 'Bad request';
-					$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
-					$node_list['errors'] = $error_message;
-					break;
-				}
-				
-				if ($query_value_verified == 'true') {
-					$query->condition('field_affiliation.entity:paragraph.field_network_verified', true);		
-				}
-				if ($query_value_verified == 'false') {
-					$query->condition('field_affiliation.entity:paragraph.field_network_verified', false);
-				}
-							
-			} 
-			
-			if ($query_value_sitecode) {	
-				$query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
-			}
-			
-			// ISO two digit code
-			if ($query_value_country) {	
-				$query->condition('field_country', $query_value_country);
-			}
-			
-			if ($query_value_sitename) {	
-				$query->condition('field_name', $query_value_sitename, 'CONTAINS');
-			}
-			
-			$nids = $query->execute();
-			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
-
-			$number_of_parsed_nodes = 0;
-			$number_of_listed_nodes = 0;
-			foreach ($nodes as $node) {
-				
-				// offset not working properly
-				if ($offset && ($number_of_parsed_nodes < $offset)) {
-					$number_of_parsed_nodes++;
-					continue;
-				} 
-
-				// get record values
-				$node_information['title'] = $node->get('title')->value;
-				$node_information['id']['prefix'] = 'https://deims.org/';
-				$node_information['id']['suffix'] = $node->get('field_deims_id')->value;
-				$node_information['coordinates'] = $node->get('field_coordinates')->value;
-				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-		
-				array_push($node_list, $node_information);
-				$number_of_listed_nodes++;
-				
-				if ($limit && $number_of_listed_nodes == $limit)	break;					
-				
-			}
-			break;
-		
-		case 'activities':
-		case 'sensors':
-		case 'datasets':
-		case 'networks':
-		case 'locations':
-		
-			$query = \Drupal::entityQuery('node');
-			$query->condition('status', 1);
-		
-			if ($content_type == 'activities') {
-				$entity_machine_name = 'activity';
-				$landing_page_label = 'activity';
-			}
-			if ($content_type == 'sensors') {
-				$entity_machine_name = 'sensor';
-				$landing_page_label = 'sensors';
-			}
-			if ($content_type == 'locations') {
-				
-				// check if query parameters are valid
-				if (isset($url_parameters)) {
-					$allowed_query_parameters = array('type', 'relatedsite', 'format', 'limit', 'offset');
-					foreach (array_keys($url_parameters) as $parameter) {
-						if (!in_array($parameter, $allowed_query_parameters)) {
-							$error_message['status'] = "400";
-							$error_message['source'] = ["pointer" => "/api/locations?{$parameter}="];
-							$error_message['title'] = 'Bad request';
-							$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
-							$node_list['errors'] = $error_message;
-							break 2;
+						if ($query_value_verified == 'true') {
+							$query_value_verified = true;		
 						}
-					}	
+						if ($query_value_verified == 'false') {
+							$query_value_verified = false;
+						}
+						
+						// throw error if verified flag has been provided but no network
+						if (is_null($query_value_network)) {
+							$error_message['status'] = "400";
+							$error_message['source'] = ["pointer" => "/api/sites?verified="];
+							$error_message['title'] = 'Bad request';
+							$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
+							$node_list['errors'] = $error_message;
+							return new JsonResponse($node_list);
+						}
+								
+					} 
+						
+					break;
+				case 'locations':
+					array_push($allowed_query_parameters, 'type', 'relatedsite');
+					$query_value_locationType = array_key_exists('type', $url_parameters) ? $url_parameters['type']: null;
+					$query_value_relatedSite = array_key_exists('relatedsite', $url_parameters) ? $url_parameters['relatedsite']: null;
+					break;
+			}
+			
+			foreach (array_keys($url_parameters) as $parameter) {
+				if (!in_array($parameter, $allowed_query_parameters)) {
+					$error_message['status'] = "400";
+					$error_message['source'] = ["pointer" => "/api/{$content_type}?{$parameter}="];
+					$error_message['title'] = 'Bad request';
+					$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
+					$node_list['errors'] = $error_message;
+					return new JsonResponse($node_list);
 				}
+			}
+		
+		}
+		
+		$query = \Drupal::entityQuery('node');
+		$query->condition('status', 1);
+		
+		// add content_type related filter to query
+		switch ($content_type) {
+			
+			case 'sites':
+										
+				$query->condition('type', 'site');
 				
-				$entity_machine_name = 'observation_location';
-				$landing_page_label = 'locations';
-			
-				$query_value_locationType = array_key_exists('type', $url_parameters) ? $url_parameters['type']: null;
-				$query_value_relatedSite = array_key_exists('relatedsite', $url_parameters) ? $url_parameters['relatedsite']: null;	
-				// if filters are provided, add additional filter conditions
-				if ($query_value_locationType) {
-					$query->condition('field_location_type.entity:taxonomy_term.field_uri', $query_value_locationType);
-				}
-				if ($query_value_relatedSite) {
-					$query->condition('field_related_site.entity:node.uuid', $query_value_relatedSite);
-				}
+				// Create the orConditionGroup
+				$orGroup = $query->orConditionGroup()
+				  ->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
+				  ->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
+				  
+				// Add the group to the query.
+				// do i need this line? TEST!
+				$query->condition($orGroup);
 				
-			}
-			if ($content_type == 'datasets') {
-				$entity_machine_name = 'dataset';
-				$landing_page_label = 'dataset';
-			}
-			
-			if ($content_type == 'networks') {
-				$entity_machine_name = 'network';
-				$landing_page_label = 'networks';
-			}
-
-			$query->condition('type', $entity_machine_name);
-			$nids = $query->execute();			
-			$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
-			
-			$number_of_parsed_nodes = 0;
-			$number_of_listed_nodes = 0;
-			foreach ($nodes as $node) {
-
-				if ($node->isPublished()) {
-
-					// continue if offset
-					if ($number_of_parsed_nodes < $offset) {
-						$number_of_parsed_nodes++;
-						continue;
+				if (isset($url_parameters)) {
+					// if filters are provided, add additional filter conditions
+					if ($query_value_observedProperties) {
+						$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);
 					}
 					
-					$node_information['title'] = $node->get('title')->value;
-					$node_information['id']['prefix'] = "https://deims.org/" . $landing_page_label . "/";
-					$node_information['id']['suffix'] = $node->get('uuid')->value;
-					$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-
-					array_push($node_list, $node_information);
-
-					$number_of_listed_nodes++;
-					if ($number_of_listed_nodes == $limit) break;
-
+					if ($query_value_network) {
+						$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network);			
+					}
+					
+					if ($query_value_verified) {		
+						$query->condition('field_affiliation.entity:paragraph.field_network_verified', query_value_verified);			
+					} 
+					
+					if ($query_value_sitecode) {	
+						$query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
+					}
+					
+					// ISO two digit code
+					if ($query_value_country) {	
+						$query->condition('field_country', $query_value_country);
+					}
+					
+					if ($query_value_sitename) {	
+						$query->condition('field_name', $query_value_sitename, 'CONTAINS');
+					}
+					
 				}
-			} 
-			break;
+				
+				$landing_page_label = '/';
+								
+				break;
+			
+			case 'activities':
+				$landing_page_label = 'activity/';
+				$query->condition('type', 'activity');
+				break;
+			case 'sensors':
+				$landing_page_label = 'sensors/';
+				$query->condition('type', 'sensor');
+				break;
+			case 'datasets':
+				$landing_page_label = 'dataset/';
+				$query->condition('type', 'dataset');
+				break;
+			case 'networks':
+				$landing_page_label = 'networks/';
+				$query->condition('type', 'network');
+				break;
+			case 'locations':
+				$landing_page_label = 'locations/';
+				$query->condition('type', 'observation_location');
+				
+				if (isset($url_parameters)) {
+					// if filters are provided, add additional filter conditions
+					if ($query_value_locationType) {
+						$query->condition('field_location_type.entity:taxonomy_term.field_uri', $query_value_locationType);
+					}
+					if ($query_value_relatedSite) {
+						$query->condition('field_related_site.entity:node.uuid', $query_value_relatedSite);
+					}
+				}
+				
+				break;
 
-		default:
-			$error_message['status'] = "400";
-			$error_message['source'] = ["pointer" => "/api/{type}"];
-			$error_message['title'] = 'Bad request';
-			$error_message['detail'] = "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :(";
-			$node_list['errors'] = $error_message;
+		}
+		
+		$nids = $query->execute();			
+		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+				
+		$number_of_parsed_nodes = 0;
+		$number_of_listed_nodes = 0;
+		foreach ($nodes as $node) {
+
+			if ($node->isPublished()) {
+
+				// continue if offset
+				if ($number_of_parsed_nodes < $offset) {
+					$number_of_parsed_nodes++;
+					continue;
+				}
+						
+				$node_information['title'] = $node->get('title')->value;
+				$node_information['id']['prefix'] = "https://deims.org/" . $landing_page_label;
+				$node_information['id']['suffix'] = $node->get('uuid')->value;
+				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+				
+				// if site add coordinates
+				if ($content_type == "sites") {
+					$node_information['coordinates'] = $node->get('field_coordinates')->value;
+				}
+
+				array_push($node_list, $node_information);
+
+				$number_of_listed_nodes++;
+				if ($number_of_listed_nodes == $limit) break;
+
+			}
+		}	
+		
+	}
+	else {
+		$error_message['status'] = "400";
+		$error_message['source'] = ["pointer" => "/api/{$content_type}"];
+		$error_message['title'] = 'Bad request';
+		$error_message['detail'] = "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :(";
+		$node_list['errors'] = $error_message;
 	}
 
 	// case for csv export
+	// move to dedicated controller?
 	if ($format == "csv" && !isset($node_list['errors'])) {
 			
 		$delimiter = ";";
 		$enclosure = '"';
 
 		$fp = fopen('php://temp', 'r+b');
-		$header = array("title", "id_prefix", "id_suffix", "coordinates", "changed");
+		$header = array("title", "id_prefix", "id_suffix", "changed");
+		
+		if ($content_type == "sites") {
+			array_push($header, 'coordinates');
+		}
+		
 		fputcsv($fp, $header, $delimiter, $enclosure);
 
 		foreach ($node_list as $node) {
-			$line = array($node["title"],$node["id"]['prefix'],$node["id"]['suffix'],$node["coordinates"],$node["changed"]);
+			$line = array($node["title"],$node["id"]['prefix'],$node["id"]['suffix'],$node["changed"]);
+			
+			if ($content_type == "sites") {
+				array_push($line, $node["coordinates"]);
+			}
+			
 			fputcsv($fp, $line, $delimiter, $enclosure);
 		}
 				
