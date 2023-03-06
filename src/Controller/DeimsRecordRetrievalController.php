@@ -65,7 +65,7 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			}
 			
 			$DeimsErrorMessageController = new DeimsErrorMessageController();
-			return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(404, "/api/{$content_type_label}/{$uuid}", "An invalid filter parameter has been provided. {$parameter} does not exist."));
+			return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(404, "/api/{$content_type_label}/{$uuid}", "There is no {$content_type} with the ID {$uuid} :("));
 		
 		}
 
