@@ -44,16 +44,29 @@ class DeimsNodeListsController {
 					$query_value_sitename = array_key_exists('name', $url_parameters) ? $url_parameters['name']: null;
 					$query_value_country = array_key_exists('country', $url_parameters) ? $url_parameters['country']: null;
 					
-					// throw error if verified flag has been provided but no network
-					if (isset($query_value_verified) && is_null($query_value_network)) {
-						$error_message['status'] = "400";
-						$error_message['source'] = ["pointer" => "/api/sites?verified="];
-						$error_message['title'] = 'Bad request';
-						$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
-						$node_list['errors'] = $error_message;
-						return new JsonResponse($node_list);
+					if (isset($query_value_verified)) {
+						// throw error if verified flag has been provided but no network
+						if (is_null($query_value_network)) {
+							$error_message['status'] = "400";
+							$error_message['source'] = ["pointer" => "/api/sites?verified="];
+							$error_message['title'] = 'Bad request';
+							$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
+							$node_list['errors'] = $error_message;
+							return new JsonResponse($node_list);
+						}
+						// throw error if incorrect verified flag has been provided
+						$allowed_verified_parameters = array("true", "false");
+						if (!in_array($query_value_verified, $allowed_verified_parameters)) {
+						//if ($query_value_verified != 'true' || $query_value_verified != 'false') {
+							$error_message['status'] = "400";
+							$error_message['source'] = ["pointer" => "/api/sites?verified={$query_value_verified}"];
+							$error_message['title'] = 'Bad request';
+							$error_message['detail'] = "The 'verified' filter can only accept 'true' or 'false' as input values";
+							$node_list['errors'] = $error_message;
+							return new JsonResponse($node_list);
+						}
 					}
-						
+					
 					break;
 				case 'locations':
 					array_push($allowed_query_parameters, 'type', 'relatedsite');
