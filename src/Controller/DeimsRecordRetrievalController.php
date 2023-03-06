@@ -43,7 +43,7 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			}
 		}
 		else {
-			$error_message['status'] = "404";
+			$error_message['status'] = 404;
 			switch ($content_type) {
 			  case 'site':
 			    $content_type_label = "sites";
