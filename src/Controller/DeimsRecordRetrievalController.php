@@ -43,7 +43,6 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			}
 		}
 		else {
-			$error_message['status'] = 404;
 			switch ($content_type) {
 			  case 'site':
 			    $content_type_label = "sites";
@@ -64,10 +63,10 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			    $content_type_label = "networks";
 			    break;
 			}
-			$error_message['source'] = ["pointer" => '/api/' . $content_type_label . '/{id}'];
-			$error_message['title'] = 'Resource not found';
-			$error_message['detail'] = "There is no " . $content_type . " with the ID '" . $uuid . "' :(";
-			$record_information['errors'] = $error_message;
+			
+			$DeimsErrorMessageController = new DeimsErrorMessageController();
+			return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(404, "/api/{$content_type_label}/{$uuid}", "An invalid filter parameter has been provided. {$parameter} does not exist."));
+		
 		}
 
 		return new JsonResponse($record_information);
