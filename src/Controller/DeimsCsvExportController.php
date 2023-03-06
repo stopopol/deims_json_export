@@ -13,11 +13,8 @@ use Drupal\Core\Controller\ControllerBase;
  */
 class DeimsCsvExportController extends ControllerBase {
   
-  // TO DO:
-  // allow defining custom filename; very useful for network export
-  
-  public function createCSV($content_type, $node_list) {
-		
+	public function createCSV($content_type, $node_list, $filename) {
+			
 		$delimiter = ";";
 		$enclosure = '"';
 
@@ -53,13 +50,18 @@ class DeimsCsvExportController extends ControllerBase {
         $csv->headers->set('Content-Type', 'application/vnd.ms-excel');
         $csv->headers->set('Content-Type', 'application/octet-stream');
         $csv->headers->set('Content-Type', 'application/force-download');
-		// allow defining a custom filename?
-        $csv->headers->set('Content-Disposition', 'attachment;filename="result_list.csv"');
+		
+		if (!isset ($filename)) {
+			$filename = 'result_list';
+		}
+		$file_string = 'attachment;filename="' . $filename . '.csv"';
+		
+        $csv->headers->set('Content-Disposition', $file_string);
 		// necessary for excel to realise it's utf-8 ... stupid excel
 		echo "\xEF\xBB\xBF";
 		
 		return $csv;
 		
-  }
+	}
 
 }
