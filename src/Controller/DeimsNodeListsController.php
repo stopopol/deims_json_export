@@ -4,7 +4,6 @@
 
 namespace Drupal\deims_json_export\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -45,26 +44,15 @@ class DeimsNodeListsController {
 					$query_value_sitename = array_key_exists('name', $url_parameters) ? $url_parameters['name']: null;
 					$query_value_country = array_key_exists('country', $url_parameters) ? $url_parameters['country']: null;
 					
-					if ($query_value_verified) {
-						
-						if ($query_value_verified == 'true') {
-							$query_value_verified = true;		
-						}
-						if ($query_value_verified == 'false') {
-							$query_value_verified = false;
-						}
-						
-						// throw error if verified flag has been provided but no network
-						if (is_null($query_value_network)) {
-							$error_message['status'] = "400";
-							$error_message['source'] = ["pointer" => "/api/sites?verified="];
-							$error_message['title'] = 'Bad request';
-							$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
-							$node_list['errors'] = $error_message;
-							return new JsonResponse($node_list);
-						}
-								
-					} 
+					// throw error if verified flag has been provided but no network
+					if (isset($query_value_verified) && is_null($query_value_network)) {
+						$error_message['status'] = "400";
+						$error_message['source'] = ["pointer" => "/api/sites?verified="];
+						$error_message['title'] = 'Bad request';
+						$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
+						$node_list['errors'] = $error_message;
+						return new JsonResponse($node_list);
+					}
 						
 					break;
 				case 'locations':
@@ -94,16 +82,15 @@ class DeimsNodeListsController {
 		switch ($content_type) {
 			
 			case 'sites':
-										
+				
+				$landing_page_label = '';				
 				$query->condition('type', 'site');
 				
 				// Create the orConditionGroup
-				$orGroup = $query->orConditionGroup()
-				  ->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
-				  ->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
-				  
-				// Add the group to the query.
-				// do i need this line? TEST!
+				$orGroup = $query
+					->orConditionGroup()
+					->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
+					->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
 				$query->condition($orGroup);
 				
 				if (isset($url_parameters)) {
@@ -116,27 +103,32 @@ class DeimsNodeListsController {
 						$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network);			
 					}
 					
-					if ($query_value_verified) {		
-						$query->condition('field_affiliation.entity:paragraph.field_network_verified', query_value_verified);			
+					if ($query_value_verified) {
+						
+						if ($query_value_verified == 'true') {
+							$query->condition('field_affiliation.entity:paragraph.field_network_verified', true);			
+						}
+						if ($query_value_verified == 'false') {
+							$query->condition('field_affiliation.entity:paragraph.field_network_verified', false);			
+						}
+						
 					} 
 					
-					if ($query_value_sitecode) {	
+					if ($query_value_sitecode) {
 						$query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
 					}
 					
 					// ISO two digit code
-					if ($query_value_country) {	
+					if ($query_value_country) {
 						$query->condition('field_country', $query_value_country);
 					}
 					
-					if ($query_value_sitename) {	
+					if ($query_value_sitename) {
 						$query->condition('field_name', $query_value_sitename, 'CONTAINS');
 					}
 					
 				}
-				
-				$landing_page_label = '/';
-								
+						
 				break;
 			
 			case 'activities':
@@ -215,50 +207,12 @@ class DeimsNodeListsController {
 		$node_list['errors'] = $error_message;
 	}
 
-	// case for csv export
-	// move to dedicated controller?
+	
+	// export as csv if requested
 	if ($format == "csv" && !isset($node_list['errors'])) {
-			
-		$delimiter = ";";
-		$enclosure = '"';
-
-		$fp = fopen('php://temp', 'r+b');
-		$header = array("title", "id_prefix", "id_suffix", "changed");
 		
-		if ($content_type == "sites") {
-			array_push($header, 'coordinates');
-		}
-		
-		fputcsv($fp, $header, $delimiter, $enclosure);
-
-		foreach ($node_list as $node) {
-			$line = array($node["title"],$node["id"]['prefix'],$node["id"]['suffix'],$node["changed"]);
-			
-			if ($content_type == "sites") {
-				array_push($line, $node["coordinates"]);
-			}
-			
-			fputcsv($fp, $line, $delimiter, $enclosure);
-		}
-				
-		rewind($fp);
-		// ... read the entire line into a variable...
-		$data = fread($fp, 1048576);
-		fclose($fp);
-		// ... and return the $data to the caller, with the trailing newline from fgets() removed.
-		$result_csv = rtrim($data, "\n");
-
-		$response = new Response($result_csv);
-        $response->headers->set('Content-Type', 'Content-Encoding: UTF-8');
-        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
-        $response->headers->set('Content-Type', 'application/vnd.ms-excel');
-        $response->headers->set('Content-Type', 'application/octet-stream');
-        $response->headers->set('Content-Type', 'application/force-download');
-        $response->headers->set('Content-Disposition', 'attachment;filename="result_list.csv"');
-		// necessary for excel to realise it's utf-8 ... stupid excel
-		echo "\xEF\xBB\xBF";
-        
-		return $response;
+		$DeimsCsvExportController = new DeimsCsvExportController();
+		return $DeimsCsvExportController->createCSV($content_type, $node_list);
 
 	}
     return new JsonResponse($node_list);
