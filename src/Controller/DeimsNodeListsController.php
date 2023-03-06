@@ -24,9 +24,15 @@ class DeimsNodeListsController {
 	$limit =  array_key_exists('limit', $url_parameters) ? ((int)$url_parameters['limit']) : null;
 	$offset = array_key_exists('offset', $url_parameters) ? ((int)$url_parameters['offset']) : null;
 	$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
+	$filename = array_key_exists('filename', $url_parameters) ? $url_parameters['filename']: null;
 	
-	$allowed_query_parameters = array('format', 'limit', 'offset');
+	$allowed_query_parameters = array('format', 'limit', 'offset', 'filename');
 	$allowed_entity_types = array('sites', 'activities', 'sensors', 'datasets', 'networks', 'locations');
+	
+	if (isset($format) && $format !='csv') {
+		$DeimsErrorMessageController = new DeimsErrorMessageController();	
+		return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?format={$format}", "The 'format' filter can only be set to 'csv'. JSON is the standard export format"));				
+	}
 	
 	if (in_array($content_type, $allowed_entity_types)) {
 	
@@ -49,7 +55,6 @@ class DeimsNodeListsController {
 						if (is_null($query_value_network)) {
 							$DeimsErrorMessageController = new DeimsErrorMessageController();	
 							return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?verified=", "The 'verified' filter must be tied to the 'network' filter."));
-						
 						}
 						// throw error if incorrect verified flag has been provided
 						$allowed_verified_parameters = array("true", "false");
@@ -204,16 +209,15 @@ class DeimsNodeListsController {
 		$DeimsErrorMessageController = new DeimsErrorMessageController();	
 		return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}", "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :("));
 	}
-
 	
 	// export as csv if requested
-	if ($format == "csv" && !isset($node_list['errors'])) {
-		
+	if ($format == "csv") {
 		$DeimsCsvExportController = new DeimsCsvExportController();
-		return $DeimsCsvExportController->createCSV($content_type, $node_list);
-
+		return $DeimsCsvExportController->createCSV($content_type, $node_list, $filename);
 	}
+	
     return new JsonResponse($node_list);
+	
   }
   
 }
