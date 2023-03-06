@@ -47,23 +47,15 @@ class DeimsNodeListsController {
 					if (isset($query_value_verified)) {
 						// throw error if verified flag has been provided but no network
 						if (is_null($query_value_network)) {
-							$error_message['status'] = "400";
-							$error_message['source'] = ["pointer" => "/api/sites?verified="];
-							$error_message['title'] = 'Bad request';
-							$error_message['detail'] = "The 'verified' filter must be tied to the 'network' filter.";
-							$node_list['errors'] = $error_message;
-							return new JsonResponse($node_list);
+							$DeimsErrorMessageController = new DeimsErrorMessageController();	
+							return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?verified=", "The 'verified' filter must be tied to the 'network' filter."));
+						
 						}
 						// throw error if incorrect verified flag has been provided
 						$allowed_verified_parameters = array("true", "false");
 						if (!in_array($query_value_verified, $allowed_verified_parameters)) {
-						//if ($query_value_verified != 'true' || $query_value_verified != 'false') {
-							$error_message['status'] = "400";
-							$error_message['source'] = ["pointer" => "/api/sites?verified={$query_value_verified}"];
-							$error_message['title'] = 'Bad request';
-							$error_message['detail'] = "The 'verified' filter can only accept 'true' or 'false' as input values";
-							$node_list['errors'] = $error_message;
-							return new JsonResponse($node_list);
+							$DeimsErrorMessageController = new DeimsErrorMessageController();	
+							return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?verified={$query_value_verified}", "The 'verified' filter can only accept 'true' or 'false' as input values"));
 						}
 					}
 					
@@ -77,12 +69,8 @@ class DeimsNodeListsController {
 			
 			foreach (array_keys($url_parameters) as $parameter) {
 				if (!in_array($parameter, $allowed_query_parameters)) {
-					$error_message['status'] = "400";
-					$error_message['source'] = ["pointer" => "/api/{$content_type}?{$parameter}="];
-					$error_message['title'] = 'Bad request';
-					$error_message['detail'] = "An invalid filter parameter has been provided. '" . $parameter . "' does not exist.";
-					$node_list['errors'] = $error_message;
-					return new JsonResponse($node_list);
+					$DeimsErrorMessageController = new DeimsErrorMessageController();
+					return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?{$parameter}=", "An invalid filter parameter has been provided. '" . $parameter . "' does not exist."));
 				}
 			}
 		
@@ -213,11 +201,8 @@ class DeimsNodeListsController {
 		
 	}
 	else {
-		$error_message['status'] = "400";
-		$error_message['source'] = ["pointer" => "/api/{$content_type}"];
-		$error_message['title'] = 'Bad request';
-		$error_message['detail'] = "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :(";
-		$node_list['errors'] = $error_message;
+		$DeimsErrorMessageController = new DeimsErrorMessageController();	
+		return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}", "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :("));
 	}
 
 	
