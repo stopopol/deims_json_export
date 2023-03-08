@@ -31,7 +31,7 @@ class DeimsNodeListsController {
 	
 	if (isset($format) && $format !='csv') {
 		$DeimsErrorMessageController = new DeimsErrorMessageController();	
-		return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?format={$format}", "The 'format' filter can only be set to 'csv'. JSON is the standard export format"));				
+		return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?format={$format}", "The 'format' filter can only be set to 'csv'. JSON is the standard export format."));				
 	}
 	
 	if (in_array($content_type, $allowed_entity_types)) {
@@ -216,7 +216,13 @@ class DeimsNodeListsController {
 		return $DeimsCsvExportController->createCSV($content_type, $node_list, $filename);
 	}
 	
-    return new JsonResponse($node_list);
+	$reponse = new JsonResponse($node_list);
+	
+	if ($filename) {
+		$reponse->headers->set('Content-disposition', "attachment;filename={$filename}.json");
+	}
+	
+    return $reponse;
 	
   }
   
