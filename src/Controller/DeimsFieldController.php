@@ -51,7 +51,12 @@ class DeimsFieldController extends ControllerBase {
 						array_push($data_values, $field->value);
 						break;
 					case "url":
-						array_push($data_values, array('title'=>$field->title,'value'=>$field->uri));
+						// in case the title is empty
+						$title = $field->title;
+						if ($title == "") {
+							$title = null;
+						}
+						array_push($data_values, array('title'=>$title,'value'=>$field->uri));
 						break;
 				}
 				
@@ -64,7 +69,11 @@ class DeimsFieldController extends ControllerBase {
 							array_push($data_values, $item->value);
 							break;
 						case "url":
-							array_push($data_values, array('title'=>$item->title,'value'=>$item->uri));
+							$title = $field->title;
+							if ($title == "") {
+								$title = null;
+							}
+							array_push($data_values, array('title'=>$title,'value'=>$item->uri));
 							break;
 						case "number_float":
 							array_push($data_values, $item->value);
