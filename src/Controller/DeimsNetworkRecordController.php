@@ -16,10 +16,13 @@ class DeimsNetworkRecordController extends ControllerBase {
 		
 		// loading controller functions
 		$DeimsFieldController = new DeimsFieldController();
+		
+		$uuid = $node->get('uuid')->value;
+		$site_list_path = 'https://' . $_SERVER['SERVER_NAME'] . '/api/sites?network=' . $uuid . '&verified=';
 
 		$information['title'] = $node->get('title')->value;
 		$information['id']['prefix'] = 'https://deims.org/networks/';
-		$information['id']['suffix'] = $node->get('uuid')->value;
+		$information['id']['suffix'] = $uuid;
 		$information['type'] = 'network';
 		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
 		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
@@ -30,6 +33,13 @@ class DeimsNetworkRecordController extends ControllerBase {
 		
 		$information['attributes']['belongsTo'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_belongs_to'));
 		$information['attributes']['consistsOf'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_consists_of'));
+		
+		$information['attributes']['verifiedMemberSites']['title'] = 'API call for listing all verified member sites of the network';
+		$information['attributes']['verifiedMemberSites']['href'] = $site_list_path . 'true';
+		$information['attributes']['verifiedMemberSites']['type'] = 'application/json';
+		$information['attributes']['unverifiedMemberSites']['title'] = 'API call for listing all unverified sites claiming to be part of the network';
+		$information['attributes']['unverifiedMemberSites']['href'] = $site_list_path . 'false';
+		$information['attributes']['unverifiedMemberSites']['type'] = 'application/json';
 		
 		return $information;
 		
