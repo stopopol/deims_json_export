@@ -69,7 +69,7 @@ class DeimsFieldController extends ControllerBase {
 							array_push($data_values, $item->value);
 							break;
 						case "url":
-							$title = $field->title;
+							$title = $item->title;
 							if ($title == "") {
 								$title = null;
 							}
