@@ -11,37 +11,50 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class DeimsNodeListsController {
 
-  /**
-   * Callback for the API.
-   */
-  public function renderRecordList($content_type) {
-	$node_list = array();
-
-	// load url parameters and make them lower case
-	$url_parameters = array_change_key_case(\Drupal::request()->query->all(), CASE_LOWER);
-	
-	// get integer values of parameters limit and offset
-	$limit =  array_key_exists('limit', $url_parameters) ? ((int)$url_parameters['limit']) : null;
-	$offset = array_key_exists('offset', $url_parameters) ? ((int)$url_parameters['offset']) : null;
-	$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
-	$filename = array_key_exists('filename', $url_parameters) ? $url_parameters['filename']: null;
-	
-	$allowed_query_parameters = array('format', 'limit', 'offset', 'filename');
-	$allowed_entity_types = array('sites', 'activities', 'sensors', 'datasets', 'networks', 'locations');
-	
-	if (isset($format) && $format !='csv') {
-		$DeimsErrorMessageController = new DeimsErrorMessageController();	
-		return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?format={$format}", "The 'format' filter can only be set to 'csv'. JSON is the standard export format."));				
-	}
-	
-	if (in_array($content_type, $allowed_entity_types)) {
-	
-		// catch invalid filter parameters which depend on the content type
-		if (isset($url_parameters)) {
-			switch ($content_type) {
-				case 'sites':
-					array_push($allowed_query_parameters, 'network', 'sitecode', 'verified', 'observedproperty', 'name', 'country');
+	/**
+	 * Callback for the API.
+	 */
+	public function renderRecordList($content_type) {
+		
+		// load url parameters and make them lower case
+		$url_parameters = array_change_key_case(\Drupal::request()->query->all(), CASE_LOWER);
+		
+		// general filter parameters available for all entity types
+		$allowed_query_parameters = array('limit', 'offset', 'format', 'filename');
+		
+		// get integer values of parameters limit and offset
+		$limit =  array_key_exists('limit', $url_parameters) ? ((int)$url_parameters['limit']) : null;
+		$offset = array_key_exists('offset', $url_parameters) ? ((int)$url_parameters['offset']) : null;
+		$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
+		$filename = array_key_exists('filename', $url_parameters) ? $url_parameters['filename']: null;
+		
+		if (isset($format) && $format !='csv') {
+			$DeimsErrorMessageController = new DeimsErrorMessageController();	
+			return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?format={$format}", "The 'format' filter can only be set to 'csv'. JSON is the standard export format."));				
+		}
 					
+		$query = \Drupal::entityQuery('node');
+		$query->condition('status', 1);
+			
+		// add content_type related filter to query
+		switch ($content_type) {
+				
+			case 'sites':
+				
+				$landing_page_label = '';				
+				$query->condition('type', 'site');
+					
+				// Create the orConditionGroup
+				$orGroup = $query
+					->orConditionGroup()
+					->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
+					->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
+				$query->condition($orGroup);
+									
+				if (isset($url_parameters)) {
+					
+					array_push($allowed_query_parameters, 'network', 'sitecode', 'verified', 'observedproperty', 'name', 'country');
+						
 					// site filter parameters
 					$query_value_network = array_key_exists('network', $url_parameters) ? $url_parameters['network']: null;
 					$query_value_sitecode = array_key_exists('sitecode', $url_parameters) ? $url_parameters['sitecode']: null;
@@ -49,7 +62,7 @@ class DeimsNodeListsController {
 					$query_value_observedProperties = array_key_exists('observedproperty', $url_parameters) ? $url_parameters['observedproperty']: null;
 					$query_value_sitename = array_key_exists('name', $url_parameters) ? $url_parameters['name']: null;
 					$query_value_country = array_key_exists('country', $url_parameters) ? $url_parameters['country']: null;
-					
+						
 					if (isset($query_value_verified)) {
 						// throw error if verified flag has been provided but no network
 						if (is_null($query_value_network)) {
@@ -64,86 +77,38 @@ class DeimsNodeListsController {
 						}
 					}
 					
-					break;
-				case 'locations':
-					array_push($allowed_query_parameters, 'type', 'relatedsite');
-					$query_value_locationType = array_key_exists('type', $url_parameters) ? $url_parameters['type']: null;
-					$query_value_relatedSite = array_key_exists('relatedsite', $url_parameters) ? $url_parameters['relatedsite']: null;
-					break;
-			}
-			
-			foreach (array_keys($url_parameters) as $parameter) {
-				if (!in_array($parameter, $allowed_query_parameters)) {
-					$DeimsErrorMessageController = new DeimsErrorMessageController();
-					return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?{$parameter}=", "An invalid filter parameter has been provided. '" . $parameter . "' does not exist."));
-				}
-			}
-		
-		}
-		
-		$query = \Drupal::entityQuery('node');
-		$query->condition('status', 1);
-		
-		// add content_type related filter to query
-		switch ($content_type) {
-			
-			case 'sites':
-				
-				$landing_page_label = '';				
-				$query->condition('type', 'site');
-				
-				// Create the orConditionGroup
-				$orGroup = $query
-					->orConditionGroup()
-					->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
-					->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
-				$query->condition($orGroup);
-				
-				if (isset($url_parameters)) {
+					
 					// if filters are provided, add additional filter conditions
+					// add [and] and [or] filters
 					if ($query_value_observedProperties) {
-						$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);
+						$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);	
 					}
-					
-					if ($query_value_network) {
-						$query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network);			
-					}
-					
+						
+					if ($query_value_network) $query->condition('field_affiliation.entity:paragraph.field_network.entity:node.uuid', $query_value_network);			
+						
 					if ($query_value_verified) {
-						
-						if ($query_value_verified == 'true') {
-							$query->condition('field_affiliation.entity:paragraph.field_network_verified', true);			
-						}
-						if ($query_value_verified == 'false') {
-							$query->condition('field_affiliation.entity:paragraph.field_network_verified', false);			
-						}
-						
+						if ($query_value_verified == 'true') $query->condition('field_affiliation.entity:paragraph.field_network_verified', true);
+						if ($query_value_verified == 'false') $query->condition('field_affiliation.entity:paragraph.field_network_verified', false);
 					} 
-					
-					if ($query_value_sitecode) {
-						$query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
-					}
-					
+						
+					if ($query_value_sitecode) $query->condition('field_affiliation.entity:paragraph.field_network_specific_site_code', $query_value_sitecode, 'LIKE');
+						
 					// ISO two digit code
 					if ($query_value_country) {
-						
 						if (str_contains($query_value_country, '[or]')) {
 							$query->condition('field_country', explode("[or]", $query_value_country), 'IN');
 						}
 						else {
 							$query->condition('field_country', $query_value_country);
 						}
+					}
 						
-					}
-					
-					if ($query_value_sitename) {
-						$query->condition('field_name', $query_value_sitename, 'CONTAINS');
-					}
-					
+					if ($query_value_sitename) $query->condition('field_name', $query_value_sitename, 'CONTAINS');
+						
 				}
-						
+					
 				break;
-			
+				
 			case 'activities':
 				$landing_page_label = 'activity/';
 				$query->condition('type', 'activity');
@@ -163,24 +128,37 @@ class DeimsNodeListsController {
 			case 'locations':
 				$landing_page_label = 'locations/';
 				$query->condition('type', 'observation_location');
-				
+					
 				if (isset($url_parameters)) {
+					
+					array_push($allowed_query_parameters, 'type', 'relatedsite');
+					$query_value_locationType = array_key_exists('type', $url_parameters) ? $url_parameters['type']: null;
+					$query_value_relatedSite = array_key_exists('relatedsite', $url_parameters) ? $url_parameters['relatedsite']: null;
+					
 					// if filters are provided, add additional filter conditions
-					if ($query_value_locationType) {
-						$query->condition('field_location_type.entity:taxonomy_term.field_uri', $query_value_locationType);
-					}
-					if ($query_value_relatedSite) {
-						$query->condition('field_related_site.entity:node.uuid', $query_value_relatedSite);
-					}
+					if ($query_value_locationType) $query->condition('field_location_type.entity:taxonomy_term.field_uri', $query_value_locationType);
+					if ($query_value_relatedSite) $query->condition('field_related_site.entity:node.uuid', $query_value_relatedSite);
 				}
-				
+					
 				break;
+					
+			default:
+				$DeimsErrorMessageController = new DeimsErrorMessageController();	
+				return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}", "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :("));
 
 		}
 		
+		foreach (array_keys($url_parameters) as $parameter) {
+			if (!in_array($parameter, $allowed_query_parameters)) {
+				$DeimsErrorMessageController = new DeimsErrorMessageController();
+				return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}?{$parameter}=", "An invalid filter parameter has been provided. '" . $parameter . "' does not exist or cannot be applied to this content type."));
+			}
+		}
+			
 		$nids = $query->execute();			
 		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
-				
+		$node_list = array();
+					
 		$number_of_parsed_nodes = 0;
 		$number_of_listed_nodes = 0;
 		foreach ($nodes as $node) {
@@ -192,17 +170,15 @@ class DeimsNodeListsController {
 					$number_of_parsed_nodes++;
 					continue;
 				}
-						
+							
 				$node_information['title'] = $node->get('title')->value;
 				$node_information['id']['prefix'] = "https://deims.org/" . $landing_page_label;
 				$node_information['id']['suffix'] = $node->get('uuid')->value;
 				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-				
+					
 				// if site add coordinates
-				if ($content_type == "sites") {
-					$node_information['coordinates'] = $node->get('field_coordinates')->value;
-				}
-
+				if ($content_type == "sites") $node_information['coordinates'] = $node->get('field_coordinates')->value;
+					
 				array_push($node_list, $node_information);
 
 				$number_of_listed_nodes++;
@@ -211,26 +187,18 @@ class DeimsNodeListsController {
 			}
 		}	
 		
+		// export as csv if requested
+		if ($format == "csv") {
+			$DeimsCsvExportController = new DeimsCsvExportController();
+			return $DeimsCsvExportController->createCSV($content_type, $node_list, $filename);
+		}
+		
+		$reponse = new JsonResponse($node_list);
+		
+		if ($filename) $reponse->headers->set('Content-disposition', "attachment;filename={$filename}.json");
+		
+		return $reponse;
+		
 	}
-	else {
-		$DeimsErrorMessageController = new DeimsErrorMessageController();	
-		return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/{$content_type}", "This is not a valid request because the DEIMS-SDR API doesn't have a resource type that is called '" . $content_type . "' :("));
-	}
-	
-	// export as csv if requested
-	if ($format == "csv") {
-		$DeimsCsvExportController = new DeimsCsvExportController();
-		return $DeimsCsvExportController->createCSV($content_type, $node_list, $filename);
-	}
-	
-	$reponse = new JsonResponse($node_list);
-	
-	if ($filename) {
-		$reponse->headers->set('Content-disposition', "attachment;filename={$filename}.json");
-	}
-	
-    return $reponse;
-	
-  }
   
 }
