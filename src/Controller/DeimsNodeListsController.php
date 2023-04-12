@@ -126,7 +126,14 @@ class DeimsNodeListsController {
 					
 					// ISO two digit code
 					if ($query_value_country) {
-						$query->condition('field_country', $query_value_country);
+						
+						if (str_contains($query_value_country, '[or]')) {
+							$query->condition('field_country', explode("[or]", $query_value_country), 'IN');
+						}
+						else {
+							$query->condition('field_country', $query_value_country);
+						}
+						
 					}
 					
 					if ($query_value_sitename) {
