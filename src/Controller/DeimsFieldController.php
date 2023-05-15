@@ -121,7 +121,7 @@ class DeimsFieldController extends ControllerBase {
 
 	}
 	
-	// print list of all resources that are related to record except for locations
+	// print list of all resources that are related to record except for locations and eLTER SOs
 	public function findRelatedResources($nids) {
 		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 		$node_list = array();
@@ -130,7 +130,7 @@ class DeimsFieldController extends ControllerBase {
 				$node_information = [];
 				$content_type = $node->bundle();
 				
-				if ($content_type == 'observation_location') {
+				if ($content_type == 'observation_location' || $content_type == 'elter_so') {
 					continue;
 				}
 				
