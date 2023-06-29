@@ -258,13 +258,13 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['type'] = 'organisation';
 					$RefEntity_item['name'] = $RefEntity->field_name->value;
 					$RefEntity_item['url'] = null;
-					$RefEntity_item['ROR'] = null;
+					$RefEntity_item['ror'] = null;
 					$RefEntity_item['funderId'] = null;
 					foreach ($RefEntity->field_url as $url) {
 						$RefEntity_item['url'] = $url -> uri;
 					}
 					foreach ($RefEntity->field_ror as $ror) {
-						$RefEntity_item['ROR'] = $ror -> uri;
+						$RefEntity_item['ror'] = $ror -> uri;
 					}
 					foreach ($RefEntity->field_doi_url as $funderId) {
 						$RefEntity_item['funderId'] = $funderId -> uri;
