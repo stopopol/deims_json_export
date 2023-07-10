@@ -43,6 +43,7 @@ class DeimsNodeListsController {
 				
 				$landing_page_label = '';				
 				$query->condition('type', 'site');
+				$query->accessCheck(FALSE);
 					
 				// Create the orConditionGroup
 				$orGroup = $query
@@ -155,7 +156,7 @@ class DeimsNodeListsController {
 			}
 		}
 			
-		$nids = $query->execute();			
+		$nids = $query->accessCheck(FALSE)->execute();			
 		$nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
 		$node_list = array();
 					

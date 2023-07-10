@@ -77,7 +77,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$information['attributes']['geographic']['elevation']['unit'] = 'msl';
 		$information['attributes']['geographic']['size']['value']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size')->value) : null;
 		$information['attributes']['geographic']['size']['unit']= 'ha';
-		$information['attributes']['geographic']['relatedLocations'] = $DeimsFieldController->findRelatedLocations(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->condition('type', 'observation_location')->execute());
+		$information['attributes']['geographic']['relatedLocations'] = $DeimsFieldController->findRelatedLocations(\Drupal::entityQuery('node')->accessCheck(FALSE)->condition('field_related_site',$node->id())->condition('type', 'observation_location')->execute());
 
 		// group observations
 		$information['attributes']['focusDesignScale']['experiments']['design'] = $node->get('field_design_experiments')->value;
@@ -103,7 +103,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$information['attributes']['general']['images'] = $DeimsFieldController->parseImageField($node->get('field_images'));
 
 		// list all referenced activities, datasets, sensors
-		$information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->condition('field_related_site',$node->id())->execute());
+		$information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->accessCheck(FALSE)->condition('field_related_site',$node->id())->execute());
 
 	  	$information['attributes']['projectRelated']['lter']['lterSiteClassification'] = $node->get('field_lter_site_classification')->value;
 	  
