@@ -324,7 +324,6 @@ class DeimsFieldController extends ControllerBase {
 				case 'projects':
 				case 'inspire_data_themes':
 				case 'parameters':
-				case 'research_topics':
 				case 'observation_location_type':
 					$RefEntity_item['label'] = $RefEntity->label();
 					$RefEntity_item['uri'] = $RefEntity->field_uri->uri;
