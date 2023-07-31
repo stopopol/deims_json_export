@@ -274,10 +274,9 @@ class DeimsFieldController extends ControllerBase {
 				case 'network_pg':
 					if ($RefEntity->field_network->entity) {
 						$RefEntity_item['network']['name'] = $RefEntity->field_network->entity->getTitle();
-						$RefEntity_item['network']['id']['prefix'] = 'https://deims.org/networks/';
-						$RefEntity_item['network']['id']['suffix'] =  $RefEntity->field_network->entity->get('uuid')->value;
-						$RefEntity_item['siteCode'] = $RefEntity->field_network_specific_site_code->value;
-						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
+						foreach ($RefEntity->field_url as $url) {
+							$RefEntity_item['url'] = $url -> uri;
+						}
 					}
 					break;
 				// paragraphs of type 'observation'
@@ -285,6 +284,14 @@ class DeimsFieldController extends ControllerBase {
 					if ($RefEntity->field_media_monitored->entity) {
 						$RefEntity_item['property'] = $RefEntity->field_media_monitored->entity->getName();
 						$RefEntity_item['unitOfMeasurement'] = 'nA';
+					}
+					break;
+				// paragraphs of type 'related_sites'
+				case 'related_sites':
+					if ($RefEntity->field_relationship_type && $RefEntity->field_related_sites->entity) {
+						$RefEntity_item['typeOfRelationship']['label'] = $RefEntity->field_relationship_type->entity->label();
+						$RefEntity_item['typeOfRelationship']['uri'] = 'null';
+						$RefEntity_item['listOfSites'] = $this->parseEntityReferenceField($RefEntity->field_related_sites);
 					}
 					break;
 				case 'observation_location':
