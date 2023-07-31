@@ -288,7 +288,7 @@ class DeimsFieldController extends ControllerBase {
 					break;
 				// paragraphs of type 'related_sites'
 				case 'related_sites':
-					if ($RefEntity->field_relationship_type && $RefEntity->field_related_sites->entity) {
+					if ($RefEntity->field_relationship_type->entity && $RefEntity->field_related_sites->entity) {
 						$RefEntity_item['typeOfRelationship']['label'] = $RefEntity->field_relationship_type->entity->label();
 						$RefEntity_item['typeOfRelationship']['uri'] = 'null';
 						$RefEntity_item['listOfSites'] = $this->parseEntityReferenceField($RefEntity->field_related_sites);
