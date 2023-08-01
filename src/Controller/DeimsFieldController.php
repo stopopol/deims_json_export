@@ -274,9 +274,10 @@ class DeimsFieldController extends ControllerBase {
 				case 'network_pg':
 					if ($RefEntity->field_network->entity) {
 						$RefEntity_item['network']['name'] = $RefEntity->field_network->entity->getTitle();
-						foreach ($RefEntity->field_url as $url) {
-							$RefEntity_item['url'] = $url -> uri;
-						}
+						$RefEntity_item['network']['id']['prefix'] = 'https://deims.org/networks/';
+						$RefEntity_item['network']['id']['suffix'] =  $RefEntity->field_network->entity->get('uuid')->value;
+						$RefEntity_item['siteCode'] = $RefEntity->field_network_specific_site_code->value;
+						$RefEntity_item['verified'] = $RefEntity->field_network_verified->value == 1 ? true : false;
 					}
 					break;
 				// paragraphs of type 'observation'
