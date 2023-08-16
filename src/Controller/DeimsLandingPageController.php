@@ -31,7 +31,7 @@ class DeimsLandingPageController extends ControllerBase {
     $output_information['paths']['/activities/{resource_id}'] = json_decode(file_get_contents($definition_location . 'activity_record.json'));
     $output_information['paths']['/sensors'] = json_decode(file_get_contents($definition_location . 'sensor_list.json'));
     $output_information['paths']['/sensors/{resource_id}'] = json_decode(file_get_contents($definition_location . 'sensor_record.json'));
-	// a list of locations shouldn't be necessary/useful
+    // To do: add path for list of locations (useful for search functions)
     $output_information['paths']['/locations/{resource_id}'] = json_decode(file_get_contents($definition_location . 'location_record.json'));
 
     $definition_location = __DIR__ . '/../json/component/';
