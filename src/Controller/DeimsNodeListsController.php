@@ -21,6 +21,7 @@ class DeimsNodeListsController {
 		
 		// general filter parameters available for all entity types
 		$allowed_query_parameters = array('limit', 'offset', 'format', 'filename');
+		$allowed_boolean_parameters = array("true", "false");
 		
 		// get integer values of parameters limit and offset
 		$limit =  array_key_exists('limit', $url_parameters) ? ((int)$url_parameters['limit']) : null;
@@ -45,16 +46,15 @@ class DeimsNodeListsController {
 				$query->condition('type', 'site');
 				$query->accessCheck(FALSE);
 					
-				// Create the orConditionGroup
-				$orGroup = $query
+				// Create the orConditionGroup to exclude inactive or closed sites
+				$exclude_closed_sites = $query
 					->orConditionGroup()
 					->condition('field_status.entity:taxonomy_term.tid', 54180, '!=') // exclude all inactive/closed sites
 					->condition('field_status', NULL, 'IS NULL'); // but still consider all sites that haven't filled in the field
-				$query->condition($orGroup);
 									
 				if (isset($url_parameters)) {
 					
-					array_push($allowed_query_parameters, 'network', 'sitecode', 'verified', 'observedproperty', 'name', 'country');
+					array_push($allowed_query_parameters, 'network', 'sitecode', 'verified', 'observedproperty', 'name', 'country', 'includeclosed');
 						
 					// site filter parameters
 					$query_value_network = array_key_exists('network', $url_parameters) ? $url_parameters['network']: null;
@@ -63,6 +63,21 @@ class DeimsNodeListsController {
 					$query_value_observedProperties = array_key_exists('observedproperty', $url_parameters) ? $url_parameters['observedproperty']: null;
 					$query_value_sitename = array_key_exists('name', $url_parameters) ? $url_parameters['name']: null;
 					$query_value_country = array_key_exists('country', $url_parameters) ? $url_parameters['country']: null;
+					$query_value_includeclosed = array_key_exists('includeclosed', $url_parameters) ? $url_parameters['includeclosed']: null;
+					
+					if (isset($query_value_includeclosed)) {
+						// throw error if incorrect verified flag has been provided
+						if (!in_array($query_value_includeclosed, $allowed_boolean_parameters)) {
+							$DeimsErrorMessageController = new DeimsErrorMessageController();	
+							return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?includeclosed={$query_value_includeclosed}", "The 'includeclosed' filter can only accept 'true' or 'false' as input values"));
+						}
+						if ($query_value_includeclosed == "false") {
+							$query->condition($exclude_closed_sites);
+						}
+					}
+					else {
+						$query->condition($exclude_closed_sites);
+					}
 						
 					if (isset($query_value_verified)) {
 						// throw error if verified flag has been provided but no network
@@ -71,8 +86,7 @@ class DeimsNodeListsController {
 							return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?verified=", "The 'verified' filter must be tied to the 'network' filter."));
 						}
 						// throw error if incorrect verified flag has been provided
-						$allowed_verified_parameters = array("true", "false");
-						if (!in_array($query_value_verified, $allowed_verified_parameters)) {
+						if (!in_array($query_value_verified, $allowed_boolean_parameters)) {
 							$DeimsErrorMessageController = new DeimsErrorMessageController();	
 							return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?verified={$query_value_verified}", "The 'verified' filter can only accept 'true' or 'false' as input values"));
 						}
@@ -106,6 +120,10 @@ class DeimsNodeListsController {
 						
 					if ($query_value_sitename) $query->condition('field_name', $query_value_sitename, 'CONTAINS');
 						
+				}
+				// if not filter parameters are provided exclude closed sites
+				else {
+					$query->condition($exclude_closed_sites);
 				}
 					
 				break;
