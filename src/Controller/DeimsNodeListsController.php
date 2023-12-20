@@ -86,6 +86,11 @@ class DeimsNodeListsController {
 						
 						// if either apply status or exclude closed sites
 						if ($query_value_status) {
+							$DeimsTaxonomyInformationController = new DeimsTaxonomyInformationController();
+							$list_of_queriable_values = $DeimsTaxonomyInformationController->get_taxonomy_uris('site_reporting_status');
+							
+							// TO DO: if not in $list_of_queriable_values then throw error message
+							
 							$query->condition('field_status.entity:taxonomy_term.field_uri', $query_value_status);
 						}
 						else {
