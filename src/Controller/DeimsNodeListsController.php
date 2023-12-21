@@ -83,13 +83,15 @@ class DeimsNodeListsController {
 						}
 					}
 					else {
-						
 						// if either apply status or exclude closed sites
 						if ($query_value_status) {
 							$DeimsTaxonomyInformationController = new DeimsTaxonomyInformationController();
 							$list_of_queriable_values = $DeimsTaxonomyInformationController->get_taxonomy_uris('site_reporting_status');
 							
-							// TO DO: if not in $list_of_queriable_values then throw error message
+							if (!in_array($query_value_status, $list_of_queriable_values)) {
+								$DeimsErrorMessageController = new DeimsErrorMessageController();
+								return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?&status={$query_value_status}", "$query_value_status is not in the list of values that can be queried."));
+							}
 							
 							$query->condition('field_status.entity:taxonomy_term.field_uri', $query_value_status);
 						}
