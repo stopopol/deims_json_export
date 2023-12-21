@@ -13,7 +13,8 @@ class DeimsTaxonomyInformationController {
 		$terms =\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vocabulary_name);
 		$list_of_uris = array();
 		foreach ($terms as $term) {
-			array_push($list_of_uris, $term->field_uri);
+			$term_obj = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term->tid);
+			array_push($list_of_uris, $term_obj->field_uri->uri);
 		}
 		return $list_of_uris;
 
