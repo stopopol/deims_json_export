@@ -90,7 +90,7 @@ class DeimsNodeListsController {
 							
 							if (!in_array($query_value_status, $list_of_queriable_values)) {
 								$DeimsErrorMessageController = new DeimsErrorMessageController();
-								return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?&status={$query_value_status}", "$query_value_status is not in the list of values that can be queried."));
+								return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?&status={$query_value_status}", "$query_value_status is not in the list of values that can be queried (" . implode(", ", $list_of_queriable_values)));
 							}
 							
 							$query->condition('field_status.entity:taxonomy_term.field_uri', $query_value_status);
