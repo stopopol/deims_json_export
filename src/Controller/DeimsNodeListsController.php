@@ -118,6 +118,13 @@ class DeimsNodeListsController {
 					// if filters are provided, add additional filter conditions
 					// add [and] and [or] filters
 					if ($query_value_observedProperties) {
+						$DeimsTaxonomyInformationController = new DeimsTaxonomyInformationController();
+						$list_of_queriable_values = $DeimsTaxonomyInformationController->get_taxonomy_uris('parameters');
+							
+						if (!in_array($query_value_observedProperties, $list_of_queriable_values)) {
+							$DeimsErrorMessageController = new DeimsErrorMessageController();
+							return new JsonResponse($DeimsErrorMessageController->generateErrorMessage(400, "/api/sites?&observedproperty={$query_value_observedProperties}", "$query_value_observedProperties is not in the list of values that can be queried. URIs coming from the envthes have to be used, e.g. http://vocabs.lter-europe.net/EnvThes/21647"));
+						}
 						$query->condition('field_parameters.entity:taxonomy_term.field_uri', $query_value_observedProperties);	
 					}
 						
