@@ -78,7 +78,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$information['attributes']['geographic']['elevation']['min'] = (!is_null($node->get('field_elevation_min')->value)) ? floatval($node->get('field_elevation_min')->value)  : null;
 		$information['attributes']['geographic']['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? floatval($node->get('field_elevation_max')->value)  : null;
 		$information['attributes']['geographic']['elevation']['unit'] = 'msl';
-		$information['attributes']['geographic']['size']['value']= (!is_null($node->get('field_size')->value)) ? floatval($node->get('field_size_ha')->value) : null;
+		$information['attributes']['geographic']['size']['value']= (!is_null($node->get('field_size_ha')->value)) ? floatval($node->get('field_size_ha')->value) : null;
 		$information['attributes']['geographic']['size']['unit']= 'ha';
 		$information['attributes']['geographic']['relatedLocations'] = $DeimsFieldController->findRelatedLocations(\Drupal::entityQuery('node')->accessCheck(FALSE)->condition('field_related_site',$node->id())->condition('type', 'observation_location')->execute());
 
