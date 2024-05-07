@@ -30,8 +30,8 @@ class DeimsLocationRecordController extends ControllerBase {
 		$information['properties']['locationType'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_location_type'), $single_value_field=true);
 		$information['properties']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'), $single_value_field=true);
 		$information['properties']['abstract'] = $node->get('field_abstract')->value;
-	  	$information['properties']['geographic']['size']['value']= (!is_null($node->get('field_size_ha')->value)) ? floatval($node->get('field_size_ha')->value) : null;
-		$information['properties']['geographic']['size']['unit']= 'ha';
+	  	$information['properties']['size']['value']= (!is_null($node->get('field_size_ha')->value)) ? floatval($node->get('field_size_ha')->value) : null;
+		$information['properties']['size']['unit']= 'ha';
 		$information['properties']['elevation']['min'] = (!is_null($node->get('field_elevation_min')->value)) ? floatval($node->get('field_elevation_min')->value)  : null;
 		$information['properties']['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? floatval($node->get('field_elevation_max')->value)  : null;
 		$information['properties']['elevation']['unit'] = 'msl';
