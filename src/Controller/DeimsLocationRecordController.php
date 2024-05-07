@@ -29,7 +29,9 @@ class DeimsLocationRecordController extends ControllerBase {
 		$information['properties']['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
 		$information['properties']['locationType'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_location_type'), $single_value_field=true);
 		$information['properties']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'), $single_value_field=true);
-		$information['properties']['abstract'] = $node->get('field_abstract')->value;	
+		$information['properties']['abstract'] = $node->get('field_abstract')->value;
+	  	$information['attributes']['geographic']['size']['value']= (!is_null($node->get('field_size_ha')->value)) ? floatval($node->get('field_size_ha')->value) : null;
+		$information['attributes']['geographic']['size']['unit']= 'ha';
 		$information['properties']['elevation']['min'] = (!is_null($node->get('field_elevation_min')->value)) ? floatval($node->get('field_elevation_min')->value)  : null;
 		$information['properties']['elevation']['max'] = (!is_null($node->get('field_elevation_max')->value)) ? floatval($node->get('field_elevation_max')->value)  : null;
 		$information['properties']['elevation']['unit'] = 'msl';
