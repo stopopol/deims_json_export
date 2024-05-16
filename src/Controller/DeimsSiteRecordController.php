@@ -42,9 +42,7 @@ class DeimsSiteRecordController extends ControllerBase {
 		$information['attributes']['general']['status'] =  $DeimsFieldController->parseEntityReferenceField($node->get('field_status'), $single_value_field=true);
 		$information['attributes']['general']['yearEstablished'] = (!is_null($node->get('field_year_established')->value)) ? intval($node->get('field_year_established')->value) : null;
 		$information['attributes']['general']['yearClosed'] = (!is_null($node->get('field_year_closed')->value)) ? intval($node->get('field_year_closed')->value) : null;
-	  	$information['attributes']['general']['hierarchy']['parent'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_parent_site'));
-		$information['attributes']['general']['hierarchy']['children'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_subsite_name'));
-		$information['attributes']['general']['relatedSites'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_sites_paragraph'));
+	  	$information['attributes']['general']['relatedSites'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_sites_paragraph'));
 		$information['attributes']['general']['siteName'] = $node->get('field_name')->value;
 		$information['attributes']['general']['shortName'] = $node->get('field_name_short')->value;
 		$information['attributes']['general']['siteType'] = $DeimsFieldController->parseTextListField($node, $fieldname = 'field_site_type', $single_value_field=true);
