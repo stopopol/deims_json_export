@@ -1,6 +1,6 @@
 {
     "name": "stopopol/deims_json_export",
     "description": "exposes information on DEIMS-SDR (sites, datasets, sensors, locations, networks) as JSON objects",
-    "type": "drupal-custom-module",
+    "type": "drupal-module",
     "homepage": "https://github.com/stopopol/deims_json_export"
 }
