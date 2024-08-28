@@ -76,10 +76,10 @@ class DeimsFieldController extends ControllerBase {
 							array_push($data_values, array('title'=>$title,'value'=>$item->uri));
 							break;
 						case "number_float":
-							array_push($data_values, $item->value);
+							array_push($data_values, floatval($item->value));
 							break;
 						case "number_integer":
-							array_push($data_values, $item->value);
+							array_push($data_values, intval($item->value));
 							break;
 					}
 				}
