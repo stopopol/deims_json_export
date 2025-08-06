@@ -18,7 +18,15 @@ class DEIMSIso19139Controller extends ControllerBase {
     ];
 
     // Generate XML string
-    $xml = new \SimpleXMLElement('<response/>');
+    $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
+          <gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+          xmlns:gco="http://www.isotc211.org/2005/gco"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:gml="http://www.opengis.net/gml"
+          xsi:schemaLocation="http://www.isotc211.org/2005/gmd
+          http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd">'
+    );
+    
     $xml->addChild('title', $data['title']);
     $xml->addChild('date', $data['date']);
 
