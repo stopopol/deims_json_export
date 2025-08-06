@@ -12,7 +12,7 @@ use Drupal\Core\Controller\ControllerBase;
  */
 class DeimsSiteRecordController extends ControllerBase {
   
-  public function parseFields($node) {
+  	public function parseFields($node) {
 		
 		// loading controller functions
 		$DeimsFieldController = new DeimsFieldController();
@@ -105,11 +105,11 @@ class DeimsSiteRecordController extends ControllerBase {
 
 		// list all referenced activities, datasets, sensors
 		$information['attributes']['relatedResources'] = $DeimsFieldController->findRelatedResources(\Drupal::entityQuery('node')->accessCheck(FALSE)->condition('field_related_site',$node->id())->execute());
-
 	  	$information['attributes']['projectRelated']['lter']['lterSiteClassification'] = $node->get('field_lter_site_classification')->value;
 	  
-
 		return $information;
-  }
+		
+  	}
 
 }
+
