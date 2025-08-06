@@ -140,39 +140,80 @@ class DEIMSIso19139Controller extends ControllerBase {
     $dataId->appendChild($lang);
 
     // extent
-    $extent = $doc->createElement("gmd:extent");
-    $exExtent = $doc->createElement("gmd:EX_Extent");
-    $geo = $doc->createElement("gmd:geographicElement");
-    $bbox = $doc->createElement("gmd:EX_GeographicBoundingBox");
-
-    $west = $doc->createElement("gmd:westBoundLongitude");
-    $west->appendChild($doc->createElement("gco:Decimal", -10.0));
-    $bbox->appendChild($west);
-
-    $east = $doc->createElement("gmd:eastBoundLongitude");
-    $east->appendChild($doc->createElement("gco:Decimal", 10.0));
-    $bbox->appendChild($east);
-
-    $south = $doc->createElement("gmd:southBoundLatitude");
-    $south->appendChild($doc->createElement("gco:Decimal", -5.0));
-    $bbox->appendChild($south);
-
-    $north = $doc->createElement("gmd:northBoundLatitude");
-    $north->appendChild($doc->createElement("gco:Decimal", 5.0));
-    $bbox->appendChild($north);
-
-    $geo->appendChild($bbox);
-    $exExtent->appendChild($geo);
-    $extent->appendChild($exExtent);
-    $dataId->appendChild($extent);
-
+    if ($record_information["attributes"]["geographic"]["boundaries"]) {
+      $bbox_geom = getBoundingBoxFromWKT($record_information["attributes"]["geographic"]["boundaries"]);
+      $extent = $doc->createElement("gmd:extent");
+      $exExtent = $doc->createElement("gmd:EX_Extent");
+      $geo = $doc->createElement("gmd:geographicElement");
+      $bbox = $doc->createElement("gmd:EX_GeographicBoundingBox");
+  
+      $west = $doc->createElement("gmd:westBoundLongitude");
+      $west->appendChild($doc->createElement("gco:Decimal", $bbox_geom["west"]));
+      $bbox->appendChild($west);
+  
+      $east = $doc->createElement("gmd:eastBoundLongitude");
+      $east->appendChild($doc->createElement("gco:Decimal", $bbox_geom["east"]));
+      $bbox->appendChild($east);
+  
+      $south = $doc->createElement("gmd:southBoundLatitude");
+      $south->appendChild($doc->createElement("gco:Decimal", $bbox_geom["south"]));
+      $bbox->appendChild($south);
+  
+      $north = $doc->createElement("gmd:northBoundLatitude");
+      $north->appendChild($doc->createElement("gco:Decimal", $bbox_geom["north"]));
+      $bbox->appendChild($north);
+  
+      $geo->appendChild($bbox);
+      $exExtent->appendChild($geo);
+      $extent->appendChild($exExtent);
+      $dataId->appendChild($extent);
+    }
+      
     $ident->appendChild($dataId);
     $root->appendChild($ident);
-
+  
     // Return response
     $response = new Response($doc->saveXML());
     $response->headers->set('Content-Type', 'application/xml');
     return $response;
+  }
+
+  public function getBoundingBoxFromWKT(string $wkt): ?array {
+    $wkt = trim($wkt);
+  
+    $minLon = $maxLon = $minLat = $maxLat = null;
+  
+    // Match all coordinate groups inside parentheses (supports multiple polygons)
+    preg_match_all('/\(\s*\(([^()]+)\)\s*\)/', $wkt, $matches);
+  
+    if (empty($matches[1])) {
+      return null; // Invalid or unsupported WKT
+    }
+  
+    foreach ($matches[1] as $coords_str) {
+      $points = preg_split('/,\s*/', trim($coords_str));
+  
+      foreach ($points as $point) {
+        // Expect "lon lat" format
+        $parts = preg_split('/\s+/', trim($point));
+        if (count($parts) < 2) continue;
+  
+        $lon = floatval($parts[0]);
+        $lat = floatval($parts[1]);
+  
+        $minLon = is_null($minLon) ? $lon : min($minLon, $lon);
+        $maxLon = is_null($maxLon) ? $lon : max($maxLon, $lon);
+        $minLat = is_null($minLat) ? $lat : min($minLat, $lat);
+        $maxLat = is_null($maxLat) ? $lat : max($maxLat, $lat);
+      }
+    }
+  
+    return [
+      'west'  => $minLon,
+      'east'  => $maxLon,
+      'south' => $minLat,
+      'north' => $maxLat,
+    ];
   }
 
 }
