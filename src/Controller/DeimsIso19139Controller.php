@@ -8,8 +8,6 @@ use Drupal\Core\Controller\ControllerBase;
 class DEIMSIso19139Controller extends ControllerBase {
 
   public function Iso19139Response($record_information) {
-    $title = htmlspecialchars($record_information["title"]);
-
     $doc = new \DOMDocument('1.0', 'UTF-8');
     $doc->formatOutput = true;
 
@@ -17,35 +15,144 @@ class DEIMSIso19139Controller extends ControllerBase {
     $root = $doc->createElementNS("http://www.isotc211.org/2005/gmd", "gmd:MD_Metadata");
     $doc->appendChild($root);
 
-    // Add necessary namespaces
+    // Namespaces
     $root->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:gco", "http://www.isotc211.org/2005/gco");
     $root->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     $root->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:gml", "http://www.opengis.net/gml");
     $root->setAttribute("xsi:schemaLocation", "http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd");
 
-    // Add title
-    $titleElem = $doc->createElement("gmd:title");
-    $charStr = $doc->createElement("gco:CharacterString", $title);
-    $titleElem->appendChild($charStr);
-    $root->appendChild($titleElem);
+    // fileIdentifier
+    $fileIdentifier = $doc->createElement("gmd:fileIdentifier");
+    $charStr = $doc->createElement("gco:CharacterString", $record_information['id']['suffix']);
+    $fileIdentifier->appendChild($charStr);
+    $root->appendChild($fileIdentifier);
 
-    // Add date
-    $dateElem = $doc->createElement("gmd:date");
-    $dateVal = $doc->createElement("gco:Date", date('Y-m-d'));
-    $dateElem->appendChild($dateVal);
-    $root->appendChild($dateElem);
+    // language
+    $language = $doc->createElement("gmd:language");
+    $langCode = $doc->createElement("gmd:LanguageCode", "eng");
+    $langCode->setAttribute("codeList", "http://www.loc.gov/standards/iso639-2/");
+    $langCode->setAttribute("codeListValue", "eng");
+    $language->appendChild($langCode);
+    $root->appendChild($language);
 
-    // Add dummy items (non-standard, for demonstration)
-    $itemsElem = $doc->createElement("gmd:items");
-    foreach ([['id' => 1, 'name' => 'Item One'], ['id' => 2, 'name' => 'Item Two']] as $item) {
-      $itemElem = $doc->createElement("gmd:item");
-      $itemElem->appendChild($doc->createElement("gmd:id", $item['id']));
-      $itemElem->appendChild($doc->createElement("gmd:name", htmlspecialchars($item['name'])));
-      $itemsElem->appendChild($itemElem);
-    }
-    $root->appendChild($itemsElem);
+    // characterSet
+    $charSet = $doc->createElement("gmd:characterSet");
+    $charCode = $doc->createElement("gmd:MD_CharacterSetCode", "utf8");
+    $charCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#MD_CharacterSetCode");
+    $charCode->setAttribute("codeListValue", "utf8");
+    $charSet->appendChild($charCode);
+    $root->appendChild($charSet);
 
-    // Return response
+    // hierarchyLevel
+    $hierarchy = $doc->createElement("gmd:hierarchyLevel");
+    $scopeCode = $doc->createElement("gmd:MD_ScopeCode", "dataset");
+    $scopeCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#MD_ScopeCode");
+    $scopeCode->setAttribute("codeListValue", "dataset");
+    $hierarchy->appendChild($scopeCode);
+    $root->appendChild($hierarchy);
+
+    // contact
+    $contact = $doc->createElement("gmd:contact");
+    $rp = $doc->createElement("gmd:CI_ResponsibleParty");
+	$name = $doc->createElement("gmd:individualName");
+	
+	foreach ($record_information["contact"]["siteManager"] as $contact) {
+		$name->appendChild($doc->createElement("gco:CharacterString", $contact["name"]));
+		$rp->appendChild($name);
+	} 
+
+    $org = $doc->createElement("gmd:organisationName");
+	
+	foreach ($record_information["contact"]["operatingOrganisation"] as $organisation) {
+		$org->appendChild($doc->createElement("gco:CharacterString", $record_information['organisation'] ?? 'Geo Example Org'));
+		$rp->appendChild($org);
+	}
+
+    $role = $doc->createElement("gmd:role");
+    $roleCode = $doc->createElement("gmd:CI_RoleCode", "pointOfContact");
+    $roleCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode");
+    $roleCode->setAttribute("codeListValue", "pointOfContact");
+    $role->appendChild($roleCode);
+    $rp->appendChild($role);
+
+    $contact->appendChild($rp);
+    $root->appendChild($contact);
+
+    // dateStamp
+    $dateStamp = $doc->createElement("gmd:dateStamp");
+    $dateStamp->appendChild($doc->createElement("gco:Date", date('Y-m-d')));
+    $root->appendChild($dateStamp);
+
+    // metadataStandard
+    $stdName = $doc->createElement("gmd:metadataStandardName");
+    $stdName->appendChild($doc->createElement("gco:CharacterString", "ISO 19115:2003/19139"));
+    $root->appendChild($stdName);
+
+    $stdVersion = $doc->createElement("gmd:metadataStandardVersion");
+    $stdVersion->appendChild($doc->createElement("gco:CharacterString", "1.0"));
+    $root->appendChild($stdVersion);
+
+    // identificationInfo
+    $ident = $doc->createElement("gmd:identificationInfo");
+    $dataId = $doc->createElement("gmd:MD_DataIdentification");
+
+    // title
+    $citation = $doc->createElement("gmd:citation");
+    $ciCitation = $doc->createElement("gmd:CI_Citation");
+
+    $title = $doc->createElement("gmd:title");
+    $title->appendChild($doc->createElement("gco:CharacterString", $record_information['title']));
+    $ciCitation->appendChild($title);
+
+    // citation > date
+    $date = $doc->createElement("gmd:date");
+    $ciDate = $doc->createElement("gmd:CI_Date");
+    $ciDate->appendChild($doc->createElement("gmd:date", $doc->createElement("gco:Date", date('Y-m-d'))));
+    $dateType = $doc->createElement("gmd:dateType");
+    $dtCode = $doc->createElement("gmd:CI_DateTypeCode", "creation");
+    $dtCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#CI_DateTypeCode");
+    $dtCode->setAttribute("codeListValue", "creation");
+    $dateType->appendChild($dtCode);
+    $ciDate->appendChild($dateType);
+    $date->appendChild($ciDate);
+    $ciCitation->appendChild($date);
+
+    $citation->appendChild($ciCitation);
+    $dataId->appendChild($citation);
+
+    // abstract
+    $abstract = $doc->createElement("gmd:abstract");
+    $abstract->appendChild($doc->createElement("gco:CharacterString", $record_information["general"]["abstract"]));
+    $dataId->appendChild($abstract);
+
+    // language
+    $lang = $doc->createElement("gmd:language");
+    $langCode = $doc->createElement("gmd:LanguageCode", "eng");
+    $langCode->setAttribute("codeList", "http://www.loc.gov/standards/iso639-2/");
+    $langCode->setAttribute("codeListValue", "eng");
+    $lang->appendChild($langCode);
+    $dataId->appendChild($lang);
+
+    // extent
+    $extent = $doc->createElement("gmd:extent");
+    $exExtent = $doc->createElement("gmd:EX_Extent");
+    $geo = $doc->createElement("gmd:geographicElement");
+    $bbox = $doc->createElement("gmd:EX_GeographicBoundingBox");
+
+    $bbox->appendChild($doc->createElement("gmd:westBoundLongitude", $doc->createElement("gco:Decimal", -10.0)));
+    $bbox->appendChild($doc->createElement("gmd:eastBoundLongitude", $doc->createElement("gco:Decimal", 10.0)));
+    $bbox->appendChild($doc->createElement("gmd:southBoundLatitude", $doc->createElement("gco:Decimal", -5.0)));
+    $bbox->appendChild($doc->createElement("gmd:northBoundLatitude", $doc->createElement("gco:Decimal", 5.0)));
+
+    $geo->appendChild($bbox);
+    $exExtent->appendChild($geo);
+    $extent->appendChild($exExtent);
+    $dataId->appendChild($extent);
+
+    $ident->appendChild($dataId);
+    $root->appendChild($ident);
+
+    // Return XML response
     $response = new Response($doc->saveXML());
     $response->headers->set('Content-Type', 'application/xml');
     return $response;
