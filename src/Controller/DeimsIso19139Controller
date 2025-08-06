@@ -7,7 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 
 class DEIMSIso19139Controller extends ControllerBase {
 
-  public function xmlResponse() {
+  public function Iso19139Response() {
     $data = [
       'title' => 'Example XML',
       'date' => date('c'),
