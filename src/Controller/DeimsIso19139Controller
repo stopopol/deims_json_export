@@ -1,0 +1,37 @@
+<?php
+
+namespace Drupal\deims_json_export\Controller;
+
+use Symfony\Component\HttpFoundation\Response;
+use Drupal\Core\Controller\ControllerBase;
+
+class DEIMSIso19139Controller extends ControllerBase {
+
+  public function xmlResponse() {
+    $data = [
+      'title' => 'Example XML',
+      'date' => date('c'),
+      'items' => [
+        ['id' => 1, 'name' => 'Item One'],
+        ['id' => 2, 'name' => 'Item Two'],
+      ],
+    ];
+
+    // Generate XML string
+    $xml = new \SimpleXMLElement('<response/>');
+    $xml->addChild('title', $data['title']);
+    $xml->addChild('date', $data['date']);
+
+    $itemsNode = $xml->addChild('items');
+    foreach ($data['items'] as $item) {
+      $itemNode = $itemsNode->addChild('item');
+      $itemNode->addChild('id', $item['id']);
+      $itemNode->addChild('name', $item['name']);
+    }
+
+    $response = new Response($xml->asXML());
+    $response->headers->set('Content-Type', 'application/xml');
+    return $response;
+  }
+
+}
