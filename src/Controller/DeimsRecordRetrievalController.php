@@ -45,7 +45,7 @@ class DeimsRecordRetrievalController extends ControllerBase {
 						
 					if ($format == "iso19139" && $content_type == "site") {
 						$DeimsIso19139Controller = new DeimsIso19139Controller();
-						$Iso19139Response = $DeimsIso19139Controller->Iso19139Response();
+						$Iso19139Response = $DeimsIso19139Controller->Iso19139Response($record_information);
   						return $Iso19139Response;
 					}
 				}
@@ -82,6 +82,7 @@ class DeimsRecordRetrievalController extends ControllerBase {
 	}
 
 }
+
 
 
 
