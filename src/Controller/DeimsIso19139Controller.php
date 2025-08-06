@@ -137,7 +137,7 @@ class DEIMSIso19139Controller extends ControllerBase {
     
     // useLimitation with license URL and name
     $useLimitation = $doc->createElement("gmd:useLimitation");
-    $licenseText = "This dataset is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0). See https://creativecommons.org/licenses/by/4.0/";
+    $licenseText = "This dataset is licenced under the Creative Commons Attribution 4.0 International (CC BY 4.0). See https://creativecommons.org/licenses/by/4.0/";
     $useLimitation->appendChild($doc->createElement("gco:CharacterString", $licenseText));
     $legalConstraints->appendChild($useLimitation);
     
