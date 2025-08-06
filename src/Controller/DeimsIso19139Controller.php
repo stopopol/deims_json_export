@@ -23,7 +23,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
     // fileIdentifier
     $fileIdentifier = $doc->createElement("gmd:fileIdentifier");
-    $charStr = $doc->createElement("gco:CharacterString", $record_information['id']['suffix']);
+    $charStr = $doc->createElement("gco:CharacterString", $record_information['id']['suffix'] ?? 'default-id');
     $fileIdentifier->appendChild($charStr);
     $root->appendChild($fileIdentifier);
 
@@ -54,18 +54,21 @@ class DEIMSIso19139Controller extends ControllerBase {
     // contact
     $contact = $doc->createElement("gmd:contact");
     $rp = $doc->createElement("gmd:CI_ResponsibleParty");
-    $name = $doc->createElement("gmd:individualName");
-	
-    foreach ($record_information["contact"]["siteManager"] as $contact) {
-	$name->appendChild($doc->createElement("gco:CharacterString", $contact["name"]));
-	$rp->appendChild($name);
-    } 
 
-    $org = $doc->createElement("gmd:organisationName");
-	
-    foreach ($record_information["contact"]["operatingOrganisation"] as $organisation) {
-	$org->appendChild($doc->createElement("gco:CharacterString", $organisation["name"]));
-	$rp->appendChild($org);
+    if (!empty($record_information["contact"]["siteManager"])) {
+      foreach ($record_information["contact"]["siteManager"] as $contact_item) {
+        $name = $doc->createElement("gmd:individualName");
+        $name->appendChild($doc->createElement("gco:CharacterString", $contact_item["name"] ?? ''));
+        $rp->appendChild($name);
+      }
+    }
+
+    if (!empty($record_information["contact"]["operatingOrganisation"])) {
+      foreach ($record_information["contact"]["operatingOrganisation"] as $org_item) {
+        $org = $doc->createElement("gmd:organisationName");
+        $org->appendChild($doc->createElement("gco:CharacterString", $org_item["name"] ?? ''));
+        $rp->appendChild($org);
+      }
     }
 
     $role = $doc->createElement("gmd:role");
@@ -101,28 +104,31 @@ class DEIMSIso19139Controller extends ControllerBase {
     $ciCitation = $doc->createElement("gmd:CI_Citation");
 
     $title = $doc->createElement("gmd:title");
-    $title->appendChild($doc->createElement("gco:CharacterString", $record_information['title']));
+    $title->appendChild($doc->createElement("gco:CharacterString", $record_information['title'] ?? 'Untitled'));
     $ciCitation->appendChild($title);
 
     // citation > date
-    $date = $doc->createElement("gmd:date");
     $ciDate = $doc->createElement("gmd:CI_Date");
-    $ciDate->appendChild($doc->createElement("gmd:date", $doc->createElement("gco:Date", date('Y-m-d'))));
+
+    $date = $doc->createElement("gmd:date");
+    $dateVal = $doc->createElement("gco:Date", date('Y-m-d'));
+    $date->appendChild($dateVal);
+    $ciDate->appendChild($date);
+
     $dateType = $doc->createElement("gmd:dateType");
     $dtCode = $doc->createElement("gmd:CI_DateTypeCode", "creation");
     $dtCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#CI_DateTypeCode");
     $dtCode->setAttribute("codeListValue", "creation");
     $dateType->appendChild($dtCode);
     $ciDate->appendChild($dateType);
-    $date->appendChild($ciDate);
-    $ciCitation->appendChild($date);
 
+    $ciCitation->appendChild($doc->createElement("gmd:date"))->appendChild($ciDate);
     $citation->appendChild($ciCitation);
     $dataId->appendChild($citation);
 
     // abstract
     $abstract = $doc->createElement("gmd:abstract");
-    $abstract->appendChild($doc->createElement("gco:CharacterString", $record_information["general"]["abstract"]));
+    $abstract->appendChild($doc->createElement("gco:CharacterString", $record_information["general"]["abstract"] ?? 'No abstract provided.'));
     $dataId->appendChild($abstract);
 
     // language
@@ -139,10 +145,21 @@ class DEIMSIso19139Controller extends ControllerBase {
     $geo = $doc->createElement("gmd:geographicElement");
     $bbox = $doc->createElement("gmd:EX_GeographicBoundingBox");
 
-    $bbox->appendChild($doc->createElement("gmd:westBoundLongitude", $doc->createElement("gco:Decimal", -10.0)));
-    $bbox->appendChild($doc->createElement("gmd:eastBoundLongitude", $doc->createElement("gco:Decimal", 10.0)));
-    $bbox->appendChild($doc->createElement("gmd:southBoundLatitude", $doc->createElement("gco:Decimal", -5.0)));
-    $bbox->appendChild($doc->createElement("gmd:northBoundLatitude", $doc->createElement("gco:Decimal", 5.0)));
+    $west = $doc->createElement("gmd:westBoundLongitude");
+    $west->appendChild($doc->createElement("gco:Decimal", -10.0));
+    $bbox->appendChild($west);
+
+    $east = $doc->createElement("gmd:eastBoundLongitude");
+    $east->appendChild($doc->createElement("gco:Decimal", 10.0));
+    $bbox->appendChild($east);
+
+    $south = $doc->createElement("gmd:southBoundLatitude");
+    $south->appendChild($doc->createElement("gco:Decimal", -5.0));
+    $bbox->appendChild($south);
+
+    $north = $doc->createElement("gmd:northBoundLatitude");
+    $north->appendChild($doc->createElement("gco:Decimal", 5.0));
+    $bbox->appendChild($north);
 
     $geo->appendChild($bbox);
     $exExtent->appendChild($geo);
@@ -152,7 +169,7 @@ class DEIMSIso19139Controller extends ControllerBase {
     $ident->appendChild($dataId);
     $root->appendChild($ident);
 
-    // Return XML response
+    // Return response
     $response = new Response($doc->saveXML());
     $response->headers->set('Content-Type', 'application/xml');
     return $response;
