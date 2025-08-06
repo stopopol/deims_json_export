@@ -54,19 +54,19 @@ class DEIMSIso19139Controller extends ControllerBase {
     // contact
     $contact = $doc->createElement("gmd:contact");
     $rp = $doc->createElement("gmd:CI_ResponsibleParty");
-	$name = $doc->createElement("gmd:individualName");
+    $name = $doc->createElement("gmd:individualName");
 	
-	foreach ($record_information["contact"]["siteManager"] as $contact) {
-		$name->appendChild($doc->createElement("gco:CharacterString", $contact["name"]));
-		$rp->appendChild($name);
-	} 
+    foreach ($record_information["contact"]["siteManager"] as $contact) {
+	$name->appendChild($doc->createElement("gco:CharacterString", $contact["name"]));
+	$rp->appendChild($name);
+    } 
 
     $org = $doc->createElement("gmd:organisationName");
 	
-	foreach ($record_information["contact"]["operatingOrganisation"] as $organisation) {
-		$org->appendChild($doc->createElement("gco:CharacterString", $record_information['organisation'] ?? 'Geo Example Org'));
-		$rp->appendChild($org);
-	}
+    foreach ($record_information["contact"]["operatingOrganisation"] as $organisation) {
+	$org->appendChild($doc->createElement("gco:CharacterString", $organisation["name"]));
+	$rp->appendChild($org);
+    }
 
     $role = $doc->createElement("gmd:role");
     $roleCode = $doc->createElement("gmd:CI_RoleCode", "pointOfContact");
