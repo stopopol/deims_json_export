@@ -55,16 +55,16 @@ class DEIMSIso19139Controller extends ControllerBase {
     $contact = $doc->createElement("gmd:contact");
     $rp = $doc->createElement("gmd:CI_ResponsibleParty");
 
-    if (!empty($record_information["contact"]["siteManager"])) {
-      foreach ($record_information["contact"]["siteManager"] as $contact_item) {
+    if (!empty($record_information["attributes"]["contact"]["siteManager"])) {
+      foreach ($record_information["attributes"]["contact"]["siteManager"] as $contact_item) {
         $name = $doc->createElement("gmd:individualName");
         $name->appendChild($doc->createElement("gco:CharacterString", $contact_item["name"] ?? ''));
         $rp->appendChild($name);
       }
     }
 
-    if (!empty($record_information["contact"]["operatingOrganisation"])) {
-      foreach ($record_information["contact"]["operatingOrganisation"] as $org_item) {
+    if (!empty($record_information["attributes"]["contact"]["operatingOrganisation"])) {
+      foreach ($record_information["attributes"]["contact"]["operatingOrganisation"] as $org_item) {
         $org = $doc->createElement("gmd:organisationName");
         $org->appendChild($doc->createElement("gco:CharacterString", $org_item["name"] ?? ''));
         $rp->appendChild($org);
@@ -104,7 +104,7 @@ class DEIMSIso19139Controller extends ControllerBase {
     $ciCitation = $doc->createElement("gmd:CI_Citation");
 
     $title = $doc->createElement("gmd:title");
-    $title->appendChild($doc->createElement("gco:CharacterString", $record_information['title'] ?? 'Untitled'));
+    $title->appendChild($doc->createElement("gco:CharacterString", $record_information['title']));
     $ciCitation->appendChild($title);
 
     // citation > date
@@ -128,7 +128,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
     // abstract
     $abstract = $doc->createElement("gmd:abstract");
-    $abstract->appendChild($doc->createElement("gco:CharacterString", $record_information["general"]["abstract"] ?? 'No abstract provided.'));
+    $abstract->appendChild($doc->createElement("gco:CharacterString", $record_information["attributes"]["general"]["abstract"] ?? 'No abstract provided.'));
     $dataId->appendChild($abstract);
 
     // language
