@@ -7,9 +7,9 @@ use Drupal\Core\Controller\ControllerBase;
 
 class DEIMSIso19139Controller extends ControllerBase {
 
-  public function Iso19139Response() {
+  public function Iso19139Response($record_information ) {
     $data = [
-      'title' => 'Example XML',
+      'title' => $record_information["title"],
       'date' => date('c'),
       'items' => [
         ['id' => 1, 'name' => 'Item One'],
