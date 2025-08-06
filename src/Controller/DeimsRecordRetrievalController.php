@@ -39,6 +39,13 @@ class DeimsRecordRetrievalController extends ControllerBase {
 							break;
 					}
 					$record_information = $DeimsRecordController->parseFields($node);
+					
+					$url_parameters = array_change_key_case(\Drupal::request()->query->all(), CASE_LOWER);
+					$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
+						
+					if ($format == "iso19139") {
+						$record_information = array("I pretend to be an XML record");
+					}
 				}
 			}
 		}
@@ -73,3 +80,4 @@ class DeimsRecordRetrievalController extends ControllerBase {
 	}
 
 }
+
