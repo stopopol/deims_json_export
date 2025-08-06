@@ -141,7 +141,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
     // extent
     if ($record_information["attributes"]["geographic"]["boundaries"]) {
-      $bbox_geom = getBoundingBoxFromWKT($record_information["attributes"]["geographic"]["boundaries"]);
+      $bbox_geom = $this->getBoundingBoxFromWKT($record_information["attributes"]["geographic"]["boundaries"]);
       $extent = $doc->createElement("gmd:extent");
       $exExtent = $doc->createElement("gmd:EX_Extent");
       $geo = $doc->createElement("gmd:geographicElement");
