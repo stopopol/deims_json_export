@@ -131,6 +131,35 @@ class DEIMSIso19139Controller extends ControllerBase {
     $abstract->appendChild($doc->createElement("gco:CharacterString", $record_information["attributes"]["general"]["abstract"] ?? 'No abstract provided.'));
     $dataId->appendChild($abstract);
 
+    // resourceConstraints - CC BY 4.0 license
+    $constraints = $doc->createElement("gmd:resourceConstraints");
+    $legalConstraints = $doc->createElement("gmd:MD_LegalConstraints");
+    
+    // useLimitation with license URL and name
+    $useLimitation = $doc->createElement("gmd:useLimitation");
+    $licenseText = "This dataset is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0). See https://creativecommons.org/licenses/by/4.0/";
+    $useLimitation->appendChild($doc->createElement("gco:CharacterString", $licenseText));
+    $legalConstraints->appendChild($useLimitation);
+    
+    // accessConstraints = license
+    $accessConstraints = $doc->createElement("gmd:accessConstraints");
+    $accessCode = $doc->createElement("gmd:MD_RestrictionCode", "license");
+    $accessCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#MD_RestrictionCode");
+    $accessCode->setAttribute("codeListValue", "license");
+    $accessConstraints->appendChild($accessCode);
+    $legalConstraints->appendChild($accessConstraints);
+    
+    // useConstraints = license
+    $useConstraints = $doc->createElement("gmd:useConstraints");
+    $useCode = $doc->createElement("gmd:MD_RestrictionCode", "license");
+    $useCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#MD_RestrictionCode");
+    $useCode->setAttribute("codeListValue", "license");
+    $useConstraints->appendChild($useCode);
+    $legalConstraints->appendChild($useConstraints);
+    
+    $constraints->appendChild($legalConstraints);
+    $dataId->appendChild($constraints);
+
     // language
     $lang = $doc->createElement("gmd:language");
     $langCode = $doc->createElement("gmd:LanguageCode", "eng");
