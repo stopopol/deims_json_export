@@ -44,7 +44,11 @@ class DeimsRecordRetrievalController extends ControllerBase {
 					$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
 						
 					if ($format == "iso19139" && $content_type == "site") {
-						$record_information = array("I pretend to be an XML record");
+						$DEIMSIso19139Controller = new $DEIMSIso19139Controller();
+						$Iso19139Response = $DeimsRecordController->Iso19139Response();
+						$response = new Response(Iso19139Response);
+						$response->headers->set('Content-Type', 'application/xml');
+  						return $response;
 					}
 				}
 			}
@@ -80,5 +84,6 @@ class DeimsRecordRetrievalController extends ControllerBase {
 	}
 
 }
+
 
 
