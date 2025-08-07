@@ -21,8 +21,8 @@ class DeimsSensorRecordController extends ControllerBase {
 		$information['id']['prefix'] = 'https://deims.org/sensors/';
 		$information['id']['suffix'] = $node->get('uuid')->value;
 		$information['type'] = 'sensor';
-		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
-		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'custom', 'Y-m-d\TH:i:sP');
+		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
 
 		$information['attributes']['general']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'));
 		$information['attributes']['general']['contact'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_contact'));
@@ -45,3 +45,4 @@ class DeimsSensorRecordController extends ControllerBase {
   }
 
 }
+
