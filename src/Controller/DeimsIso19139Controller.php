@@ -78,6 +78,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 				$name = $doc->createElement("gmd:individualName");
 				$charString = $doc->createElement("gco:CharacterString", $person["name"] ?? "");
 				$name->appendChild($charString);
+				$rp->appendChild($name);
 				
                 // role is always mandatory for CI_ResponsibleParty
                 $role = $doc->createElement("gmd:role");
@@ -98,6 +99,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 				$name = $doc->createElement("gmd:organisationName");
 				$charString = $doc->createElement("gco:CharacterString", $organisation["name"] ?? "");
 				$name->appendChild($charString);
+				$rp->appendChild($name);
 				
                 // role is always mandatory for CI_ResponsibleParty
                 $role = $doc->createElement("gmd:role");
