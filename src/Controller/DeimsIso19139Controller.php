@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Controller\ControllerBase;
 
 class DEIMSIso19139Controller extends ControllerBase {
+	
     public function Iso19139Response($record_information) {
 		
         $doc = new \DOMDocument("1.0", "UTF-8");
@@ -72,12 +73,12 @@ class DEIMSIso19139Controller extends ControllerBase {
         // contact
         if (!empty($record_information["attributes"]["contact"]["siteManager"])) {
             foreach ($record_information["attributes"]["contact"]["siteManager"] as $person) {
-				$contact = $doc->createElement("gmd:contact");
-                $rp = $doc->createElement("gmd:CI_ResponsibleParty");
-                $name = $doc->createElement("gmd:individualName");
-                $nameText = $doc->createTextNode($person["name"] ?? "");
-                $name->appendChild($nameText);
-                $rp->appendChild($name);
+				$contact = $doc->createElement("gmd:contact");				
+				$rp = $doc->createElement("gmd:CI_ResponsibleParty");
+				$name = $doc->createElement("gmd:individualName");
+				$charString = $doc->createElement("gco:CharacterString", $person["name"] ?? "");
+				$name->appendChild($charString);
+				
                 // role is always mandatory for CI_ResponsibleParty
                 $role = $doc->createElement("gmd:role");
                 $roleCode = $doc->createElement("gmd:CI_RoleCode","pointOfContact");
@@ -94,10 +95,10 @@ class DEIMSIso19139Controller extends ControllerBase {
             foreach ($record_information["attributes"]["contact"]["operatingOrganisation"] as $organisation) {
                 $contact = $doc->createElement("gmd:contact");
 				$rp = $doc->createElement("gmd:CI_ResponsibleParty");
-                $name = $doc->createElement("gmd:organisationName");
-                $nameText = $doc->createTextNode($organisation["name"] ?? "");
-                $name->appendChild($nameText);
-                $rp->appendChild($name);
+				$name = $doc->createElement("gmd:organisationName");
+				$charString = $doc->createElement("gco:CharacterString", $organisation["name"] ?? "");
+				$name->appendChild($charString);
+				
                 // role is always mandatory for CI_ResponsibleParty
                 $role = $doc->createElement("gmd:role");
                 $roleCode = $doc->createElement("gmd:CI_RoleCode", "pointOfContact");
@@ -112,7 +113,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
         // dateStamp
         $dateStamp = $doc->createElement("gmd:dateStamp");
-		$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
+	$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
         $root->appendChild($dateStamp);
 
         // metadataStandard
@@ -255,7 +256,7 @@ class DEIMSIso19139Controller extends ControllerBase {
             $ident->appendChild($dataId);
             $root->appendChild($ident);
         } 
-		else {
+	else {
             // Extract coordinates from WKT string (assumed to be valid "POINT(lon lat)")
             $wkt = $record_information["attributes"]["geographic"]["coordinates"];
             preg_match("/POINT\s*\(\s*([\d\.\-]+)\s+([\d\.\-]+)\s*\)/i", $wkt, $matches);
@@ -296,7 +297,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
     public function getBoundingBoxFromWKT(string $wkt): ?array {
         
-		$wkt = trim($wkt);
+	$wkt = trim($wkt);
         $minLon = $maxLon = $minLat = $maxLat = null;
 
         // Match all coordinate groups inside parentheses (supports multiple polygons)
