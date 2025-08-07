@@ -60,7 +60,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 		$lineage = $doc->createElement("gmd:lineage");
 		$liLineage = $doc->createElement("gmd:LI_Lineage");
 		$statement = $doc->createElement("gmd:statement");
-		$statementText = "This metadata record was created using information from DEIMS-SDR (deims.org) based on (potentially erroneous user input via forms.";
+		$statementText = "This metadata record was created using information from DEIMS-SDR (deims.org) based on (potentially) erroneous user input via forms.";
 		$charString = $doc->createElement("gco:CharacterString");
 		$charString->appendChild($doc->createTextNode($statementText));
 		$statement->appendChild($charString);
@@ -93,7 +93,7 @@ class DEIMSIso19139Controller extends ControllerBase {
         }
 
         if (!empty($record_information["attributes"]["contact"]["operatingOrganisation"])) {
-            foreach ($record_information["attributes"]["contact"]["operatingOrganisation"] as $organisation) {
+        	foreach ($record_information["attributes"]["contact"]["operatingOrganisation"] as $organisation) {
                 $contact = $doc->createElement("gmd:contact");
 				$rp = $doc->createElement("gmd:CI_ResponsibleParty");
 				$name = $doc->createElement("gmd:organisationName");
@@ -115,7 +115,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
         // dateStamp
         $dateStamp = $doc->createElement("gmd:dateStamp");
-		$dateStamp->appendChild($doc->createElement("gco:DateTime", date("c")));
+		$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
         $root->appendChild($dateStamp);
 
         // metadataStandard
@@ -138,15 +138,12 @@ class DEIMSIso19139Controller extends ControllerBase {
         $title->appendChild($doc->createElement("gco:CharacterString",$record_information["title"]));
         $ciCitation->appendChild($title);
 
-        // citation
+        // citation / date
         $ciDate = $doc->createElement("gmd:CI_Date");
-
         $date = $doc->createElement("gmd:date");
         $dateVal = $doc->createElement("gco:DateTime",$record_information["changed"]);
         $date->appendChild($dateVal);
         $ciDate->appendChild($date);
-
-		// date
         $dateType = $doc->createElement("gmd:dateType");
         $dtCode = $doc->createElement("gmd:CI_DateTypeCode", "creation");
         $dtCode->setAttribute("codeList","http://www.isotc211.org/2005/resources/codeList.xml#CI_DateTypeCode");
@@ -157,7 +154,7 @@ class DEIMSIso19139Controller extends ControllerBase {
         $citation->appendChild($ciCitation);
         $dataId->appendChild($citation);
 
-        // topic
+        // Create <gmd:topicCategory>
         $topicCategory = $doc->createElement("gmd:topicCategory");
         $topicCode = $doc->createElement("gmd:MD_TopicCategoryCode", "structure");
         $topicCategory->appendChild($topicCode);
@@ -195,7 +192,6 @@ class DEIMSIso19139Controller extends ControllerBase {
         $useCode->setAttribute("codeListValue", "license");
         $useConstraints->appendChild($useCode);
         $legalConstraints->appendChild($useConstraints);
-
         $constraints->appendChild($legalConstraints);
         $dataId->appendChild($constraints);
 
@@ -213,17 +209,13 @@ class DEIMSIso19139Controller extends ControllerBase {
             $browseGraphic = $doc->createElement("gmd:MD_BrowseGraphic");
 
             $image = $record_information["attributes"]["general"]["images"][0];
-            // File name (URL or file path)
             $fileName = $doc->createElement("gmd:fileName");
             $fileName->appendChild($doc->createElement("gco:CharacterString", $image["url"]));
             $browseGraphic->appendChild($fileName);
 
-            // Optional description
             $fileDesc = $doc->createElement("gmd:fileDescription");
             $fileDesc->appendChild($doc->createElement("gco:CharacterString", $image["alt"]));
             $browseGraphic->appendChild($fileDesc);
-
-            // Nest and append
             $graphicOverview->appendChild($browseGraphic);
             $dataId->appendChild($graphicOverview);
         }
@@ -300,7 +292,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
     public function getBoundingBoxFromWKT(string $wkt): ?array {
         
-	$wkt = trim($wkt);
+		$wkt = trim($wkt);
         $minLon = $maxLon = $minLat = $maxLat = null;
 
         // Match all coordinate groups inside parentheses (supports multiple polygons)
@@ -312,7 +304,7 @@ class DEIMSIso19139Controller extends ControllerBase {
             $points = preg_split("/,\s*/", trim($coords_str));
 
             foreach ($points as $point) {
-                // Expect "lon lat" format
+            	// Expect "lon lat" format
                 $parts = preg_split("/\s+/", trim($point));
                 if (count($parts) < 2) {
                     continue;
