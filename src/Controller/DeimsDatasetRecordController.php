@@ -21,8 +21,8 @@ class DeimsDatasetRecordController extends ControllerBase {
 		$information['id']['prefix'] = 'https://deims.org/dataset/';
 		$information['id']['suffix'] = $node->get('uuid')->value;
 		$information['type'] = 'dataset';
-		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
-		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'custom', 'Y-m-d\TH:i:sP');
+		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
 		
 		$information['attributes']['general']['abstract'] = (!is_null($node->get('field_abstract')->value)) ? ($node->get('field_abstract')->value) : null; 
 		$information['attributes']['general']['keywords']= $DeimsFieldController->parseEntityReferenceField($node->get('field_keywords'));
@@ -64,3 +64,4 @@ class DeimsDatasetRecordController extends ControllerBase {
 		
   }
 }
+
