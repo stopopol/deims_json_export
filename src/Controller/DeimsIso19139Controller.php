@@ -60,7 +60,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 		$lineage = $doc->createElement("gmd:lineage");
 		$liLineage = $doc->createElement("gmd:LI_Lineage");
 		$statement = $doc->createElement("gmd:statement");
-		$statementText = "This metadata record was created using information from DEIMS-SDR (deims.org) based on (potentially) erroneous user input via forms.";
+		$statementText = "This metadata record was created using information from DEIMS-SDR (deims.org) based on (potentially erroneous or outdated) user input via forms.";
 		$charString = $doc->createElement("gco:CharacterString");
 		$charString->appendChild($doc->createTextNode($statementText));
 		$statement->appendChild($charString);
