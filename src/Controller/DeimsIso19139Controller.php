@@ -5,8 +5,7 @@ namespace Drupal\deims_json_export\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Controller\ControllerBase;
 
-class DEIMSIso19139Controller extends ControllerBase
-{
+class DEIMSIso19139Controller extends ControllerBase {
     public function Iso19139Response($record_information) {
 		
         $doc = new \DOMDocument("1.0", "UTF-8");
@@ -311,7 +310,7 @@ class DEIMSIso19139Controller extends ControllerBase
         // Match all coordinate groups inside parentheses (supports multiple polygons)
         preg_match_all("/\(\s*\(([^()]+)\)\s*\)/", $wkt, $matches);
 
-        if (empty($matches[1])) { return null; // Invalid or unsupported WKT }
+        if (empty($matches[1])) { return null;} // Invalid or unsupported WKT 
 
         foreach ($matches[1] as $coords_str) {
             $points = preg_split("/,\s*/", trim($coords_str));
