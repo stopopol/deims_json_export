@@ -23,8 +23,8 @@ class DeimsSiteRecordController extends ControllerBase {
 		$information['id']['prefix'] = 'https://deims.org/';
 		$information['id']['suffix'] = $node->get('field_deims_id')->value;
 		$information['type'] = 'site';
-		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
-		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'custom', 'Y-m-d\TH:i:sP');
+		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
 		
 		$information['attributes']['affiliation']['networks'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_affiliation'));
 		$information['attributes']['affiliation']['projects'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_projects'));
@@ -112,4 +112,5 @@ class DeimsSiteRecordController extends ControllerBase {
   	}
 
 }
+
 
