@@ -115,7 +115,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
         // dateStamp
         $dateStamp = $doc->createElement("gmd:dateStamp");
-	$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
+		$dateStamp->appendChild($doc->createElement("gco:DateTime", date("c")));
         $root->appendChild($dateStamp);
 
         // metadataStandard
@@ -138,14 +138,15 @@ class DEIMSIso19139Controller extends ControllerBase {
         $title->appendChild($doc->createElement("gco:CharacterString",$record_information["title"]));
         $ciCitation->appendChild($title);
 
-        // citation > date
+        // citation
         $ciDate = $doc->createElement("gmd:CI_Date");
 
         $date = $doc->createElement("gmd:date");
-        $dateVal = $doc->createElement("gco:Date",$record_information["changed"]);
+        $dateVal = $doc->createElement("gco:DateTime",$record_information["changed"]);
         $date->appendChild($dateVal);
         $ciDate->appendChild($date);
 
+		// date
         $dateType = $doc->createElement("gmd:dateType");
         $dtCode = $doc->createElement("gmd:CI_DateTypeCode", "creation");
         $dtCode->setAttribute("codeList","http://www.isotc211.org/2005/resources/codeList.xml#CI_DateTypeCode");
@@ -156,7 +157,7 @@ class DEIMSIso19139Controller extends ControllerBase {
         $citation->appendChild($ciCitation);
         $dataId->appendChild($citation);
 
-        // Create <gmd:topicCategory>
+        // topic
         $topicCategory = $doc->createElement("gmd:topicCategory");
         $topicCode = $doc->createElement("gmd:MD_TopicCategoryCode", "structure");
         $topicCategory->appendChild($topicCode);
@@ -257,7 +258,7 @@ class DEIMSIso19139Controller extends ControllerBase {
             $dataId->appendChild($extent);
             $ident->appendChild($dataId);
             $root->appendChild($ident);
-        } 
+    } 
 	else {
             // Extract coordinates from WKT string (assumed to be valid "POINT(lon lat)")
             $wkt = $record_information["attributes"]["geographic"]["coordinates"];
