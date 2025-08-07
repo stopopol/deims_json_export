@@ -22,8 +22,8 @@ class DeimsActivityRecordController extends ControllerBase {
 		$information['id']['prefix'] = 'https://deims.org/activity/';
 		$information['id']['suffix'] = $node->get('uuid')->value;
 		$information['type'] = 'activity';
-		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
-		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+	  	$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'custom', 'Y-m-d\TH:i:sP');
+		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
 		
 		$information['attributes']['general']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'));
 		$information['attributes']['general']['abstract'] = $node->get('field_abstract')->value;
@@ -56,3 +56,4 @@ class DeimsActivityRecordController extends ControllerBase {
   }
 
 }
+
