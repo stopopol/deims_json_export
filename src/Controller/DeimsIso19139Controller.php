@@ -53,37 +53,47 @@ class DEIMSIso19139Controller extends ControllerBase {
 
     // contact
     $contact = $doc->createElement("gmd:contact");
-    $rp = $doc->createElement("gmd:CI_ResponsibleParty");
+	$root->appendChild($contact);
 
     if (!empty($record_information["attributes"]["contact"]["siteManager"])) {
-      foreach ($record_information["attributes"]["contact"]["siteManager"] as $contact_item) {
+      foreach ($record_information["attributes"]["contact"]["siteManager"] as $person) {
+		$rp = $doc->createElement("gmd:CI_ResponsibleParty");
         $name = $doc->createElement("gmd:individualName");
-        $name->appendChild($doc->createElement("gco:CharacterString", $contact_item["name"] ?? ''));
+        $name->appendChild($doc->createElement("gco:CharacterString", $person["name"] ?? ''));
         $rp->appendChild($name);
+		
+		// role is always mandatory for CI_ResponsibleParty
+		$role = $doc->createElement("gmd:role");
+		$roleCode = $doc->createElement("gmd:CI_RoleCode", "pointOfContact");
+		$roleCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode");
+		$roleCode->setAttribute("codeListValue", "pointOfContact");
+		$role->appendChild($roleCode);
+		$rp->appendChild($role);
+		$contact->appendChild($rp);
       }
     }
 
     if (!empty($record_information["attributes"]["contact"]["operatingOrganisation"])) {
-      foreach ($record_information["attributes"]["contact"]["operatingOrganisation"] as $org_item) {
-        $org = $doc->createElement("gmd:organisationName");
-        $org->appendChild($doc->createElement("gco:CharacterString", $org_item["name"] ?? ''));
-        $rp->appendChild($org);
+      foreach ($record_information["attributes"]["contact"]["operatingOrganisation"] as $organisation) {
+        $rp = $doc->createElement("gmd:CI_ResponsibleParty");
+		$name = $doc->createElement("gmd:organisationName");
+        $name->appendChild($doc->createElement("gco:CharacterString", $organisation["name"] ?? ''));
+        $rp->appendChild($name);
+		
+		// role is always mandatory for CI_ResponsibleParty
+		$role = $doc->createElement("gmd:role");
+		$roleCode = $doc->createElement("gmd:CI_RoleCode", "pointOfContact");
+		$roleCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode");
+		$roleCode->setAttribute("codeListValue", "pointOfContact");
+		$role->appendChild($roleCode);
+		$rp->appendChild($role);
+		$contact->appendChild($rp);
       }
     }
 
-    $role = $doc->createElement("gmd:role");
-    $roleCode = $doc->createElement("gmd:CI_RoleCode", "pointOfContact");
-    $roleCode->setAttribute("codeList", "http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode");
-    $roleCode->setAttribute("codeListValue", "pointOfContact");
-    $role->appendChild($roleCode);
-    $rp->appendChild($role);
-
-    $contact->appendChild($rp);
-    $root->appendChild($contact);
-
     // dateStamp
     $dateStamp = $doc->createElement("gmd:dateStamp");
-    $dateStamp->appendChild($doc->createElement("gco:Date", date('Y-m-d')));
+    $dateStamp->appendChild($doc->createElement("gco:DateTime", date('c')));
     $root->appendChild($dateStamp);
 
     // metadataStandard
@@ -111,7 +121,7 @@ class DEIMSIso19139Controller extends ControllerBase {
     $ciDate = $doc->createElement("gmd:CI_Date");
 
     $date = $doc->createElement("gmd:date");
-    $dateVal = $doc->createElement("gco:Date", date('Y-m-d'));
+    $dateVal = $doc->createElement("gco:Date", $record_information['changed']);
     $date->appendChild($dateVal);
     $ciDate->appendChild($date);
 
@@ -170,37 +180,69 @@ class DEIMSIso19139Controller extends ControllerBase {
 
     // extent
     if ($record_information["attributes"]["geographic"]["boundaries"]) {
-      $bbox_geom = $this->getBoundingBoxFromWKT($record_information["attributes"]["geographic"]["boundaries"]);
-      $extent = $doc->createElement("gmd:extent");
-      $exExtent = $doc->createElement("gmd:EX_Extent");
-      $geo = $doc->createElement("gmd:geographicElement");
-      $bbox = $doc->createElement("gmd:EX_GeographicBoundingBox");
-  
-      $west = $doc->createElement("gmd:westBoundLongitude");
-      $west->appendChild($doc->createElement("gco:Decimal", $bbox_geom["west"]));
-      $bbox->appendChild($west);
-  
-      $east = $doc->createElement("gmd:eastBoundLongitude");
-      $east->appendChild($doc->createElement("gco:Decimal", $bbox_geom["east"]));
-      $bbox->appendChild($east);
-  
-      $south = $doc->createElement("gmd:southBoundLatitude");
-      $south->appendChild($doc->createElement("gco:Decimal", $bbox_geom["south"]));
-      $bbox->appendChild($south);
-  
-      $north = $doc->createElement("gmd:northBoundLatitude");
-      $north->appendChild($doc->createElement("gco:Decimal", $bbox_geom["north"]));
-      $bbox->appendChild($north);
-  
-      $geo->appendChild($bbox);
-      $exExtent->appendChild($geo);
-      $extent->appendChild($exExtent);
-      $dataId->appendChild($extent);
+		$bbox_geom = $this->getBoundingBoxFromWKT($record_information["attributes"]["geographic"]["boundaries"]);
+		$extent = $doc->createElement("gmd:extent");
+		$exExtent = $doc->createElement("gmd:EX_Extent");
+		$geo = $doc->createElement("gmd:geographicElement");
+		$bbox = $doc->createElement("gmd:EX_GeographicBoundingBox");
+	  
+		$west = $doc->createElement("gmd:westBoundLongitude");
+		$west->appendChild($doc->createElement("gco:Decimal", $bbox_geom["west"]));
+		$bbox->appendChild($west);
+	  
+		$east = $doc->createElement("gmd:eastBoundLongitude");
+		$east->appendChild($doc->createElement("gco:Decimal", $bbox_geom["east"]));
+		$bbox->appendChild($east);
+	  
+		$south = $doc->createElement("gmd:southBoundLatitude");
+		$south->appendChild($doc->createElement("gco:Decimal", $bbox_geom["south"]));
+		$bbox->appendChild($south);
+	  
+		$north = $doc->createElement("gmd:northBoundLatitude");
+		$north->appendChild($doc->createElement("gco:Decimal", $bbox_geom["north"]));
+		$bbox->appendChild($north);
+	  
+		$geo->appendChild($bbox);
+		$exExtent->appendChild($geo);
+		$extent->appendChild($exExtent);
+		$dataId->appendChild($extent);
+		$ident->appendChild($dataId);
+		$root->appendChild($ident);
     }
+	else {
+		// Extract coordinates from WKT string (assumed to be valid "POINT(lon lat)")
+		$wkt = $record_information["attributes"]["geographic"]["coordinates"];
+		preg_match('/POINT\s*\(\s*([\d\.\-]+)\s+([\d\.\-]+)\s*\)/i', $wkt, $matches);
+		$lon = $matches[1];
+		$lat = $matches[2];
+
+		// Create extent structure using gml:Point
+		$extent = $doc->createElement("gmd:extent");
+		$exExtent = $doc->createElement("gmd:EX_Extent");
+		$geoElement = $doc->createElement("gmd:geographicElement");
+		$boundingPolygon = $doc->createElement("gmd:EX_BoundingPolygon");
+
+		$polygon = $doc->createElement("gmd:polygon");
+		$gmlPoint = $doc->createElementNS("http://www.opengis.net/gml", "gml:Point");
+		$gmlPoint->setAttribute("gml:id", "centroid_or_representative_coordinates_of_site");
+		$gmlPoint->setAttribute("srsName", "http://www.opengis.net/def/crs/EPSG/0/4326");
+
+		// Add the coordinates (lat lon)
+		$pos = $doc->createElementNS("http://www.opengis.net/gml", "gml:pos", "$lat $lon");
+		$gmlPoint->appendChild($pos);
+
+		// Nest everything into the correct hierarchy
+		$polygon->appendChild($gmlPoint);
+		$boundingPolygon->appendChild($polygon);
+		$geoElement->appendChild($boundingPolygon);
+		$exExtent->appendChild($geoElement);
+		$extent->appendChild($exExtent);
+
+		$dataId->appendChild($extent);
+		$ident->appendChild($dataId);
+		$root->appendChild($ident);
+	}
       
-    $ident->appendChild($dataId);
-    $root->appendChild($ident);
-  
     // Return response
     $response = new Response($doc->saveXML());
     $response->headers->set('Content-Type', 'application/xml');
@@ -244,5 +286,34 @@ class DEIMSIso19139Controller extends ControllerBase {
       'north' => $maxLat,
     ];
   }
+  
+  
+  public function addPointFromWKT(DOMDocument $doc, DOMElement $dataId, string $wkt) {
+  // Match WKT point format: POINT(lon lat)
+  if (preg_match('/POINT\s*\(\s*([\d\.\-]+)\s+([\d\.\-]+)\s*\)/i', $wkt, $matches)) {
+    $lon = $matches[1];
+    $lat = $matches[2];
+
+    $extent = $doc->createElement("gmd:extent");
+    $exExtent = $doc->createElement("gmd:EX_Extent");
+    $geoElement = $doc->createElement("gmd:geographicElement");
+    $boundingPolygon = $doc->createElement("gmd:EX_BoundingPolygon");
+
+    $polygon = $doc->createElement("gmd:polygon");
+    $gmlPoint = $doc->createElementNS("http://www.opengis.net/gml", "gml:Point");
+    $gmlPoint->setAttribute("gml:id", "point1");
+    $gmlPoint->setAttribute("srsName", "http://www.opengis.net/def/crs/EPSG/0/4326");
+
+    $pos = $doc->createElementNS("http://www.opengis.net/gml", "gml:pos", "$lat $lon");
+    $gmlPoint->appendChild($pos);
+
+    $polygon->appendChild($gmlPoint);
+    $boundingPolygon->appendChild($polygon);
+    $geoElement->appendChild($boundingPolygon);
+    $exExtent->appendChild($geoElement);
+    $extent->appendChild($exExtent);
+    $dataId->appendChild($extent);
+  }
+}
 
 }
