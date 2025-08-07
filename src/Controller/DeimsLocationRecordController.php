@@ -25,8 +25,9 @@ class DeimsLocationRecordController extends ControllerBase {
 		$information['properties']['title'] = $node->get('title')->value;
 		$information['properties']['id']['prefix'] = 'https://deims.org/locations/';
 		$information['properties']['id']['suffix'] = $node->get('uuid')->value;
-		$information['properties']['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
-		$information['properties']['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+	  	$information['properties']['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'custom', 'Y-m-d\TH:i:sP');
+		$information['properties']['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
+	  
 		$information['properties']['locationType'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_location_type'), $single_value_field=true);
 		$information['properties']['relatedSite'] = $DeimsFieldController->parseEntityReferenceField($node->get('field_related_site'), $single_value_field=true);
 		$information['properties']['abstract'] = $node->get('field_abstract')->value;
@@ -42,3 +43,4 @@ class DeimsLocationRecordController extends ControllerBase {
   }
 	
 }
+
