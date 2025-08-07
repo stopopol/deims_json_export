@@ -178,7 +178,6 @@ class DEIMSIso19139Controller extends ControllerBase
         // title
         $citation = $doc->createElement("gmd:citation");
         $ciCitation = $doc->createElement("gmd:CI_Citation");
-
         $title = $doc->createElement("gmd:title");
         $title->appendChild(
             $doc->createElement(
@@ -208,13 +207,18 @@ class DEIMSIso19139Controller extends ControllerBase
         $dtCode->setAttribute("codeListValue", "creation");
         $dateType->appendChild($dtCode);
         $ciDate->appendChild($dateType);
-
         $ciCitation
             ->appendChild($doc->createElement("gmd:date"))
             ->appendChild($ciDate);
         $citation->appendChild($ciCitation);
         $dataId->appendChild($citation);
 
+        // Create <gmd:topicCategory>
+        $topicCategory = $doc->createElement("gmd:topicCategory");
+        $topicCode = $doc->createElement("gmd:MD_TopicCategoryCode", "structure");
+        $topicCategory->appendChild($topicCode);
+        $dataId->appendChild($topicCategory);
+        
         // abstract
         $abstract = $doc->createElement("gmd:abstract");
         $abstractText = $doc->createElement("gco:CharacterString");
