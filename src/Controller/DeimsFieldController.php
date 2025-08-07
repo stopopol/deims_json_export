@@ -147,7 +147,7 @@ class DeimsFieldController extends ControllerBase {
 				}
 				$node_information['title'] = $node->get('title')->value;
 				$node_information['id']['suffix'] = $node->get('field_uuid')->value;
-				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
 				
 				array_push($node_list, $node_information);
 			} 
@@ -339,3 +339,4 @@ class DeimsFieldController extends ControllerBase {
 	}
 
 }
+
