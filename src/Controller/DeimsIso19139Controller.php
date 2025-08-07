@@ -177,8 +177,31 @@ class DEIMSIso19139Controller extends ControllerBase {
     $langCode->setAttribute("codeListValue", "eng");
     $lang->appendChild($langCode);
     $dataId->appendChild($lang);
+	
+	// image
+	if ($record_information["attributes"]["general"]["images"]) {
+		
+		$graphicOverview = $doc->createElement("gmd:graphicOverview");
+		$browseGraphic = $doc->createElement("gmd:MD_BrowseGraphic");
 
-    // extent
+		$image = $record_information["attributes"]["general"]["images"][0];
+		// File name (URL or file path)
+		$fileName = $doc->createElement("gmd:fileName");
+		$fileName->appendChild($doc->createElement("gco:CharacterString", $image["url"]));
+		$browseGraphic->appendChild($fileName);
+
+		// Optional description
+		$fileDesc = $doc->createElement("gmd:fileDescription");
+		$fileDesc->appendChild($doc->createElement("gco:CharacterString", $image["alt"]));
+		$browseGraphic->appendChild($fileDesc);
+		
+		// Nest and append
+		$graphicOverview->appendChild($browseGraphic);
+		$dataId->appendChild($graphicOverview);
+
+	}
+
+    // geographic extent
     if ($record_information["attributes"]["geographic"]["boundaries"]) {
 		$bbox_geom = $this->getBoundingBoxFromWKT($record_information["attributes"]["geographic"]["boundaries"]);
 		$extent = $doc->createElement("gmd:extent");
@@ -286,34 +309,5 @@ class DEIMSIso19139Controller extends ControllerBase {
       'north' => $maxLat,
     ];
   }
-  
-  
-  public function addPointFromWKT(DOMDocument $doc, DOMElement $dataId, string $wkt) {
-  // Match WKT point format: POINT(lon lat)
-  if (preg_match('/POINT\s*\(\s*([\d\.\-]+)\s+([\d\.\-]+)\s*\)/i', $wkt, $matches)) {
-    $lon = $matches[1];
-    $lat = $matches[2];
-
-    $extent = $doc->createElement("gmd:extent");
-    $exExtent = $doc->createElement("gmd:EX_Extent");
-    $geoElement = $doc->createElement("gmd:geographicElement");
-    $boundingPolygon = $doc->createElement("gmd:EX_BoundingPolygon");
-
-    $polygon = $doc->createElement("gmd:polygon");
-    $gmlPoint = $doc->createElementNS("http://www.opengis.net/gml", "gml:Point");
-    $gmlPoint->setAttribute("gml:id", "point1");
-    $gmlPoint->setAttribute("srsName", "http://www.opengis.net/def/crs/EPSG/0/4326");
-
-    $pos = $doc->createElementNS("http://www.opengis.net/gml", "gml:pos", "$lat $lon");
-    $gmlPoint->appendChild($pos);
-
-    $polygon->appendChild($gmlPoint);
-    $boundingPolygon->appendChild($polygon);
-    $geoElement->appendChild($boundingPolygon);
-    $exExtent->appendChild($geoElement);
-    $extent->appendChild($exExtent);
-    $dataId->appendChild($extent);
-  }
-}
-
+ 
 }
