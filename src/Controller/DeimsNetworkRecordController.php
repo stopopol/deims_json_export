@@ -24,8 +24,8 @@ class DeimsNetworkRecordController extends ControllerBase {
 		$information['id']['prefix'] = 'https://deims.org/networks/';
 		$information['id']['suffix'] = $uuid;
 		$information['type'] = 'network';
-		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'html_datetime');
-		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
+		$information['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'custom', 'Y-m-d\TH:i:sP');
+		$information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
 
 		$information['attributes']['abstract'] = $node->get('field_abstract')->value;
 		$information['attributes']['url'] = $DeimsFieldController->parseRegularField($node->get('field_url'), "url");
@@ -46,3 +46,4 @@ class DeimsNetworkRecordController extends ControllerBase {
   }
 
 }
+
