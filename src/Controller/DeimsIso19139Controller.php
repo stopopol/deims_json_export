@@ -70,43 +70,34 @@ class DEIMSIso19139Controller extends ControllerBase {
 		$root->appendChild($dataQualityInfo);
 
         // contact
-        $contact = $doc->createElement("gmd:contact");
-        $root->appendChild($contact);
-
         if (!empty($record_information["attributes"]["contact"]["siteManager"])) {
             foreach ($record_information["attributes"]["contact"]["siteManager"] as $person) {
+				$contact = $doc->createElement("gmd:contact");
                 $rp = $doc->createElement("gmd:CI_ResponsibleParty");
                 $name = $doc->createElement("gmd:individualName");
                 $nameText = $doc->createTextNode($person["name"] ?? "");
                 $name->appendChild($nameText);
-
                 $rp->appendChild($name);
-
                 // role is always mandatory for CI_ResponsibleParty
                 $role = $doc->createElement("gmd:role");
-                $roleCode = $doc->createElement(
-                    "gmd:CI_RoleCode",
-                    "pointOfContact"
-                );
-                $roleCode->setAttribute(
-                    "codeList",
-                    "http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode"
-                );
+                $roleCode = $doc->createElement("gmd:CI_RoleCode","pointOfContact");
+                $roleCode->setAttribute("codeList","http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode");
                 $roleCode->setAttribute("codeListValue", "pointOfContact");
                 $role->appendChild($roleCode);
                 $rp->appendChild($role);
                 $contact->appendChild($rp);
+				$root->appendChild($contact);
             }
         }
 
         if (!empty($record_information["attributes"]["contact"]["operatingOrganisation"])) {
             foreach ($record_information["attributes"]["contact"]["operatingOrganisation"] as $organisation) {
-                $rp = $doc->createElement("gmd:CI_ResponsibleParty");
+                $contact = $doc->createElement("gmd:contact");
+				$rp = $doc->createElement("gmd:CI_ResponsibleParty");
                 $name = $doc->createElement("gmd:organisationName");
                 $nameText = $doc->createTextNode($organisation["name"] ?? "");
                 $name->appendChild($nameText);
                 $rp->appendChild($name);
-
                 // role is always mandatory for CI_ResponsibleParty
                 $role = $doc->createElement("gmd:role");
                 $roleCode = $doc->createElement("gmd:CI_RoleCode", "pointOfContact");
@@ -115,12 +106,13 @@ class DEIMSIso19139Controller extends ControllerBase {
                 $role->appendChild($roleCode);
                 $rp->appendChild($role);
                 $contact->appendChild($rp);
+				$root->appendChild($contact);
             }
         }
 
         // dateStamp
         $dateStamp = $doc->createElement("gmd:dateStamp");
-        $dateStamp->appendChild($doc->createElement("gco:DateTime", date("c")));
+		$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
         $root->appendChild($dateStamp);
 
         // metadataStandard
