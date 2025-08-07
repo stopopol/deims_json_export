@@ -222,8 +222,8 @@ class DeimsNodeListsController {
 				$node_information['title'] = $node->get('title')->value;
 				$node_information['id']['prefix'] = "https://deims.org/" . $landing_page_label;
 				$node_information['id']['suffix'] = $node->get('uuid')->value;
-				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'html_datetime');
-					
+				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
+
 				// if site add coordinates
 				if ($content_type == "sites") $node_information['coordinates'] = $node->get('field_coordinates')->value;
 					
@@ -250,3 +250,4 @@ class DeimsNodeListsController {
 	}
   
 }
+
