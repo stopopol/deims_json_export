@@ -11,6 +11,8 @@ class DEIMSIso19139Controller extends ControllerBase {
 		
         $doc = new \DOMDocument("1.0", "UTF-8");
         $doc->formatOutput = true;
+		
+		$site_uuid = $record_information["id"]["suffix"];
 
         // Root element
         $root = $doc->createElementNS("http://www.isotc211.org/2005/gmd","gmd:MD_Metadata");
@@ -24,7 +26,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
         // fileIdentifier
         $fileIdentifier = $doc->createElement("gmd:fileIdentifier");
-        $charStr = $doc->createElement("gco:CharacterString",$record_information["id"]["suffix"]);
+        $charStr = $doc->createElement("gco:CharacterString",$site_uuid);
         $fileIdentifier->appendChild($charStr);
         $root->appendChild($fileIdentifier);
 
@@ -52,11 +54,39 @@ class DEIMSIso19139Controller extends ControllerBase {
         $hierarchy->appendChild($scopeCode);
         $root->appendChild($hierarchy);
 		
+		// distributionInfo
+		$distributionInfo = $doc->createElement("gmd:distributionInfo");
+		$mdDistribution = $doc->createElement("gmd:MD_Distribution");
+		$transferOptions = $doc->createElement("gmd:transferOptions");
+		$digitalTransfer = $doc->createElement("gmd:MD_DigitalTransferOptions");
+		$onLine = $doc->createElement("gmd:onLine");
+		$onlineResource = $doc->createElement("gmd:CI_OnlineResource");
+		$linkage = $doc->createElement("gmd:linkage");
+		$url = $doc->createElement("gmd:URL", "https://www.deims.org/" . $site_uuid);
+		$linkage->appendChild($url);
+		$onlineResource->appendChild($linkage);
+		$protocol = $doc->createElement("gmd:protocol");
+		$protocolText = $doc->createElement("gco:CharacterString", "WWW:LINK-1.0-http--link");
+		$protocol->appendChild($protocolText);
+		$onlineResource->appendChild($protocol);
+		$name = $doc->createElement("gmd:name");
+		$nameText = $doc->createElement("gco:CharacterString", "Landing Page");
+		$name->appendChild($nameText);
+		$onlineResource->appendChild($name);
+		$description = $doc->createElement("gmd:description");
+		$descText = $doc->createElement("gco:CharacterString", "Site record on DEIMS.org that includes all relevant details and download options.");
+		$description->appendChild($descText);
+		$onlineResource->appendChild($description);
+		$onLine->appendChild($onlineResource);
+		$digitalTransfer->appendChild($onLine);
+		$transferOptions->appendChild($digitalTransfer);
+		$mdDistribution->appendChild($transferOptions);
+		$distributionInfo->appendChild($mdDistribution);
+		$root->appendChild($distributionInfo);
+		
 		// Create <gmd:dataQualityInfo>
 		$dataQualityInfo = $doc->createElement("gmd:dataQualityInfo");
 		$dqDataQuality = $doc->createElement("gmd:DQ_DataQuality");
-
-		// <gmd:lineage>
 		$lineage = $doc->createElement("gmd:lineage");
 		$liLineage = $doc->createElement("gmd:LI_Lineage");
 		$statement = $doc->createElement("gmd:statement");
@@ -250,8 +280,8 @@ class DEIMSIso19139Controller extends ControllerBase {
             $dataId->appendChild($extent);
             $ident->appendChild($dataId);
             $root->appendChild($ident);
-    } 
-	else {
+		} 
+		else {
             // Extract coordinates from WKT string (assumed to be valid "POINT(lon lat)")
             $wkt = $record_information["attributes"]["geographic"]["coordinates"];
             preg_match("/POINT\s*\(\s*([\d\.\-]+)\s+([\d\.\-]+)\s*\)/i", $wkt, $matches);
