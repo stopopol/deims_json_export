@@ -15,14 +15,13 @@ class DEIMSIso19139Controller extends ControllerBase {
 		$site_uuid = $record_information["id"]["suffix"];
 
         // Root element
-        $root = $doc->createElementNS("http://www.isotc211.org/2005/gmd","gmd:MD_Metadata");
-        $doc->appendChild($root);
+        $root = $doc->createElement("gmd:MD_Metadata");
+		$root->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:gmd",   "http://www.isotc211.org/2005/gmd");
+		$root->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:gco",   "http://www.isotc211.org/2005/gco");
+		$root->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:gmx",   "http://www.isotc211.org/2005/gmx");
+		$root->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink"); 
 
-        // Namespaces
-        $root->setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:gco","http://www.isotc211.org/2005/gco");
-        $root->setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance");
-        $root->setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:gml","http://www.opengis.net/gml");
-        $root->setAttribute("xsi:schemaLocation","http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd");
+		$doc->appendChild($root);
 
         // fileIdentifier
         $fileIdentifier = $doc->createElement("gmd:fileIdentifier");
@@ -33,7 +32,7 @@ class DEIMSIso19139Controller extends ControllerBase {
         // language
         $language = $doc->createElement("gmd:language");
         $langCode = $doc->createElement("gmd:LanguageCode", "eng");
-        $langCode->setAttribute("codeList","http://www.loc.gov/standards/iso639-2/");
+        $langCode->setAttribute("codeList","http://www.isotc211.org/2005/resources/codeList.xml#LanguageCode");
         $langCode->setAttribute("codeListValue", "eng");
         $language->appendChild($langCode);
         $root->appendChild($language);
@@ -232,6 +231,77 @@ class DEIMSIso19139Controller extends ControllerBase {
         $langCode->setAttribute("codeListValue", "eng");
         $lang->appendChild($langCode);
         $dataId->appendChild($lang);
+
+		// -------------------
+		// 1. GEMET Keywords
+		// -------------------
+		$descKeywords1 = $doc->createElement("gmd:descriptiveKeywords");
+		$mdKeywords1 = $doc->createElement("gmd:MD_Keywords");
+
+		// First keyword
+		$keyword = $doc->createElement("gmd:keyword");
+		$anchor = $doc->createElement("gmx:Anchor", "ef");
+		$anchor->setAttribute("xlink:href", "https://www.eionet.europa.eu/gemet/en/inspire-theme/ef");
+		$keyword->appendChild($anchor);
+		$mdKeywords1->appendChild($keyword);
+
+		// Keyword type
+		$type = $doc->createElement("gmd:type");
+		$typeCode = $doc->createElement("gmd:MD_KeywordTypeCode", "theme");
+		$typeCode->setAttribute("codeList", "http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_KeywordTypeCode");
+		$typeCode->setAttribute("codeListValue", "theme");
+		$type->appendChild($typeCode);
+		$mdKeywords1->appendChild($type);
+
+		// Thesaurus name
+		$thesaurus = $doc->createElement("gmd:thesaurusName");
+		$citation = $doc->createElement("gmd:CI_Citation");
+		$title = $doc->createElement("gmd:title");
+		$title->appendChild($doc->createElement("gco:CharacterString", "GEMET - INSPIRE themes, version 1.0"));
+		$citation->appendChild($title);
+		$thesaurus->appendChild($citation);
+		$mdKeywords1->appendChild($thesaurus);
+
+		// Add to descriptiveKeywords and MD_DataIdentification
+		$descKeywords1->appendChild($mdKeywords1);
+		$dataId->appendChild($descKeywords1);
+
+		// -------------------
+		// 2. EnvThes Keywords (from observedProperties)
+		// -------------------
+		if (!empty($record_information["attributes"]["focusDesignScale"]["observedProperties"])) {
+			$descKeywords2 = $doc->createElement("gmd:descriptiveKeywords");
+			$mdKeywords2 = $doc->createElement("gmd:MD_Keywords");
+
+			foreach ($record_information["attributes"]["focusDesignScale"]["observedProperties"] as $kw) {
+				$keyword = $doc->createElement("gmd:keyword");
+				$anchor = $doc->createElement("gmx:Anchor", $kw["label"]);
+				$anchor->setAttribute("xlink:href", $kw["uri"]);
+				$keyword->appendChild($anchor);
+				$mdKeywords2->appendChild($keyword);
+			}
+
+			// Keyword type
+			$type = $doc->createElement("gmd:type");
+			$typeCode = $doc->createElement("gmd:MD_KeywordTypeCode", "theme");
+			$typeCode->setAttribute("codeList", "http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_KeywordTypeCode");
+			$typeCode->setAttribute("codeListValue", "theme");
+			$type->appendChild($typeCode);
+			$mdKeywords2->appendChild($type);
+
+			// Thesaurus name
+			$thesaurus = $doc->createElement("gmd:thesaurusName");
+			$citation = $doc->createElement("gmd:CI_Citation");
+			$title = $doc->createElement("gmd:title");
+			$title->appendChild($doc->createElement("gco:CharacterString", "EnvThes - https://vocabs.lter-europe.net/EnvThes/en/"));
+			$citation->appendChild($title);
+			$thesaurus->appendChild($citation);
+			$mdKeywords2->appendChild($thesaurus);
+
+			// Add to descriptiveKeywords and MD_DataIdentification
+			$descKeywords2->appendChild($mdKeywords2);
+			$dataId->appendChild($descKeywords2);
+		}
 
         // image
         if ($record_information["attributes"]["general"]["images"]) {
