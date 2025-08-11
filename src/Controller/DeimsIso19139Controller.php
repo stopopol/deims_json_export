@@ -383,6 +383,38 @@ class DEIMSIso19139Controller extends ControllerBase {
             $ident->appendChild($dataId);
             $root->appendChild($ident);
         }
+		
+		// ----------------------
+		// Add projection info
+		// ----------------------
+		$refSystemInfo = $doc->createElement("gmd:referenceSystemInfo");
+		$mdReferenceSystem = $doc->createElement("gmd:MD_ReferenceSystem");
+		$referenceSystemIdentifier = $doc->createElement("gmd:referenceSystemIdentifier");
+		$rsIdentifier = $doc->createElement("gmd:RS_Identifier");
+
+		// Code (EPSG:4326)
+		$code = $doc->createElement("gmd:code");
+		$codeString = $doc->createElement("gco:CharacterString", "EPSG:4326");
+		$code->appendChild($codeString);
+
+		// Code space (EPSG)
+		$codeSpace = $doc->createElement("gmd:codeSpace");
+		$codeSpaceString = $doc->createElement("gco:CharacterString", "EPSG");
+		$codeSpace->appendChild($codeSpaceString);
+
+		// Build projection hierarchy
+		$rsIdentifier->appendChild($code);
+		$rsIdentifier->appendChild($codeSpace);
+		$referenceSystemIdentifier->appendChild($rsIdentifier);
+		$mdReferenceSystem->appendChild($referenceSystemIdentifier);
+		$refSystemInfo->appendChild($mdReferenceSystem);
+
+		// Append projection info to same parent as extent
+		$dataId->appendChild($refSystemInfo);
+
+		// Final append chain
+		$ident->appendChild($dataId);
+		$root->appendChild($ident);
 
         // Return response
         $response = new Response($doc->saveXML());
