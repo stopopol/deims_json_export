@@ -227,7 +227,7 @@ class DEIMSIso19139Controller extends ControllerBase {
         // language
         $lang = $doc->createElement("gmd:language");
         $langCode = $doc->createElement("gmd:LanguageCode", "eng");
-        $langCode->setAttribute("codeList","http://www.loc.gov/standards/iso639-2/");
+        $langCode->setAttribute("codeList","http://www.isotc211.org/2005/resources/codeList.xml#LanguageCode");
         $langCode->setAttribute("codeListValue", "eng");
         $lang->appendChild($langCode);
         $dataId->appendChild($lang);
