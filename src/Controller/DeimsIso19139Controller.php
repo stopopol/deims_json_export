@@ -191,19 +191,21 @@ class DEIMSIso19139Controller extends ControllerBase {
         $topicCategory->appendChild($topicCode);
         $dataId->appendChild($topicCategory);
         
-        // abstract
-        $abstract = $doc->createElement("gmd:abstract");
-        $abstractText = $doc->createElement("gco:CharacterString");
+		// abstract
+		$abstractNode = $doc->createElement("gmd:abstract");
+		$abstractText = $doc->createElement("gco:CharacterString");
 		
-        $abstract = $record_information["attributes"]["general"]["abstract"] ?? "No abstract provided.";
-		// catch iso-breaking tags
-		$abstract = html_entity_decode($abstract, ENT_QUOTES | ENT_XML1, 'UTF-8');
-		$abstract = str_replace(["\r\n", "\r"], "\n", $abstract);
-		$abstract = strip_tags($abstract);
+		$abstractContent = $record_information["attributes"]["general"]["abstract"] ?? "No abstract provided.";
 		
-		$abstractText->appendChild($doc->createTextNode($abstract));
-        $abstract->appendChild($abstractText);
-        $dataId->appendChild($abstract);
+		// clean problematic characters
+		$abstractContent = html_entity_decode($abstractContent, ENT_QUOTES | ENT_XML1, 'UTF-8');
+		$abstractContent = str_replace(["\r\n", "\r"], "\n", $abstractContent);
+		$abstractContent = strip_tags($abstractContent);
+		
+		$abstractText->appendChild($doc->createTextNode($abstractContent));
+		$abstractNode->appendChild($abstractText);
+		
+		$dataId->appendChild($abstractNode);
 
         // resourceConstraints - CC BY 4.0 license
         $constraints = $doc->createElement("gmd:resourceConstraints");
