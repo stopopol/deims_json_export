@@ -29,13 +29,12 @@ class DEIMSIso19139Controller extends ControllerBase {
         $fileIdentifier->appendChild($charStr);
         $root->appendChild($fileIdentifier);
 
-		// modified date
+		// modified - updatedate
 		$dateStamp = $doc->createElement("gmd:dateStamp");
-		$dateStamp->appendChild(
-		    $doc->createElement("gco:Date", substr($record_information["changed"], 0, 10))
-		);
+		$dateTimeNode = $doc->createElement("gco:DateTime", $record_information["changed"]);
+		$dateStamp->appendChild($dateTimeNode);
 		$root->appendChild($dateStamp);
-
+		
         // language
         $language = $doc->createElement("gmd:language");
         $langCode = $doc->createElement("gmd:LanguageCode", "eng");
