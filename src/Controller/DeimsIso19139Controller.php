@@ -31,7 +31,7 @@ class DEIMSIso19139Controller extends ControllerBase {
 
 		// modified date
 		$dateStamp = $doc->createElement("gmd:dateStamp");
-		$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
+		$dateStamp->appendChild($doc->createElement("gco:DateTime",$record_information["changed"]);
 		$root->appendChild($dateStamp);
 
         // language
