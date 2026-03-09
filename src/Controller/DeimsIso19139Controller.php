@@ -194,7 +194,14 @@ class DEIMSIso19139Controller extends ControllerBase {
         // abstract
         $abstract = $doc->createElement("gmd:abstract");
         $abstractText = $doc->createElement("gco:CharacterString");
-        $abstractText->appendChild($doc->createTextNode($record_information["attributes"]["general"]["abstract"] ?? "No abstract provided."));
+		
+        $abstract = $record_information["attributes"]["general"]["abstract"] ?? "No abstract provided.";
+		// catch iso-breaking tags
+		$abstract = html_entity_decode($abstract, ENT_QUOTES | ENT_XML1, 'UTF-8');
+		$abstract = str_replace(["\r\n", "\r"], "\n", $abstract);
+		$abstract = strip_tags($abstract);
+		
+		$abstractText->appendChild($doc->createTextNode($abstract));
         $abstract->appendChild($abstractText);
         $dataId->appendChild($abstract);
 
