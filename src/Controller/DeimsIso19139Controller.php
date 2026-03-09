@@ -29,6 +29,11 @@ class DEIMSIso19139Controller extends ControllerBase {
         $fileIdentifier->appendChild($charStr);
         $root->appendChild($fileIdentifier);
 
+		// modified date
+		$dateStamp = $doc->createElement("gmd:dateStamp");
+		$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
+		$root->appendChild($dateStamp);
+
         // language
         $language = $doc->createElement("gmd:language");
         $langCode = $doc->createElement("gmd:LanguageCode", "eng");
@@ -141,11 +146,6 @@ class DEIMSIso19139Controller extends ControllerBase {
 				$root->appendChild($contact);
             }
         }
-
-        // dateStamp
-        $dateStamp = $doc->createElement("gmd:dateStamp");
-		$dateStamp->appendChild($doc->createElement("gco:Date", date("Y-m-d")));
-        $root->appendChild($dateStamp);
 
         // metadataStandard
         $stdName = $doc->createElement("gmd:metadataStandardName");
