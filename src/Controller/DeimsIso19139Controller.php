@@ -325,7 +325,19 @@ class DEIMSIso19139Controller extends ControllerBase {
             $browseGraphic->appendChild($fileName);
 
             $fileDesc = $doc->createElement("gmd:fileDescription");
-            $fileDesc->appendChild($doc->createElement("gco:CharacterString", $image["alt"]));
+			$fileDescText = $doc->createElement("gco:CharacterString");
+			
+			$desc = $image["alt"] ?? "";
+			
+			// clean text if there are weird characters in there
+			$desc = html_entity_decode($desc, ENT_QUOTES | ENT_XML1, 'UTF-8');
+			$desc = str_replace(["\r\n", "\r"], "\n", $desc);
+			$desc = strip_tags($desc);
+			$desc = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $desc);
+			
+			$fileDescText->appendChild($doc->createTextNode($desc));
+			$fileDesc->appendChild($fileDescText);
+			
             $browseGraphic->appendChild($fileDesc);
             $graphicOverview->appendChild($browseGraphic);
             $dataId->appendChild($graphicOverview);
