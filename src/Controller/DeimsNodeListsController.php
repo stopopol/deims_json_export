@@ -26,7 +26,7 @@ class DeimsNodeListsController {
 		// get integer values of parameters limit and offset
 		$limit =  array_key_exists('limit', $url_parameters) ? ((int)$url_parameters['limit']) : null;
 		$offset = array_key_exists('offset', $url_parameters) ? ((int)$url_parameters['offset']) : null;
-		$format = array_key_exists('format', $url_parameters) ? $url_parameters['format']: null;
+		$format = array_key_exists('format', $url_parameters) ? strtolower($url_parameters['format']): null;
 		$filename = array_key_exists('filename', $url_parameters) ? $url_parameters['filename']: null;
 		
 		if (isset($format) && $format !='csv') {
