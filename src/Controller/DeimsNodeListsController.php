@@ -165,10 +165,6 @@ class DeimsNodeListsController {
 				$landing_page_label = 'sensors/';
 				$query->condition('type', 'sensor');
 				break;
-			case 'datasets':
-				$landing_page_label = 'dataset/';
-				$query->condition('type', 'dataset');
-				break;
 			case 'networks':
 				$landing_page_label = 'networks/';
 				$query->condition('type', 'network');
