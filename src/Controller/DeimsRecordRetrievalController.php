@@ -22,9 +22,6 @@ class DeimsRecordRetrievalController extends ControllerBase {
 						case 'site':
 							$DeimsRecordController = new DeimsSiteRecordController();
 							break;
-						case 'dataset':
-							$DeimsRecordController = new DeimsDatasetRecordController();
-							break;
 						case 'activity':
 							$DeimsRecordController = new DeimsActivityRecordController();
 							break;
@@ -56,9 +53,6 @@ class DeimsRecordRetrievalController extends ControllerBase {
 			  case 'site':
 			    $content_type_label = "sites";
 			    break;
-			  case 'dataset':
-			    $content_type_label = "datasets";
-			    break;
 			  case 'activity':
 			    $content_type_label = "activities";
 			    break;
@@ -82,11 +76,3 @@ class DeimsRecordRetrievalController extends ControllerBase {
 	}
 
 }
-
-
-
-
-
-
-
-
