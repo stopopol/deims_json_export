@@ -23,15 +23,6 @@ site_record.content:
     requirements:
       _access: 'TRUE'
 
-dataset_record.content:
-    path: '/api/datasets/{uuid}'
-    defaults:
-      _controller: 'Drupal\deims_json_export\Controller\DeimsRecordRetrievalController::renderRecord'
-      content_type: 'dataset'
-      _title: 'JSON api'
-    requirements:
-      _access: 'TRUE'
-
 activity_record.content:
     path: '/api/activities/{uuid}'
     defaults:
