@@ -229,12 +229,6 @@ class DeimsFieldController extends ControllerBase {
 					$RefEntity_item['id']['prefix'] = 'https://deims.org/activity/';
 					$RefEntity_item['id']['suffix'] = $RefEntity->field_uuid->value;
 					break;
-				case 'dataset':
-					$RefEntity_item['type'] = 'dataset';
-					$RefEntity_item['name'] = $RefEntity->field_name->value;
-					$RefEntity_item['id']['prefix'] = 'https://deims.org/datasets/';
-					$RefEntity_item['id']['suffix'] = $RefEntity->field_uuid->value;
-					break;
 				case 'network':
 					$RefEntity_item['type'] = 'network';
 					$RefEntity_item['title'] = $RefEntity->get('title')->value;
