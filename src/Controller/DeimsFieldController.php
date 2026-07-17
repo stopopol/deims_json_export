@@ -140,7 +140,7 @@ class DeimsFieldController extends ControllerBase {
 				        break;
 				
 				    default:
-				        continue;
+				        continue 2;
 				}
 
 				$node_information['title'] = $node->get('title')->value;
