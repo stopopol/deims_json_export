@@ -130,18 +130,19 @@ class DeimsFieldController extends ControllerBase {
 				$node_information = [];
 				$content_type = $node->bundle();
 				
-				if ($content_type == 'observation_location' || $content_type == 'elter_so') {
-					continue;
-				}
-				
 				switch ($content_type) {
-					case 'activity':
-						$node_information['id']['prefix'] = 'https://deims.org/activity/';
-						break;
-					case 'sensor':
-						$node_information['id']['prefix'] = 'https://deims.org/sensors/';
-						break;
+				    case 'activity':
+				        $node_information['id']['prefix'] = 'https://deims.org/activity/';
+				        break;
+				
+				    case 'sensor':
+				        $node_information['id']['prefix'] = 'https://deims.org/sensors/';
+				        break;
+				
+				    default:
+				        continue;
 				}
+
 				$node_information['title'] = $node->get('title')->value;
 				$node_information['id']['suffix'] = $node->get('field_uuid')->value;
 				$node_information['changed'] = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'Y-m-d\TH:i:sP');
