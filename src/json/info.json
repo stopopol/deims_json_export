@@ -1,9 +1,9 @@
 {
-    "title": "DEIMS-SDR API",
-    "description": "This is an API for automated data export from the site and dataset registry DEIMS-SDR",
+    "title": "DEIMS API",
+    "description": "This is an API for automated data export from the site and dataset registry DEIMS",
     "termsOfService": "https://deims.org/terms",
     "contact": {
-      "name": "DEIMS-SDR Support",
+      "name": "DEIMS Support",
       "url": "https://deims.org/contact"
     },
     "license": {
