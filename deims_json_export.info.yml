@@ -1,7 +1,6 @@
-name: DEIMS-SDR JSON Exports
+name: DEIMS JSON Exports
 description: Contains all routes and controllers for generating the JSON/CSV exports
-package: DEIMS-SDR
+package: DEIMS
 type: module
 version: 9.x-1.0
 core_version_requirement: ^9 || ^10 || ^11
-
