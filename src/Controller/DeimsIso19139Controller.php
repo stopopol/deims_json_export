@@ -5,7 +5,7 @@ namespace Drupal\deims_json_export\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Controller\ControllerBase;
 
-class DEIMSIso19139Controller extends ControllerBase {
+class DeimsIso19139Controller extends ControllerBase {
 	
     public function Iso19139Response($record_information) {
 		
